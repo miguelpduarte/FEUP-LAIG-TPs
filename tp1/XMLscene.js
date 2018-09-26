@@ -77,15 +77,16 @@ class XMLscene extends CGFscene {
     }
 
 
-    /* Handler called when the graph is finally loaded. 
+    /*
+     * Handler called when the graph is finally loaded. 
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
         this.camera.near = this.graph.near;
         this.camera.far = this.graph.far;
 
-        //TODO: Change reference length according to parsed graph
-        //this.axis = new CGFaxis(this, this.graph.referenceLength);
+        // Change referential length according to parsed graph
+        this.axis = new CGFaxis(this, this.graph.referentialLength);
 
         // TODO: Change ambient and background details according to parsed graph
 

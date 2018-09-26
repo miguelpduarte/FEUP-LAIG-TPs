@@ -8,6 +8,30 @@ var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
 var NODES_INDEX = 5;
 
+const XML_NODES = [
+    'scene',
+    'views',
+    'ambient',
+    'lights',
+    'textures',
+    'materials',
+    'transformations',
+    'primitives',
+    'components'
+]
+
+const XML_ELEMENTS_CHECKLIST_BASE = {
+    'scene': false,
+    'views': false,
+    'ambient': false,
+    'lights': false,
+    'textures': false,
+    'materials': false,
+    'transformations': false,
+    'primitives': false,
+    'components': false 
+}
+
 /**
  * MySceneGraph class, representing the scene graph.
  */
@@ -24,12 +48,30 @@ class MySceneGraph {
 
         this.nodes = [];
 
-        this.idRoot = null;                    // The id of the root element.
+        // The id of the root element.
+        this.idRoot = null;
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
+
+        //Defining parsing helpers
+        this.XML_ELEMENTS_PARSING_FUNCS = {
+            'scene': this.parseScene,
+            'views': this.parseViews,
+            'ambient': this.parseAmbient,
+            'lights': this.parseLights,
+            'textures': this.parseTextures,
+            'materials': this.parseMaterials,
+            'transformations': this.parseTransformations,
+            'primitives': this.parsePrimitives,
+            'components': this.parseComponents
+        }
+
+        //Binding this
+        Object.keys(this.XML_ELEMENTS_PARSING_FUNCS)
+            .forEach(key => this.XML_ELEMENTS_PARSING_FUNCS[key] = this.XML_ELEMENTS_PARSING_FUNCS[key].bind(this));
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -49,12 +91,12 @@ class MySceneGraph {
      */
     onXMLReady() {
         this.log("XML Loading finished.");
-        var rootElement = this.reader.xmlDoc.documentElement;
+        const rootElement = this.reader.xmlDoc.documentElement;
 
         // Here should go the calls for different functions to parse the various blocks
-        var error = this.parseXMLFile(rootElement);
+        const error = this.parseXMLFile(rootElement);
 
-        if (error != null) {
+        if (error) {
             this.onXMLError(error);
             return;
         }
@@ -70,100 +112,37 @@ class MySceneGraph {
      * @param {XML root element} rootElement
      */
     parseXMLFile(rootElement) {
-        if (rootElement.nodeName != "SCENE")
-            return "root tag <SCENE> missing";
-
-        var nodes = rootElement.children;
-
-        // Reads the names of the nodes to an auxiliary buffer.
-        var nodeNames = [];
-
-        for (var i = 0; i < nodes.length; i++) {
-            nodeNames.push(nodes[i].nodeName);
+        if (rootElement.nodeName !== "yas") {
+            return "root tag <yas> missing";
         }
 
-        var error;
+        const nodes = rootElement.children;
 
-        // Processes each node, verifying errors.
-
-        // <INITIALS>
-        var index;
-        if ((index = nodeNames.indexOf("INITIALS")) == -1)
-            return "tag <INITIALS> missing";
-        else {
-            if (index != INITIALS_INDEX)
-                this.onXMLMinorError("tag <INITIALS> out of order");
-
-            //Parse INITIAL block
-            if ((error = this.parseInitials(nodes[index])) != null)
-                return error;
+        //Checking elements order
+        for(let i = 0; i < XML_NODES.length; ++i) {
+            if(nodes[i].nodeName !== XML_NODES[i]) {
+                return "node " + XML_NODES[i] + " missing or out of order!";
+            }
         }
 
-        // <ILLUMINATION>
-        if ((index = nodeNames.indexOf("ILLUMINATION")) == -1)
-            return "tag <ILLUMINATION> missing";
-        else {
-            if (index != ILLUMINATION_INDEX)
-                this.onXMLMinorError("tag <ILLUMINATION> out of order");
-
-            //Parse ILLUMINATION block
-            if ((error = this.parseIllumination(nodes[index])) != null)
-                return error;
+        if(nodes.length > XML_NODES.length) {
+            this.onXMLMinorError("The XML File has additional unexpected nodes. These were not parsed.");
         }
 
-        // <LIGHTS>
-        if ((index = nodeNames.indexOf("LIGHTS")) == -1)
-            return "tag <LIGHTS> missing";
-        else {
-            if (index != LIGHTS_INDEX)
-                this.onXMLMinorError("tag <LIGHTS> out of order");
+        let err;
 
-            //Parse LIGHTS block
-            if ((error = this.parseLights(nodes[index])) != null)
-                return error;
-        }
-
-        // <TEXTURES>
-        if ((index = nodeNames.indexOf("TEXTURES")) == -1)
-            return "tag <TEXTURES> missing";
-        else {
-            if (index != TEXTURES_INDEX)
-                this.onXMLMinorError("tag <TEXTURES> out of order");
-
-            //Parse TEXTURES block
-            if ((error = this.parseTextures(nodes[index])) != null)
-                return error;
-        }
-
-        // <MATERIALS>
-        if ((index = nodeNames.indexOf("MATERIALS")) == -1)
-            return "tag <MATERIALS> missing";
-        else {
-            if (index != MATERIALS_INDEX)
-                this.onXMLMinorError("tag <MATERIALS> out of order");
-
-            //Parse MATERIALS block
-            if ((error = this.parseMaterials(nodes[index])) != null)
-                return error;
-        }
-
-        // <NODES>
-        if ((index = nodeNames.indexOf("NODES")) == -1)
-            return "tag <NODES> missing";
-        else {
-            if (index != NODES_INDEX)
-                this.onXMLMinorError("tag <NODES> out of order");
-
-            //Parse NODES block
-            if ((error = this.parseNodes(nodes[index])) != null)
-                return error;
+        for(let i = 0; i < XML_NODES.length; ++i) {
+            err = this.XML_ELEMENTS_PARSING_FUNCS[XML_NODES[i]](nodes[i]);
+            if(err) {
+                return err;
+            }
         }
     }
 
     /**
      * Parses the <INITIALS> block.
      */
-    parseInitials(initialsNode) {
+    parseInitials_old(initialsNode) {
 
         var children = initialsNode.children;
 
@@ -256,7 +235,7 @@ class MySceneGraph {
      * Parses the <ILLUMINATION> block.
      * @param {illumination block element} illuminationNode
      */
-    parseIllumination(illuminationNode) {
+    parseIllumination_old(illuminationNode) {
         // TODO: Parse Illumination node
 
         this.log("Parsed illumination");
@@ -269,7 +248,7 @@ class MySceneGraph {
      * Parses the <LIGHTS> node.
      * @param {lights block element} lightsNode
      */
-    parseLights(lightsNode) {
+    parseLights_old(lightsNode) {
 
         var children = lightsNode.children;
 
@@ -415,7 +394,7 @@ class MySceneGraph {
      * Parses the <TEXTURES> block. 
      * @param {textures block element} texturesNode
      */
-    parseTextures(texturesNode) {
+    parseTextures_old(texturesNode) {
         // TODO: Parse block
 
         console.log("Parsed textures");
@@ -427,7 +406,7 @@ class MySceneGraph {
      * Parses the <MATERIALS> node.
      * @param {materials block element} materialsNode
      */
-    parseMaterials(materialsNode) {
+    parseMaterials_old(materialsNode) {
         // TODO: Parse block
         this.log("Parsed materials");
         return null;
@@ -438,18 +417,84 @@ class MySceneGraph {
      * Parses the <NODES> block.
      * @param {nodes block element} nodesNode
      */
-    parseNodes(nodesNode) {
+    parseNodes_old(nodesNode) {
         // TODO: Parse block
         this.log("Parsed nodes");
         return null;
+    }
+
+
+    /**
+     * Parses the <scene> block.
+     * @param {scene block element} sceneNode
+     */
+    parseScene(sceneNode) {
+        console.log('Parsing scene', sceneNode);
+        this.idRoot = this.reader.getString(sceneNode, "root");
+        if(!this.attrExists(this.idRoot)) {
+            return "scene root attribute is not defined";
+        }
+        this.referentialLength = this.reader.getFloat(sceneNode, "axis_length");
+        if(!this.attrExists(this.referentialLength)) {
+            return "scene axis_length attribute is not defined"
+        } else if(!this.attrIsNumber(this.referentialLength)) {
+            return "scene axis_length attribute is not a number";
+        }
+    
+        console.log('root', this.idRoot);
+        console.log('ref len', this.referentialLength);
+    }
+
+    /**
+     * Parses the <views> block.
+     * @param {views block element} viewsNode
+     */
+    parseViews(viewsNode) {
+        console.log('Parsing views', viewsNode);
+    }
+
+    parseAmbient(ambientNode) {
+        console.log('Parsing ambient', ambientNode);
+    }
+
+    parseLights(lightsNode) {
+        console.log('Parsing lights', lightsNode);
+    }
+
+    parseTextures(texturesNode) {
+        console.log('Parsing textures', texturesNode);
+    }
+
+    parseMaterials(materialsNode) {
+        console.log('Parsing materials', materialsNode);
+    }
+
+    parseTransformations(transformationsNode) {
+        console.log('Parsing transformations', transformationsNode);
+    }
+
+    parsePrimitives(primitivesNode) {
+        console.log('Parsing primitives', primitivesNode);
+    }
+
+    parseComponents(componentsNode) {
+        console.log('Parsing components', componentsNode);
+    }
+
+    attrExists(attribute) {
+        return attribute !== null;
+    }
+
+    attrIsNumber(attribute) {
+        return !isNaN(attribute);
     }
 
     /*
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
      */
-    onXMLError(message) {
-        console.error("XML Loading Error: " + message);
+    onXMLError(error) {
+        console.error("XML Loading Error: ", error);
         this.loadedOk = false;
     }
 
@@ -457,8 +502,8 @@ class MySceneGraph {
      * Callback to be executed on any minor error, showing a warning on the console.
      * @param {string} message
      */
-    onXMLMinorErro(message) {
-        console.warn("Warning: " + message);
+    onXMLMinorError(message) {
+        console.warn("XMLParserWarning: " + message);
     }
 
 
@@ -467,7 +512,7 @@ class MySceneGraph {
      * @param {string} message
      */
     log(message) {
-        console.log("   " + message);
+        console.log("XMLParserLog:   ", message);
     }
 
     /**

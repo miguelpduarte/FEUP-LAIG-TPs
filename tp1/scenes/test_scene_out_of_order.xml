@@ -2,6 +2,11 @@
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="ss" axis_length="ff" />
+    <textures>
+        <!-- Deve existir um ou mais blocos "texture" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <texture id="ss" file="ss" />
+    </textures>
     <views default="ss" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
@@ -33,11 +38,6 @@
             <specular r="ff" g="ff" b="ff" a="ff" />
         </spot>
     </lights>
-    <textures>
-        <!-- Deve existir um ou mais blocos "texture" -->
-        <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="ss" file="ss" />
-    </textures>
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
