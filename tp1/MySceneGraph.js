@@ -49,7 +49,7 @@ class MySceneGraph {
         this.nodes = [];
 
         this.rootElementId = null;
-        
+
         //To use for checking if ids are repeated
         this.elementIds = new Set();
         
@@ -477,7 +477,7 @@ class MySceneGraph {
             }
         }
 
-        if(this.cameras.length === 0) {
+        if(this.cameras.size === 0) {
             return "no views were defined";
         }
     }
