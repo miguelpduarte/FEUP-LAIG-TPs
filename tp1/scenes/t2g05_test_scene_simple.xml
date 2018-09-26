@@ -1,7 +1,7 @@
 <yas>
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="ss" axis_length="ff" />
+    <scene root="ss" axis_length="10" />
     <views default="ss" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->

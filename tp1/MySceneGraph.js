@@ -48,8 +48,13 @@ class MySceneGraph {
 
         this.nodes = [];
 
-        // The id of the root element.
-        this.idRoot = null;
+        this.rootElementId = null;
+        
+        //To use for checking if ids are repeated
+        this.elementIds = new Set();
+        
+        this.cameras = new Map();
+        this.lights = new Map();
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -429,20 +434,21 @@ class MySceneGraph {
      * @param {scene block element} sceneNode
      */
     parseScene(sceneNode) {
-        console.log('Parsing scene', sceneNode);
-        this.idRoot = this.reader.getString(sceneNode, "root");
-        if(!this.attrExists(this.idRoot)) {
-            return "scene root attribute is not defined";
+        if(!this.reader.hasAttribute(sceneNode, "root")) {
+            return this.missingNodeAttributeMessage("scene", "root");
         }
+        
+        if(!this.reader.hasAttribute(sceneNode, "axis_length")) {
+            return this.missingNodeAttributeMessage("scene", "axis_length");
+        }
+        
         this.referentialLength = this.reader.getFloat(sceneNode, "axis_length");
-        if(!this.attrExists(this.referentialLength)) {
-            return "scene axis_length attribute is not defined"
-        } else if(!this.attrIsNumber(this.referentialLength)) {
-            return "scene axis_length attribute is not a number";
+        
+        if(!this.attrIsNumber(this.referentialLength)) {
+            return this.missingNodeAttributeMessage("scene", "axis_length");
         }
-    
-        console.log('root', this.idRoot);
-        console.log('ref len', this.referentialLength);
+
+        this.rootElementId = this.reader.getString(sceneNode, "root");
     }
 
     /**
@@ -451,6 +457,37 @@ class MySceneGraph {
      */
     parseViews(viewsNode) {
         console.log('Parsing views', viewsNode);
+
+        if(!this.reader.hasAttribute(viewsNode, "default")) {
+            return this.missingNodeAttributeMessage("views", "default");
+        }
+
+        this.defaultViewId = this.reader.getString(viewsNode, "default");
+
+        console.log("wow ", viewsNode);
+
+        //Check if it has one view defined at least and it matches the default view id
+        const views = viewsNode.children;
+
+        for(let i = 0; i < views.length; ++i) {
+            if(views[i].nodeName === "perspective") {
+                this.createPerspectiveCamera(views[i]);
+            } else if(views[i].nodeName === "ortho") {
+                this.createOrthoCamera(views[i]);
+            }
+        }
+
+        if(this.cameras.length === 0) {
+            return "no views were defined";
+        }
+    }
+
+    createPerspectiveCamera(viewNode) {
+        console.log("persp ", viewNode);
+    }
+
+    createOrthoCamera(viewNode) {
+        console.log("ortho ", viewNode);
     }
 
     parseAmbient(ambientNode) {
@@ -481,10 +518,6 @@ class MySceneGraph {
         console.log('Parsing components', componentsNode);
     }
 
-    attrExists(attribute) {
-        return attribute !== null;
-    }
-
     attrIsNumber(attribute) {
         return !isNaN(attribute);
     }
@@ -513,6 +546,15 @@ class MySceneGraph {
      */
     log(message) {
         console.log("XMLParserLog:   ", message);
+    }
+
+    /**
+     * 
+     * @param {string} node_name The name of the node
+     * @param {string} attribute_name The name of the attribute
+     */
+    missingNodeAttributeMessage(node_name, attribute_name) {
+        return `${node_name} ${attribute_name} attribute is not defined`
     }
 
     /**
