@@ -5,11 +5,11 @@
     <views default="ss" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
-        <perspective id="ss" near="ff" far="ff" angle="ff">
-            <from x="ff" y="ff" z="ff" />
-            <to x="ff" y="ff" z="ff" />
+        <perspective id="p1" near="2.5" far="3.2" angle="38">
+            <from x="1" y="2" z="3" />
+            <to x="4.1" y="5.2" z="6.3" />
         </perspective>
-        <ortho id="ss" near="ff" far="ff" left="ff" right="ff" top="ff" bottom="ff" />
+        <ortho id="o1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
     </views>
     <ambient>
         <ambient r="ff" g="ff" b="ff" a="ff" />

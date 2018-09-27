@@ -445,7 +445,7 @@ class MySceneGraph {
         this.referentialLength = this.reader.getFloat(sceneNode, "axis_length");
         
         if(!this.attrIsNumber(this.referentialLength)) {
-            return this.missingNodeAttributeMessage("scene", "axis_length");
+            return this.isNanAttributeMessage("scene", "axis_length");
         }
 
         this.rootElementId = this.reader.getString(sceneNode, "root");
@@ -469,11 +469,16 @@ class MySceneGraph {
         //Check if it has one view defined at least and it matches the default view id
         const views = viewsNode.children;
 
+        let err;
         for(let i = 0; i < views.length; ++i) {
             if(views[i].nodeName === "perspective") {
-                this.createPerspectiveCamera(views[i]);
+                err = this.createPerspectiveCamera(views[i]);
             } else if(views[i].nodeName === "ortho") {
-                this.createOrthoCamera(views[i]);
+                err = this.createOrthoCamera(views[i]);
+            }
+
+            if(err) {
+                return err;
             }
         }
 
@@ -484,10 +489,145 @@ class MySceneGraph {
 
     createPerspectiveCamera(viewNode) {
         console.log("persp ", viewNode);
+
+        //id
+        if(!this.reader.hasAttribute(viewNode, "id")) {
+            return this.missingNodeAttributeMessage("perspective", "id");
+        }
+        let id = this.reader.getString(viewNode, "id");
+        if (this.elementIds.has(id)) {
+            return "id '" + id + "' already exists";
+        } 
+        this.elementIds.add(id);
+
+        //near
+        let near = this.parseFloatAttr(viewNode, "near");
+        if (typeof near !== "number") {
+            return near;
+        }
+
+        //far
+        let far = this.parseFloatAttr(viewNode, "far");
+        if (typeof far !== "number") {
+            return far;
+        }
+
+        //near must be smaller than far
+        if (near >= far) {
+            return "perspective near attribute must be smaller than far attribute";
+        }
+
+        //angle
+        let angle = this.parseFloatAttr(viewNode, "angle");
+        if (typeof angle !== "number") {
+            return angle;
+        }
+
+        const cameraCoords = viewNode.children;
+
+        if (cameraCoords.length !== 2) {
+            return "perspective invalid number of camera coordinates";
+        } else if (cameraCoords[0].nodeName !== "from") {
+            return "perpective 'from' node is missing";
+        } else if (cameraCoords[1].nodeName !== "to") {
+            return "perpective 'to' node is missing";
+        }
+
+        let from = this.parseCoords(cameraCoords[0]);
+        if (typeof from === "string") {
+            return from;
+        }
+
+        let to = this.parseCoords(cameraCoords[1]);
+        if (typeof to === "string") {
+            return to;
+        }
+
+        const cam = {
+            type: "perspective",
+            id,
+            near,
+            far,
+            angle,
+            from,
+            to
+        }
+
+        this.cameras.set(cam.id, cam);
+        console.log("cameras" , this.cameras);
     }
 
     createOrthoCamera(viewNode) {
         console.log("ortho ", viewNode);
+
+        //id
+        if(!this.reader.hasAttribute(viewNode, "id")) {
+            return this.missingNodeAttributeMessage("ortho", "id");
+        }
+        let id = this.reader.getString(viewNode, "id");
+        if (this.elementIds.has(id)) {
+            return "id '" + id + "' already exists";
+        } 
+        this.elementIds.add(id);
+
+        ///near
+        let near = this.parseFloatAttr(viewNode, "near");
+        if (typeof near !== "number") {
+            return near;
+        }
+
+        //far
+        let far = this.parseFloatAttr(viewNode, "far");
+        if (typeof far !== "number") {
+            return far;
+        }
+
+        //near must be smaller than far
+        if (near >= far) {
+            return "ortho near attribute must be smaller than far attribute";
+        }
+
+        // TODO: left <= right ?
+        ///left
+        let left = this.parseFloatAttr(viewNode, "left");
+        if (typeof left !== "number") {
+            return left;
+        }
+
+        //right
+        let right = this.parseFloatAttr(viewNode, "right");
+        if (typeof right !== "number") {
+            return right;
+        }
+
+        // TODO: bottom <= top ?
+        ///bottom
+        let bottom = this.parseFloatAttr(viewNode, "bottom");
+        if (typeof bottom !== "number") {
+            return bottom;
+        }
+
+        //top
+        let top = this.parseFloatAttr(viewNode, "top");
+        if (typeof top !== "number") {
+            return top;
+        }
+
+        console.log("Ortho not created: left? right? top? bottom? what?");
+
+        const cam = {
+            type: "ortho",
+            id,
+            near,
+            far,
+            left,
+            right,
+            bottom,
+            top
+        }
+
+        this.cameras.set(cam.id, cam);
+        console.log("cameras" , this.cameras);
     }
 
     parseAmbient(ambientNode) {
@@ -520,6 +660,36 @@ class MySceneGraph {
 
     attrIsNumber(attribute) {
         return !isNaN(attribute);
+    }
+    
+    parseFloatAttr(node, attribute_name) {
+        if(!this.reader.hasAttribute(node, attribute_name)) {
+            return this.missingNodeAttributeMessage(node.nodeName, attribute_name);
+        }
+        let attr = this.reader.getFloat(node, attribute_name);
+        if(!this.attrIsNumber(attr)) {
+            return this.isNanAttributeMessage(node.nodeName, attribute_name);
+        }
+        return attr;
+    }
+
+    parseCoords(node) {
+        let x = this.parseFloatAttr(node, "x");
+        if (typeof x !== "number") {
+            return x;
+        }
+
+        let y = this.parseFloatAttr(node, "y");
+        if (typeof y !== "number") {
+            return y;
+        }
+
+        let z = this.parseFloatAttr(node, "z");
+        if (typeof z !== "number") {
+            return z;
+        }
+
+        return {x, y, z};
     }
 
     /*
@@ -556,6 +726,16 @@ class MySceneGraph {
     missingNodeAttributeMessage(node_name, attribute_name) {
         return `${node_name} ${attribute_name} attribute is not defined`
     }
+
+    /**
+     * 
+     * @param {string} node_name The name of the node
+     * @param {string} attribute_name The name of the attribute
+     */
+    isNanAttributeMessage(node_name, attribute_name) {
+        return `${node_name} ${attribute_name} attribute is not a number`
+    }
+    
 
     /**
      * Displays the scene, processing each node, starting in the root node.
