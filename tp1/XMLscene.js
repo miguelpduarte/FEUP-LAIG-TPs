@@ -82,8 +82,8 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.camera.near = this.graph.near;
-        this.camera.far = this.graph.far;
+        // this.camera.near = this.graph.near;
+        // this.camera.far = this.graph.far;
 
         // Change referential length according to parsed graph
         this.axis = new CGFaxis(this, this.graph.referentialLength);
