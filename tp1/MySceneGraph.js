@@ -60,6 +60,7 @@ class MySceneGraph {
         this.textures = new Map();
         this.materials = new Map();
         this.transformations = new Map();
+        this.primitives = new Map();
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -883,7 +884,7 @@ class MySceneGraph {
         const materialProperties = materialNode.children;
 
         if (materialProperties.length !== 4) {
-            return "materials invalid number of material coordinates";
+            return "materials invalid number of material propreties ";
         } else if (materialProperties[0].nodeName !== "emission") {
             return this.missingNodeMessage("material", "emission");
         } else if (materialProperties[1].nodeName !== "ambient") {
@@ -991,7 +992,7 @@ class MySceneGraph {
 
     createTranslate(transformationNode) {
         let translate = this.parseCoords(transformationNode);
-        if (typeof target !== "string") {
+        if (typeof translate !== "string") {
             translate.type = "translate";
         }
 
@@ -1023,7 +1024,7 @@ class MySceneGraph {
 
     createScale(transformationNode) {
         let scale = this.parseCoords(transformationNode);
-        if (typeof target !== "string") {
+        if (typeof scale !== "string") {
             scale.type = "scale";
         }
 
@@ -1031,7 +1032,247 @@ class MySceneGraph {
     }
 
     parsePrimitives(primitivesNode) {
-        console.log('Parsing primitives', primitivesNode);
+        console.log('Parsing primitives');
+
+        const primitives = primitivesNode.children;
+
+        let err;
+        for(let i = 0; i < primitives.length; ++i) {
+            err = this.parsePrimitive(primitives[i]);
+
+            if(err) {
+                return err;
+            }
+        }
+
+        if(this.primitives.size === 0) {
+            return "no primitives were defined";
+        }
+    }
+
+    parsePrimitive(primitiveNode) {
+        //id
+        if(!this.reader.hasAttribute(primitiveNode, "id")) {
+            return this.missingNodeAttributeMessage("transformation", "id");
+        }
+        let id = this.reader.getString(primitiveNode, "id");
+        let err;
+        if (err = this.verifyUniqueId(primitiveNode.nodeName, id)) {
+            return err;
+        }
+
+        const childNodes = primitiveNode.children;
+
+        if (childNodes.length > 1) {
+            return "primitive with id '" + id + "' has more than one tag";
+        } else if (childNodes.length === 0) {
+            return "primitive with id '" + id + "' is empty";
+        }
+
+        let primitiveChild = childNodes[0];
+
+        let primitive;
+        if (primitiveChild.nodeName === "rectangle") {
+            primitive = this.createRectangle(primitiveChild);
+        } else if (primitiveChild.nodeName === "triangle") {
+            primitive = this.createTriangle(primitiveChild);
+        } else if (primitiveChild.nodeName === "cylinder") {
+            primitive = this.createCylinder(primitiveChild);
+        } else if (primitiveChild.nodeName === "sphere") {
+            primitive = this.createSphere(primitiveChild);
+        } else if (primitiveChild.nodeName === "torus") {
+            primitive = this.createTorus(primitiveChild);
+        } else {
+            return "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
+        }
+
+        if (typeof primitive === "string") {
+            return primitive;
+        }
+
+        primitive.id = id;
+
+        this.primitives.set(primitive.id, primitive);
+    }
+
+    createRectangle(primitiveNode) {
+        let x1 = this.parseFloatAttr(primitiveNode, "x1");
+        if (typeof x1 !== "number") {
+            return x1;
+        }
+
+        let y1 = this.parseFloatAttr(primitiveNode, "y1");
+        if (typeof y1 !== "number") {
+            return y1;
+        }
+
+        let x2 = this.parseFloatAttr(primitiveNode, "x2");
+        if (typeof x2 !== "number") {
+            return x2;
+        }
+
+        let y2 = this.parseFloatAttr(primitiveNode, "y2");
+        if (typeof y2 !== "number") {
+            return y2;
+        }
+
+        return {
+            type: "rectangle",
+            x1,
+            y1,
+            x2,
+            y2
+        }
+    }
+
+    createTriangle(primitiveNode) {
+        let x1 = this.parseFloatAttr(primitiveNode, "x1");
+        if (typeof x1 !== "number") {
+            return x1;
+        }
+
+        let y1 = this.parseFloatAttr(primitiveNode, "y1");
+        if (typeof y1 !== "number") {
+            return y1;
+        }
+
+        let z1 = this.parseFloatAttr(primitiveNode, "z1");
+        if (typeof z1 !== "number") {
+            return z1;
+        }
+
+        let x2 = this.parseFloatAttr(primitiveNode, "x2");
+        if (typeof x2 !== "number") {
+            return x2;
+        }
+
+        let y2 = this.parseFloatAttr(primitiveNode, "y2");
+        if (typeof y2 !== "number") {
+            return y2;
+        }
+
+        let z2 = this.parseFloatAttr(primitiveNode, "z2");
+        if (typeof z2 !== "number") {
+            return z2;
+        }
+
+        let x3 = this.parseFloatAttr(primitiveNode, "x3");
+        if (typeof x3 !== "number") {
+            return x3;
+        }
+
+        let y3 = this.parseFloatAttr(primitiveNode, "y3");
+        if (typeof y3 !== "number") {
+            return y3;
+        }
+
+        let z3 = this.parseFloatAttr(primitiveNode, "z3");
+        if (typeof z3 !== "number") {
+            return z3;
+        }
+           
+        return {
+            type: "triangle",
+            x1,
+            y1,
+            z1,
+            x2,
+            y2,
+            z2,
+            x3,
+            y3,
+            z3
+        }
+    }
+
+    createCylinder(primitiveNode) {
+        let base = this.parseFloatAttr(primitiveNode, "base");
+        if (typeof base !== "number") {
+            return base;
+        }
+
+        let top = this.parseFloatAttr(primitiveNode, "top");
+        if (typeof top !== "number") {
+            return top;
+        }
+
+        let height = this.parseFloatAttr(primitiveNode, "height");
+        if (typeof height !== "number") {
+            return height;
+        }
+
+        let slices = this.parseIntAttr(primitiveNode, "slices");
+        if (typeof slices !== "number") {
+            return slices;
+        }
+
+        let stacks = this.parseIntAttr(primitiveNode, "stacks");
+        if (typeof stacks !== "number") {
+            return stacks;
+        }
+
+        return {
+            type: "cylinder",
+            base,
+            top,
+            height,
+            slices,
+            stacks
+        }
+    }
+
+    createSphere(primitiveNode) {
+        let radius = this.parseFloatAttr(primitiveNode, "radius");
+        if (typeof radius !== "number") {
+            return radius;
+        }
+
+        let slices = this.parseIntAttr(primitiveNode, "slices");
+        if (typeof slices !== "number") {
+            return slices;
+        }
+
+        let stacks = this.parseIntAttr(primitiveNode, "stacks");
+        if (typeof stacks !== "number") {
+            return stacks;
+        }
+
+        return {
+            type: "sphere",
+            radius,
+            slices,
+            stacks
+        }
+    }
+
+    createTorus(primitiveNode) {
+        let inner = this.parseFloatAttr(primitiveNode, "inner");
+        if (typeof inner !== "number") {
+            return inner;
+        }
+
+        let outer = this.parseFloatAttr(primitiveNode, "outer");
+        if (typeof outer !== "number") {
+            return outer;
+        }
+
+        let slices = this.parseIntAttr(primitiveNode, "slices");
+        if (typeof slices !== "number") {
+            return slices;
+        }
+
+        let loops = this.parseIntAttr(primitiveNode, "loops");
+        if (typeof loops !== "number") {
+            return loops;
+        }
+
+        return {
+            type: "torus",
+            inner,
+            outer,
+            slices,
+            loops
+        }
     }
 
     parseComponents(componentsNode) {
@@ -1055,6 +1296,15 @@ class MySceneGraph {
             return this.isNanAttributeMessage(node.nodeName, attribute_name);
         }
         return attr;
+    }
+
+    parseIntAttr(node, attribute_name) {
+        let attr = this.parseFloatAttr(node, attribute_name);
+        if (typeof attr === "number" && !Number.isInteger(attr)) {
+            return this.isNotIntegerAttributeMessage(node.nodeName, attribute_name);
+        } else {
+            return attr;
+        }
     }
 
     parseCoords(node) {
@@ -1157,12 +1407,19 @@ class MySceneGraph {
         return `${node_name} ${attribute_name} attribute is not a number`;
     }
 
+    isNotIntegerAttributeMessage(node_name, attribute_name) {
+        return `${node_name} ${attribute_name} attribute is not an integer`;
+    }
+
     notBooleanAttributeMessage(node_name, attribute_name) {
         return `${node_name} ${attribute_name} attribute is not of boolean type`;
     }
     
     verifyUniqueId(node_name, id) {
-        if (this.elementIds.has(id)) {
+        if (id === "") {
+            return `node ${node_name}: id cannot be empty`;
+        }
+        else if (this.elementIds.has(id)) {
             return `node ${node_name}: '${id}' id already exists`;
         }
         else {
