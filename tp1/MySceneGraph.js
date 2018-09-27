@@ -59,6 +59,7 @@ class MySceneGraph {
         this.lights = new Map();
         this.textures = new Map();
         this.materials = new Map();
+        this.transformations = new Map();
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -860,14 +861,12 @@ class MySceneGraph {
         if(this.materials.size === 0) {
             return "no materials were defined";
         }
-
-        console.log("MATERIALS: ", this.materials);
     }
 
     createMaterial(materialNode) {
         //id
         if(!this.reader.hasAttribute(materialNode, "id")) {
-            return this.missingNodeAttributeMessage("texture", "id");
+            return this.missingNodeAttributeMessage("material", "id");
         }
         let id = this.reader.getString(materialNode, "id");
         let err;
@@ -928,7 +927,107 @@ class MySceneGraph {
     }
 
     parseTransformations(transformationsNode) {
-        console.log('Parsing transformations', transformationsNode);
+        console.log('Parsing transformations');
+
+        const transformations = transformationsNode.children;
+
+        let err;
+        for(let i = 0; i < transformations.length; ++i) {
+            err = this.parseTransformation(transformations[i]);
+
+            if(err) {
+                return err;
+            }
+        }
+
+        if(this.transformations.size === 0) {
+            return "no transformations were defined";
+        }
+    }
+
+    parseTransformation(transformationNode) {
+        //id
+        if(!this.reader.hasAttribute(transformationNode, "id")) {
+            return this.missingNodeAttributeMessage("transformation", "id");
+        }
+        let id = this.reader.getString(transformationNode, "id");
+        let err;
+        if (err = this.verifyUniqueId(transformationNode.nodeName, id)) {
+            return err;
+        }
+
+        let transformation = {
+            id,
+            transformations: []
+        }
+
+        const transformations = transformationNode.children;
+
+        let ret;
+        for(let i = 0; i < transformations.length; ++i) {
+            if (transformations[i].nodeName === "translate") {
+                ret = this.createTranslate(transformations[i]);
+            } else if (transformations[i].nodeName === "rotate") {
+                ret = this.createRotate(transformations[i]);
+            } else if (transformations[i].nodeName === "scale") {
+                ret = this.createScale(transformations[i]);
+            } else {
+                return "invalid transformation '" + transformations[i].nodeName + "' in transformation with id '" + id + "'";
+            }
+
+            if (typeof ret === "string") {
+                return ret;
+            } else {
+                transformation.transformations.push(ret);
+            }
+        }
+
+        if (transformation.transformations.length === 0) {
+            return "transformation with id '" + id + "' is empty";
+        }
+
+        this.transformations.set(transformation.id, transformation);
+    }
+
+    createTranslate(transformationNode) {
+        let translate = this.parseCoords(transformationNode);
+        if (typeof target !== "string") {
+            translate.type = "translate";
+        }
+
+        return translate;
+    }
+
+    createRotate(transformationNode) {
+        //axis
+        if(!this.reader.hasAttribute(transformationNode, "axis")) {
+            return this.missingNodeAttributeMessage("transformation", "axis");
+        }
+        let axis = this.reader.getString(transformationNode, "axis");
+        if (axis !== "x" && axis !== "y" && axis !== "z") {
+            return "rotate transformation with invalid axis (must be 'x', 'y' or 'z')";
+        }
+
+        //angle
+        let angle = this.parseFloatAttr(transformationNode, "angle");
+        if (typeof angle !== "number") {
+            return angle;
+        }
+
+        return {
+            type: "rotate",
+            axis,
+            angle
+        }
+    }
+
+    createScale(transformationNode) {
+        let scale = this.parseCoords(transformationNode);
+        if (typeof target !== "string") {
+            scale.type = "scale";
+        }
+
+        return scale;
     }
 
     parsePrimitives(primitivesNode) {
@@ -996,6 +1095,10 @@ class MySceneGraph {
         let a = this.parseFloatAttr(node, "a");
         if (typeof a !== "number") {
             return a;
+        }
+
+        if (a < 0 || a > 1) {
+            return `${node.nodeName} alpha attribute must be in the range [0, 1]`;
         }
 
         return {r, g, b, a};

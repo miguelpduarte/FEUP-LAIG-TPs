@@ -20,17 +20,17 @@
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="eree" enabled="true" >
             <location x="2" y="3" z="4" w="5.4" />
-            <ambient r="4" g="2" b="3" a="1.1" />
-            <diffuse r="4" g="2" b="3" a="1.1" />
-            <specular r="4" g="2" b="3" a="1.1" />
+            <ambient r="4" g="2" b="3" a="0.5" />
+            <diffuse r="4" g="2" b="3" a="0.5" />
+            <specular r="4" g="2" b="3" a="0.5" />
         </omni>
         <spot id="54" enabled="false" angle="4.5" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
             <location x="2" y="3" z="3" w="4" />
             <target x="2" y="2" z="2" />
-            <ambient r="4" g="2" b="3" a="1.1" />
-            <diffuse r="4" g="2" b="3" a="1.1" />
-            <specular r="4" g="2" b="3" a="1.1" />
+            <ambient r="4" g="2" b="3" a="0.5" />
+            <diffuse r="4" g="2" b="3" a="0.5" />
+            <specular r="4" g="2" b="3" a="0.5" />
         </spot>
     </lights>
     <textures>
@@ -43,28 +43,33 @@
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="mat1" shininess="45" >
-            <emission r="1" g="2" b="3" a="4" />
-            <ambient r="5" g="6" b="7" a="8" />
-            <diffuse r="9" g="10" b="11" a="12" />
-            <specular r="13" g="14" b="15" a="16" />
+            <emission r="1" g="2" b="3" a="0.5" />
+            <ambient r="5" g="6" b="7" a="0.5" />
+            <diffuse r="9" g="10" b="11" a="0.5" />
+            <specular r="13" g="14" b="15" a="0.5" />
         </material>
         <material id="mat2" shininess="46" >
-            <emission r="1" g="2" b="3" a="4" />
-            <ambient r="5" g="6" b="7" a="8" />
-            <diffuse r="9" g="10" b="11" a="12" />
-            <specular r="13" g="14" b="15" a="16" />
+            <emission r="1" g="2" b="3" a="0.5" />
+            <ambient r="5" g="6" b="7" a="0.5" />
+            <diffuse r="9" g="10" b="11" a="0.5" />
+            <specular r="13" g="14" b="15" a="0.5" />
         </material>
     </materials>
     <transformations>
         <!-- Deve existir um ou mais blocos "transformation" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <!-- Os angulos sao expressos em graus -->
-        <transformation id="ss">
+        <transformation id="transform1">
             <!-- instrucoes a usar sem limite nem ordem -->
             <!-- deve existir pelo menos uma transformacao -->
-            <translate x="ff" y="ff" z="ff" />
-            <rotate axis="cc" angle="ff" />
-            <scale x="ff" y="ff" z="ff" />
+            <translate x="44" y="55" z="66" />
+            <rotate axis="z" angle="45" />
+            <scale x="4" y="4" z="4" />
+        </transformation>
+        <transformation id="transform2">
+            <!-- instrucoes a usar sem limite nem ordem -->
+            <!-- deve existir pelo menos uma transformacao -->
+            <translate x="0.2" y="7" z="2.5" />
         </transformation>
     </transformations>
     <primitives>
