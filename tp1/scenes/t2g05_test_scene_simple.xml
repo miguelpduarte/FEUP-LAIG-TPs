@@ -2,7 +2,7 @@
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="ss" axis_length="10" />
-    <views default="ss" >
+    <views default="p1" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
         <perspective id="p1" near="2.5" far="3.2" angle="38">
@@ -12,40 +12,47 @@
         <ortho id="o1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
     </views>
     <ambient>
-        <ambient r="ff" g="ff" b="ff" a="ff" />
-        <background r="ff" g="ff" b="ff" a="ff" />
+        <ambient r="6" g="7" b="8" a="0.4" />
+        <background r="0.2" g="0.3" b="0.44" a="0.6" />
     </ambient>
     <lights>
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="ss" enabled="tt" >
-            <location x="ff" y="ff" z="ff" w="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+        <omni id="eree" enabled="true" >
+            <location x="2" y="3" z="4" w="5.4" />
+            <ambient r="4" g="2" b="3" a="1.1" />
+            <diffuse r="4" g="2" b="3" a="1.1" />
+            <specular r="4" g="2" b="3" a="1.1" />
         </omni>
-        <spot id="ss" enabled="tt" angle="ff" exponent="ff">
+        <spot id="54" enabled="false" angle="4.5" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <location x="ff" y="ff" z="ff" w="ff" />
-            <target x="ff" y="ff" z="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+            <location x="2" y="3" z="3" w="4" />
+            <target x="2" y="2" z="2" />
+            <ambient r="4" g="2" b="3" a="1.1" />
+            <diffuse r="4" g="2" b="3" a="1.1" />
+            <specular r="4" g="2" b="3" a="1.1" />
         </spot>
     </lights>
     <textures>
         <!-- Deve existir um ou mais blocos "texture" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="ss" file="ss" />
+        <texture id="tex1" file="/home/notfound/123.png" />
+        <texture id="tex2" file="/home/notfound/123.png" />
     </textures>
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss" shininess = "ff" >
-            <emission r="ff" g="ff" b="ff" a="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+        <material id="mat1" shininess="45" >
+            <emission r="1" g="2" b="3" a="4" />
+            <ambient r="5" g="6" b="7" a="8" />
+            <diffuse r="9" g="10" b="11" a="12" />
+            <specular r="13" g="14" b="15" a="16" />
+        </material>
+        <material id="mat2" shininess="46" >
+            <emission r="1" g="2" b="3" a="4" />
+            <ambient r="5" g="6" b="7" a="8" />
+            <diffuse r="9" g="10" b="11" a="12" />
+            <specular r="13" g="14" b="15" a="16" />
         </material>
     </materials>
     <transformations>

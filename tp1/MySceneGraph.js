@@ -49,12 +49,16 @@ class MySceneGraph {
         this.nodes = [];
 
         this.rootElementId = null;
+        this.ambient = null;
+        this.background = null;
 
         //To use for checking if ids are repeated
         this.elementIds = new Set();
         
         this.cameras = new Map();
         this.lights = new Map();
+        this.textures = new Map();
+        this.materials = new Map();
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -237,19 +241,6 @@ class MySceneGraph {
     }
 
     /**
-     * Parses the <ILLUMINATION> block.
-     * @param {illumination block element} illuminationNode
-     */
-    parseIllumination_old(illuminationNode) {
-        // TODO: Parse Illumination node
-
-        this.log("Parsed illumination");
-
-        return null;
-    }
-
-
-    /**
      * Parses the <LIGHTS> node.
      * @param {lights block element} lightsNode
      */
@@ -395,45 +386,14 @@ class MySceneGraph {
         return null;
     }
 
-    /**
-     * Parses the <TEXTURES> block. 
-     * @param {textures block element} texturesNode
-     */
-    parseTextures_old(texturesNode) {
-        // TODO: Parse block
-
-        console.log("Parsed textures");
-
-        return null;
-    }
-
-    /**
-     * Parses the <MATERIALS> node.
-     * @param {materials block element} materialsNode
-     */
-    parseMaterials_old(materialsNode) {
-        // TODO: Parse block
-        this.log("Parsed materials");
-        return null;
-
-    }
-
-    /**
-     * Parses the <NODES> block.
-     * @param {nodes block element} nodesNode
-     */
-    parseNodes_old(nodesNode) {
-        // TODO: Parse block
-        this.log("Parsed nodes");
-        return null;
-    }
-
 
     /**
      * Parses the <scene> block.
      * @param {scene block element} sceneNode
      */
     parseScene(sceneNode) {
+        console.log('Parsing scene');
+
         if(!this.reader.hasAttribute(sceneNode, "root")) {
             return this.missingNodeAttributeMessage("scene", "root");
         }
@@ -456,15 +416,13 @@ class MySceneGraph {
      * @param {views block element} viewsNode
      */
     parseViews(viewsNode) {
-        console.log('Parsing views', viewsNode);
+        console.log('Parsing views');
 
         if(!this.reader.hasAttribute(viewsNode, "default")) {
             return this.missingNodeAttributeMessage("views", "default");
         }
 
         this.defaultViewId = this.reader.getString(viewsNode, "default");
-
-        console.log("wow ", viewsNode);
 
         //Check if it has one view defined at least and it matches the default view id
         const views = viewsNode.children;
@@ -485,20 +443,22 @@ class MySceneGraph {
         if(this.cameras.size === 0) {
             return "no views were defined";
         }
+
+        if(!this.cameras.has(this.defaultViewId)) {
+            return "specified default view id does not exist";
+        }
     }
 
     createPerspectiveCamera(viewNode) {
-        console.log("persp ", viewNode);
-
         //id
         if(!this.reader.hasAttribute(viewNode, "id")) {
             return this.missingNodeAttributeMessage("perspective", "id");
         }
         let id = this.reader.getString(viewNode, "id");
-        if (this.elementIds.has(id)) {
-            return "id '" + id + "' already exists";
-        } 
-        this.elementIds.add(id);
+        let err;
+        if (err = this.verifyUniqueId(viewNode.nodeName, id)) {
+            return err;
+        }
 
         //near
         let near = this.parseFloatAttr(viewNode, "near");
@@ -528,9 +488,9 @@ class MySceneGraph {
         if (cameraCoords.length !== 2) {
             return "perspective invalid number of camera coordinates";
         } else if (cameraCoords[0].nodeName !== "from") {
-            return "perpective 'from' node is missing";
+            return this.missingNodeMessage("perspective", "from");
         } else if (cameraCoords[1].nodeName !== "to") {
-            return "perpective 'to' node is missing";
+            return this.missingNodeMessage("perspective", "to");
         }
 
         let from = this.parseCoords(cameraCoords[0]);
@@ -554,21 +514,18 @@ class MySceneGraph {
         }
 
         this.cameras.set(cam.id, cam);
-        console.log("cameras" , this.cameras);
     }
 
     createOrthoCamera(viewNode) {
-        console.log("ortho ", viewNode);
-
         //id
         if(!this.reader.hasAttribute(viewNode, "id")) {
             return this.missingNodeAttributeMessage("ortho", "id");
         }
         let id = this.reader.getString(viewNode, "id");
-        if (this.elementIds.has(id)) {
-            return "id '" + id + "' already exists";
-        } 
-        this.elementIds.add(id);
+        let err;
+        if (err = this.verifyUniqueId(viewNode.nodeName, id)) {
+            return err;
+        }
 
         ///near
         let near = this.parseFloatAttr(viewNode, "near");
@@ -588,7 +545,7 @@ class MySceneGraph {
         }
 
         // TODO: left <= right ?
-        ///left
+        //left
         let left = this.parseFloatAttr(viewNode, "left");
         if (typeof left !== "number") {
             return left;
@@ -601,7 +558,7 @@ class MySceneGraph {
         }
 
         // TODO: bottom <= top ?
-        ///bottom
+        //bottom
         let bottom = this.parseFloatAttr(viewNode, "bottom");
         if (typeof bottom !== "number") {
             return bottom;
@@ -627,23 +584,347 @@ class MySceneGraph {
         }
 
         this.cameras.set(cam.id, cam);
-        console.log("cameras" , this.cameras);
     }
 
     parseAmbient(ambientNode) {
-        console.log('Parsing ambient', ambientNode);
+        console.log("Parsing ambient");
+
+        const children = ambientNode.children;
+
+        if (children.length !== 2) {
+            return "ambient invalid number of child nodes";
+        } else if (children[0].nodeName !== "ambient") {
+            return this.missingNodeMessage("ambient", "ambient");
+        } else if (children[1].nodeName !== "background") {
+            return this.missingNodeMessage("ambient", "background");
+        }
+
+        this.ambient = this.parseRGBA(children[0]);
+        if (typeof this.ambient === "string") {
+            return this.ambient;
+        }
+
+        this.background = this.parseRGBA(children[1]);
+        if (typeof this.background === "string") {
+            return this.background;
+        }
     }
 
     parseLights(lightsNode) {
-        console.log('Parsing lights', lightsNode);
+        console.log('Parsing lights');
+
+        const lights = lightsNode.children;
+
+        let err;
+        for(let i = 0; i < lights.length; ++i) {
+            if(lights[i].nodeName === "omni") {
+                err = this.createOmniLight(lights[i]);
+            } else if(lights[i].nodeName === "spot") {
+                err = this.createSpotLight(lights[i]);
+            }
+
+            if(err) {
+                return err;
+            }
+        }
+
+        if(this.lights.size === 0) {
+            return "no lights were defined";
+        }
+    }
+
+    createOmniLight(lightNode) {
+        //id
+        if(!this.reader.hasAttribute(lightNode, "id")) {
+            return this.missingNodeAttributeMessage("omni", "id");
+        }
+        let id = this.reader.getString(lightNode, "id");
+        let err;
+        if (err = this.verifyUniqueId(lightNode.nodeName, id)) {
+            return err;
+        }
+
+        //enabled
+        if(!this.reader.hasAttribute(lightNode, "enabled")) {
+            return this.missingNodeAttributeMessage("omni", "enabled");
+        }
+        let enabled = this.reader.getString(lightNode, "enabled");
+        if (!this.attrIsBoolean(enabled)) {
+            return this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
+        }
+
+        const lightProperties = lightNode.children;
+
+        if (lightProperties.length !== 4) {
+            return "omni invalid number of light coordinates";
+        } else if (lightProperties[0].nodeName !== "location") {
+            return this.missingNodeMessage("omni", "location");
+        } else if (lightProperties[1].nodeName !== "ambient") {
+            return this.missingNodeMessage("omni", "ambient");
+        } else if (lightProperties[2].nodeName !== "diffuse") {
+            return this.missingNodeMessage("omni", "diffuse");
+        } else if (lightProperties[3].nodeName !== "specular") {
+            return this.missingNodeMessage("omni", "specular");
+        }
+
+        let locationNode = lightProperties[0]
+        let location = this.parseCoords(locationNode);
+        if (typeof location === "string") {
+            return location;
+        }
+        let w = this.parseFloatAttr(locationNode, "w");
+        if (typeof w !== "number") {
+            return w;
+        }
+        location.w = w;
+
+        let ambient = this.parseRGBA(lightProperties[1]);
+        if (typeof ambient === "string") {
+            return ambient;
+        }
+
+        let diffuse = this.parseRGBA(lightProperties[2]);
+        if (typeof diffuse === "string") {
+            return diffuse;
+        }
+
+        let specular = this.parseRGBA(lightProperties[3]);
+        if (typeof specular === "string") {
+            return specular;
+        }
+
+        const light = {
+            type: "omni",
+            id,
+            enabled,
+            location,
+            ambient,
+            diffuse,
+            specular
+        }
+
+        this.lights.set(light.id, light);
+    }
+
+    createSpotLight(lightNode) {
+        //id
+        if(!this.reader.hasAttribute(lightNode, "id")) {
+            return this.missingNodeAttributeMessage("spot", "id");
+        }
+        let id = this.reader.getString(lightNode, "id");
+        let err;
+        if (err = this.verifyUniqueId(lightNode.nodeName, id)) {
+            return err;
+        }
+
+        //enabled
+        if(!this.reader.hasAttribute(lightNode, "enabled")) {
+            return this.missingNodeAttributeMessage("spot", "enabled");
+        }
+        let enabled = this.reader.getString(lightNode, "enabled");
+        if (!this.attrIsBoolean(enabled)) {
+            return this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
+        }
+
+        //angle
+        let angle = this.parseFloatAttr(lightNode, "angle");
+        if (typeof angle !== "number") {
+            return angle;
+        }
+
+        //exponent
+        let exponent = this.parseFloatAttr(lightNode, "exponent");
+        if (typeof exponent !== "number") {
+            return exponent;
+        }
+
+        const lightProperties = lightNode.children;
+
+        if (lightProperties.length !== 5) {
+            return "spot invalid number of light coordinates";
+        } else if (lightProperties[0].nodeName !== "location") {
+            return this.missingNodeMessage("spot", "location");
+        } else if (lightProperties[1].nodeName !== "target") {
+            return this.missingNodeMessage("spot", "target");
+        } else if (lightProperties[2].nodeName !== "ambient") {
+            return this.missingNodeMessage("spot", "ambient");
+        } else if (lightProperties[3].nodeName !== "diffuse") {
+            return this.missingNodeMessage("spot", "diffuse");
+        } else if (lightProperties[4].nodeName !== "specular") {
+            return this.missingNodeMessage("spot", "specular");
+        }
+
+        let locationNode = lightProperties[0]
+        let location = this.parseCoords(locationNode);
+        if (typeof location === "string") {
+            return location;
+        }
+        let w = this.parseFloatAttr(locationNode, "w");
+        if (typeof w !== "number") {
+            return w;
+        }
+        location.w = w;
+
+        let target = this.parseCoords(lightProperties[1]);
+        if (typeof target === "string") {
+            return target;
+        }
+
+        let ambient = this.parseRGBA(lightProperties[2]);
+        if (typeof ambient === "string") {
+            return ambient;
+        }
+
+        let diffuse = this.parseRGBA(lightProperties[3]);
+        if (typeof diffuse === "string") {
+            return diffuse;
+        }
+
+        let specular = this.parseRGBA(lightProperties[4]);
+        if (typeof specular === "string") {
+            return specular;
+        }
+
+        const light = {
+            type: "spot",
+            id,
+            enabled,
+            location,
+            target,
+            ambient,
+            diffuse,
+            specular
+        }
+
+        this.lights.set(light.id, light);
     }
 
     parseTextures(texturesNode) {
-        console.log('Parsing textures', texturesNode);
+        console.log('Parsing textures');
+
+        const textures = texturesNode.children;
+
+        let err;
+        for(let i = 0; i < textures.length; ++i) {
+            err = this.createTexture(textures[i]);
+
+            if(err) {
+                return err;
+            }
+        }
+
+        if(this.textures.size === 0) {
+            return "no textures were defined";
+        }
+    }
+
+    createTexture(textureNode) {
+        //id
+        if(!this.reader.hasAttribute(textureNode, "id")) {
+            return this.missingNodeAttributeMessage("texture", "id");
+        }
+        let id = this.reader.getString(textureNode, "id");
+        let err;
+        if (err = this.verifyUniqueId(textureNode.nodeName, id)) {
+            return err;
+        }
+
+        //file
+        if(!this.reader.hasAttribute(textureNode, "file")) {
+            return this.missingNodeAttributeMessage("texture", "file");
+        }
+        let file = this.reader.getString(textureNode, "file");
+
+        const texture = {
+            id,
+            file
+        }
+
+        this.textures.set(texture.id, texture);
     }
 
     parseMaterials(materialsNode) {
-        console.log('Parsing materials', materialsNode);
+        console.log('Parsing materials');
+
+        const materials = materialsNode.children;
+
+        let err;
+        for(let i = 0; i < materials.length; ++i) {
+            err = this.createMaterial(materials[i]);
+
+            if(err) {
+                return err;
+            }
+        }
+
+        if(this.materials.size === 0) {
+            return "no materials were defined";
+        }
+
+        console.log("MATERIALS: ", this.materials);
+    }
+
+    createMaterial(materialNode) {
+        //id
+        if(!this.reader.hasAttribute(materialNode, "id")) {
+            return this.missingNodeAttributeMessage("texture", "id");
+        }
+        let id = this.reader.getString(materialNode, "id");
+        let err;
+        if (err = this.verifyUniqueId(materialNode.nodeName, id)) {
+            return err;
+        }
+
+        //shininess
+        let shininess = this.parseFloatAttr(materialNode, "shininess");
+        if (typeof shininess !== "number") {
+            return shininess;
+        }
+
+        const materialProperties = materialNode.children;
+
+        if (materialProperties.length !== 4) {
+            return "materials invalid number of material coordinates";
+        } else if (materialProperties[0].nodeName !== "emission") {
+            return this.missingNodeMessage("material", "emission");
+        } else if (materialProperties[1].nodeName !== "ambient") {
+            return this.missingNodeMessage("material", "ambient");
+        } else if (materialProperties[2].nodeName !== "diffuse") {
+            return this.missingNodeMessage("material", "diffuse");
+        } else if (materialProperties[3].nodeName !== "specular") {
+            return this.missingNodeMessage("material", "specular");
+        }
+
+        let emission = this.parseRGBA(materialProperties[0]);
+        if (typeof emission === "string") {
+            return emission;
+        }
+
+        let ambient = this.parseRGBA(materialProperties[1]);
+        if (typeof ambient === "string") {
+            return ambient;
+        }
+
+        let diffuse = this.parseRGBA(materialProperties[2]);
+        if (typeof diffuse === "string") {
+            return diffuse;
+        }
+
+        let specular = this.parseRGBA(materialProperties[3]);
+        if (typeof specular === "string") {
+            return specular;
+        }
+
+        const material = {
+            id,
+            shininess,
+            emission,
+            ambient,
+            diffuse,
+            specular
+        }
+
+        this.materials.set(material.id, material);
     }
 
     parseTransformations(transformationsNode) {
@@ -660,6 +941,10 @@ class MySceneGraph {
 
     attrIsNumber(attribute) {
         return !isNaN(attribute);
+    }
+
+    attrIsBoolean(attribute) {
+        return attribute === "true" || attribute === "false";
     }
     
     parseFloatAttr(node, attribute_name) {
@@ -690,6 +975,30 @@ class MySceneGraph {
         }
 
         return {x, y, z};
+    }
+
+    parseRGBA(node) {
+        let r = this.parseFloatAttr(node, "r");
+        if (typeof r !== "number") {
+            return r;
+        }
+
+        let g = this.parseFloatAttr(node, "g");
+        if (typeof g !== "number") {
+            return g;
+        }
+
+        let b = this.parseFloatAttr(node, "b");
+        if (typeof b !== "number") {
+            return b;
+        }
+
+        let a = this.parseFloatAttr(node, "a");
+        if (typeof a !== "number") {
+            return a;
+        }
+
+        return {r, g, b, a};
     }
 
     /*
@@ -724,7 +1033,16 @@ class MySceneGraph {
      * @param {string} attribute_name The name of the attribute
      */
     missingNodeAttributeMessage(node_name, attribute_name) {
-        return `${node_name} ${attribute_name} attribute is not defined`
+        return `${node_name} ${attribute_name} attribute is not defined`;
+    }
+
+    /**
+     * 
+     * @param {string} node_name The name of the node
+     * @param {string} attribute_name The name of the attribute
+     */
+    missingNodeMessage(node_name, attribute_name) {
+        return `${node_name} '${attribute_name}' node is missing`;
     }
 
     /**
@@ -733,9 +1051,22 @@ class MySceneGraph {
      * @param {string} attribute_name The name of the attribute
      */
     isNanAttributeMessage(node_name, attribute_name) {
-        return `${node_name} ${attribute_name} attribute is not a number`
+        return `${node_name} ${attribute_name} attribute is not a number`;
+    }
+
+    notBooleanAttributeMessage(node_name, attribute_name) {
+        return `${node_name} ${attribute_name} attribute is not of boolean type`;
     }
     
+    verifyUniqueId(node_name, id) {
+        if (this.elementIds.has(id)) {
+            return `node ${node_name}: '${id}' id already exists`;
+        }
+        else {
+            this.elementIds.add(id);
+            return false;
+        }
+    }
 
     /**
      * Displays the scene, processing each node, starting in the root node.
