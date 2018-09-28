@@ -1,13 +1,3 @@
-var DEGREE_TO_RAD = Math.PI / 180;
-
-// Order of the groups in the XML document.
-var INITIALS_INDEX = 0;
-var ILLUMINATION_INDEX = 1;
-var LIGHTS_INDEX = 2;
-var TEXTURES_INDEX = 3;
-var MATERIALS_INDEX = 4;
-var NODES_INDEX = 5;
-
 const XML_NODES = [
     'scene',
     'views',
@@ -19,18 +9,6 @@ const XML_NODES = [
     'primitives',
     'components'
 ]
-
-const XML_ELEMENTS_CHECKLIST_BASE = {
-    'scene': false,
-    'views': false,
-    'ambient': false,
-    'lights': false,
-    'textures': false,
-    'materials': false,
-    'transformations': false,
-    'primitives': false,
-    'components': false 
-}
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -54,13 +32,16 @@ class MySceneGraph {
 
         //To use for checking if ids are repeated
         this.elementIds = new Set();
-        
+
         this.cameras = new Map();
         this.lights = new Map();
         this.textures = new Map();
         this.materials = new Map();
         this.transformations = new Map();
         this.primitives = new Map();
+        this.components = new Map();
+
+        this.tree = {};
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -92,10 +73,8 @@ class MySceneGraph {
          * After the file is read, the reader calls onXMLReady on this object.
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
-
         this.reader.open('scenes/' + filename, this);
     }
-
 
     /*
      * Callback to be executed after successful reading
@@ -394,8 +373,6 @@ class MySceneGraph {
      * @param {scene block element} sceneNode
      */
     parseScene(sceneNode) {
-        console.log('Parsing scene');
-
         if(!this.reader.hasAttribute(sceneNode, "root")) {
             return this.missingNodeAttributeMessage("scene", "root");
         }
@@ -418,8 +395,6 @@ class MySceneGraph {
      * @param {views block element} viewsNode
      */
     parseViews(viewsNode) {
-        console.log('Parsing views');
-
         if(!this.reader.hasAttribute(viewsNode, "default")) {
             return this.missingNodeAttributeMessage("views", "default");
         }
@@ -589,8 +564,6 @@ class MySceneGraph {
     }
 
     parseAmbient(ambientNode) {
-        console.log("Parsing ambient");
-
         const children = ambientNode.children;
 
         if (children.length !== 2) {
@@ -613,8 +586,6 @@ class MySceneGraph {
     }
 
     parseLights(lightsNode) {
-        console.log('Parsing lights');
-
         const lights = lightsNode.children;
 
         let err;
@@ -650,8 +621,8 @@ class MySceneGraph {
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
             return this.missingNodeAttributeMessage("omni", "enabled");
         }
-        let enabled = this.reader.getString(lightNode, "enabled");
-        if (!this.attrIsBoolean(enabled)) {
+        const enabled = this.reader.getBoolean(lightNode, "enabled");
+        if (enabled === null) {
             return this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
         }
 
@@ -719,12 +690,11 @@ class MySceneGraph {
             return err;
         }
 
-        //enabled
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
             return this.missingNodeAttributeMessage("spot", "enabled");
         }
-        let enabled = this.reader.getString(lightNode, "enabled");
-        if (!this.attrIsBoolean(enabled)) {
+        const enabled = this.reader.getBoolean(lightNode, "enabled");
+        if (enabled === null) {
             return this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
         }
 
@@ -802,8 +772,6 @@ class MySceneGraph {
     }
 
     parseTextures(texturesNode) {
-        console.log('Parsing textures');
-
         const textures = texturesNode.children;
 
         let err;
@@ -846,8 +814,6 @@ class MySceneGraph {
     }
 
     parseMaterials(materialsNode) {
-        console.log('Parsing materials');
-
         const materials = materialsNode.children;
 
         let err;
@@ -928,8 +894,6 @@ class MySceneGraph {
     }
 
     parseTransformations(transformationsNode) {
-        console.log('Parsing transformations');
-
         const transformations = transformationsNode.children;
 
         let err;
@@ -1032,8 +996,6 @@ class MySceneGraph {
     }
 
     parsePrimitives(primitivesNode) {
-        console.log('Parsing primitives');
-
         const primitives = primitivesNode.children;
 
         let err;
@@ -1118,10 +1080,8 @@ class MySceneGraph {
 
         return {
             type: "rectangle",
-            x1,
-            y1,
-            x2,
-            y2
+            x1, y1,
+            x2, y2
         }
     }
 
@@ -1173,15 +1133,9 @@ class MySceneGraph {
            
         return {
             type: "triangle",
-            x1,
-            y1,
-            z1,
-            x2,
-            y2,
-            z2,
-            x3,
-            y3,
-            z3
+            x1, y1, z1,
+            x2, y2, z2,
+            x3, y3, z3
         }
     }
 
@@ -1277,14 +1231,12 @@ class MySceneGraph {
 
     parseComponents(componentsNode) {
         console.log('Parsing components', componentsNode);
+
+        const components = componentsNode.children;
     }
 
     attrIsNumber(attribute) {
         return !isNaN(attribute);
-    }
-
-    attrIsBoolean(attribute) {
-        return attribute === "true" || attribute === "false";
     }
     
     parseFloatAttr(node, attribute_name) {
