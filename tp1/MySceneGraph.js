@@ -31,8 +31,6 @@ class MySceneGraph {
         this.background = null;
 
         //To use for checking if ids are repeated
-        this.elementIds = new Set();
-
         this.cameras = new Map();
         this.lights = new Map();
         this.textures = new Map();
@@ -432,10 +430,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("perspective", "id");
         }
         let id = this.reader.getString(viewNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(viewNode.nodeName, id)) {
-            return err;
-        }
 
         //near
         let near = this.parseFloatAttr(viewNode, "near");
@@ -490,6 +484,11 @@ class MySceneGraph {
             to
         }
 
+        let err = this.verifyUniqueId("perspective", this.cameras, id);
+        if (err) {
+            return err;
+        }
+
         this.cameras.set(cam.id, cam);
     }
 
@@ -499,10 +498,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("ortho", "id");
         }
         let id = this.reader.getString(viewNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(viewNode.nodeName, id)) {
-            return err;
-        }
 
         ///near
         let near = this.parseFloatAttr(viewNode, "near");
@@ -560,6 +555,11 @@ class MySceneGraph {
             top
         }
 
+        let err = this.verifyUniqueId("ortho", this.cameras, id);
+        if (err) {
+            return err;
+        }
+
         this.cameras.set(cam.id, cam);
     }
 
@@ -612,10 +612,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("omni", "id");
         }
         let id = this.reader.getString(lightNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(lightNode.nodeName, id)) {
-            return err;
-        }
 
         //enabled
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
@@ -676,6 +672,11 @@ class MySceneGraph {
             specular
         }
 
+        let err = this.verifyUniqueId("omni", this.lights, id);
+        if (err) {
+            return err;
+        }
+
         this.lights.set(light.id, light);
     }
 
@@ -685,10 +686,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("spot", "id");
         }
         let id = this.reader.getString(lightNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(lightNode.nodeName, id)) {
-            return err;
-        }
 
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
             return this.missingNodeAttributeMessage("spot", "enabled");
@@ -768,6 +765,11 @@ class MySceneGraph {
             specular
         }
 
+        let err = this.verifyUniqueId("spot", this.lights, id);
+        if (err) {
+            return err;
+        }
+
         this.lights.set(light.id, light);
     }
 
@@ -794,10 +796,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("texture", "id");
         }
         let id = this.reader.getString(textureNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(textureNode.nodeName, id)) {
-            return err;
-        }
 
         //file
         if(!this.reader.hasAttribute(textureNode, "file")) {
@@ -808,6 +806,11 @@ class MySceneGraph {
         const texture = {
             id,
             file
+        }
+
+        let err = this.verifyUniqueId("texture", this.textures, id);
+        if (err) {
+            return err;
         }
 
         this.textures.set(texture.id, texture);
@@ -836,10 +839,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("material", "id");
         }
         let id = this.reader.getString(materialNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(materialNode.nodeName, id)) {
-            return err;
-        }
 
         //shininess
         let shininess = this.parseFloatAttr(materialNode, "shininess");
@@ -890,6 +889,11 @@ class MySceneGraph {
             specular
         }
 
+        let err = this.verifyUniqueId("material", this.materials, id);
+        if (err) {
+            return err;
+        }
+
         this.materials.set(material.id, material);
     }
 
@@ -916,10 +920,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("transformation", "id");
         }
         let id = this.reader.getString(transformationNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(transformationNode.nodeName, id)) {
-            return err;
-        }
 
         let transformation = {
             id,
@@ -949,6 +949,11 @@ class MySceneGraph {
 
         if (transformation.transformations.length === 0) {
             return "transformation with id '" + id + "' is empty";
+        }
+
+        let err = this.verifyUniqueId("transformation", this.transformations, id);
+        if (err) {
+            return err;
         }
 
         this.transformations.set(transformation.id, transformation);
@@ -1018,10 +1023,6 @@ class MySceneGraph {
             return this.missingNodeAttributeMessage("transformation", "id");
         }
         let id = this.reader.getString(primitiveNode, "id");
-        let err;
-        if (err = this.verifyUniqueId(primitiveNode.nodeName, id)) {
-            return err;
-        }
 
         const childNodes = primitiveNode.children;
 
@@ -1053,6 +1054,11 @@ class MySceneGraph {
         }
 
         primitive.id = id;
+
+        let err = this.verifyUniqueId("primitive", this.primitives, id);
+        if (err) {
+            return err;
+        }
 
         this.primitives.set(primitive.id, primitive);
     }
@@ -1367,7 +1373,7 @@ class MySceneGraph {
         return `${node_name} ${attribute_name} attribute is not of boolean type`;
     }
     
-    verifyUniqueId(node_name, id) {
+    /* verifyUniqueId(node_name, id) {
         if (id === "") {
             return `node ${node_name}: id cannot be empty`;
         }
@@ -1376,6 +1382,26 @@ class MySceneGraph {
         }
         else {
             this.elementIds.add(id);
+            return false;
+        }
+    } */
+
+    idInUseMessage(node_name, id) {
+        return `${node_name} '${id}' id is already in use`;
+    }
+
+    emptyIdMessage(node_name) {
+        return `${node_name} id must not be empty`;
+    }
+
+    verifyUniqueId(node_name, container, id) {
+        if (id === "") {
+            return this.emptyIdMessage(node_name);
+        }
+        else if (container.has(id)) {
+            return this.idInUseMessage(node_name, id);
+        }
+        else {
             return false;
         }
     }

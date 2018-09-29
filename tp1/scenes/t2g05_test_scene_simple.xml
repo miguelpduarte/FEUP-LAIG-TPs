@@ -2,14 +2,18 @@
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="ss" axis_length="10" />
-    <views default="p1" >
+    <views default="ortho1" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
-        <perspective id="p1" near="2.5" far="3.2" angle="38">
+        <perspective id="perspective1" near="2.5" far="3.2" angle="38">
             <from x="1" y="2" z="3" />
             <to x="4.1" y="5.2" z="6.3" />
         </perspective>
-        <ortho id="o1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
+        <perspective id="perspective2" near="2.5" far="3.2" angle="38">
+            <from x="1" y="2" z="3" />
+            <to x="4.1" y="5.2" z="6.3" />
+        </perspective>
+        <ortho id="ortho1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
     </views>
     <ambient>
         <ambient r="6" g="7" b="8" a="0.4" />
@@ -18,13 +22,19 @@
     <lights>
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="eree" enabled="true" >
+        <omni id="omni1" enabled="true" >
             <location x="2" y="3" z="4" w="5.4" />
             <ambient r="4" g="2" b="3" a="0.5" />
             <diffuse r="4" g="2" b="3" a="0.5" />
             <specular r="4" g="2" b="3" a="0.5" />
         </omni>
-        <spot id="54" enabled="false" angle="4.5" exponent="2">
+        <omni id="omni2" enabled="true" >
+            <location x="2" y="3" z="4" w="5.4" />
+            <ambient r="4" g="2" b="3" a="0.5" />
+            <diffuse r="4" g="2" b="3" a="0.5" />
+            <specular r="4" g="2" b="3" a="0.5" />
+        </omni>
+        <spot id="spot1" enabled="false" angle="4.5" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
             <location x="2" y="3" z="3" w="4" />
             <target x="2" y="2" z="2" />
