@@ -23,10 +23,10 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="omni1" enabled="true" >
-            <location x="2" y="3" z="4" w="5.4" />
-            <ambient r="4" g="2" b="3" a="0.5" />
-            <diffuse r="4" g="2" b="3" a="0.5" />
-            <specular r="4" g="2" b="3" a="0.5" />
+            <location x="1" y="1" z="1" w="1" />
+            <ambient r="4" g="2" b="3" a="1" />
+            <diffuse r="4" g="2" b="3" a="1" />
+            <specular r="4" g="2" b="3" a="1" />
         </omni>
         <omni id="omni2" enabled="true" >
             <location x="2" y="3" z="4" w="5.4" />

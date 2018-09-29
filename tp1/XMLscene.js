@@ -46,7 +46,47 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        var i = 0;
+        console.log("---------------------------");
+        console.log("----- Initing Lights ------");
+        console.log("---------------------------");
+
+        let num_created_lights = 0;
+        const lights = this.graph.lights.values();
+
+        let result = lights.next();
+        while(!result.done) {
+            let light = result.value;
+            result = lights.next();
+
+            console.log(light);
+
+            if (light.type === "omni") {
+                this.lights[num_created_lights].setPosition(...Object.values(light.location));
+                this.lights[num_created_lights].setAmbient(...Object.values(light.ambient));
+                this.lights[num_created_lights].setDiffuse(...Object.values(light.diffuse));
+                this.lights[num_created_lights].setSpecular(...Object.values(light.specular));
+
+                this.lights[num_created_lights].setVisible(true);
+                if(light.enabled) {
+                    this.lights[num_created_lights].enable();
+                } else {
+                    this.lights[num_created_lights].disable();
+                }
+
+                this.lights[num_created_lights].update();
+            }
+            else if (light.type === "spot") {
+                console.log("Spot");
+            }
+
+            // Only eight lights allowed by WebGL.
+            if (++num_created_lights == 8) {
+                break;
+            }
+        }
+
+        
+        /* var i = 0;
         // Lights index.
 
         // Reads the lights from the scene graph.
@@ -73,7 +113,7 @@ class XMLscene extends CGFscene {
 
                 i++;
             }
-        }
+        } */
     }
 
 
