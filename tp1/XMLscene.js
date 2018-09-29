@@ -1,4 +1,5 @@
-var DEGREE_TO_RAD = Math.PI / 180;
+const DEGREE_TO_RAD = Math.PI / 180;
+const MAX_LIGHTS = 8;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -46,19 +47,12 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        console.log("---------------------------");
-        console.log("----- Initing Lights ------");
-        console.log("---------------------------");
-
         let num_created_lights = 0;
         const lights = this.graph.lights.values();
 
         let result = lights.next();
         while(!result.done) {
             let light = result.value;
-            result = lights.next();
-
-            console.log(light);
 
             if (light.type === "omni") {
                 this.lights[num_created_lights].setPosition(...Object.values(light.location));
@@ -77,43 +71,16 @@ class XMLscene extends CGFscene {
             }
             else if (light.type === "spot") {
                 console.log("Spot");
+                // TODO: this
             }
 
             // Only eight lights allowed by WebGL.
-            if (++num_created_lights == 8) {
+            if (++num_created_lights == MAX_LIGHTS) {
                 break;
             }
+
+            result = lights.next();
         }
-
-        
-        /* var i = 0;
-        // Lights index.
-
-        // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
-            if (i >= 8)
-                break;              // Only eight lights allowed by WebGL.
-
-            if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
-
-                //lights are predefined in cgfscene
-                this.lights[i].setPosition(light[1][0], light[1][1], light[1][2], light[1][3]);
-                this.lights[i].setAmbient(light[2][0], light[2][1], light[2][2], light[2][3]);
-                this.lights[i].setDiffuse(light[3][0], light[3][1], light[3][2], light[3][3]);
-                this.lights[i].setSpecular(light[4][0], light[4][1], light[4][2], light[4][3]);
-
-                this.lights[i].setVisible(true);
-                if (light[0])
-                    this.lights[i].enable();
-                else
-                    this.lights[i].disable();
-
-                this.lights[i].update();
-
-                i++;
-            }
-        } */
     }
 
 
@@ -129,6 +96,7 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this, this.graph.referentialLength);
 
         // TODO: Change ambient and background details according to parsed graph
+		this.gl.clearColor(...Object.values(this.graph.background));
 
         this.initLights();
 
