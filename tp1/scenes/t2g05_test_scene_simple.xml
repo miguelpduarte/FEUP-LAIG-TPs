@@ -109,7 +109,7 @@
         </primitive >
     </primitives >
     <components>
-        <component id="ss">
+        <component id="comp1">
             <!-- Uma "component" e' um objeto composto e pode ser -->
             <!-- usada em nos intermédios -->
             <!-- bloco "transformation" e' obrigatorio -->
@@ -155,6 +155,22 @@
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
+                <componentref id="ss" />
+                <primitiveref id="ss" />
+            </children>
+        </component>
+        <component id="comp2">
+            <transformation>
+                <transformationref id="ss" />
+                <translate x="ff" y="ff" z="ff" />
+                <rotate axis="cc" angle="ff" />
+                <scale x="ff" y="ff" z="ff" />
+            </transformation>
+            <materials>
+                <material id="ss" />
+            </materials>
+            <texture id="ss" length_s="ff" length_t="ff" />
+            <children>
                 <componentref id="ss" />
                 <primitiveref id="ss" />
             </children>

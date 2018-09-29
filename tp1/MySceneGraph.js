@@ -457,7 +457,7 @@ class MySceneGraph {
         const cameraCoords = viewNode.children;
 
         if (cameraCoords.length !== 2) {
-            return "perspective invalid number of camera coordinates";
+            return "perspective '" + id + "' invalid number of camera coordinates";
         } else if (cameraCoords[0].nodeName !== "from") {
             return this.missingNodeMessage("perspective", "from");
         } else if (cameraCoords[1].nodeName !== "to") {
@@ -625,7 +625,7 @@ class MySceneGraph {
         const lightProperties = lightNode.children;
 
         if (lightProperties.length !== 4) {
-            return "omni invalid number of light coordinates";
+            return "omni '" + id + "' invalid number of light coordinates";
         } else if (lightProperties[0].nodeName !== "location") {
             return this.missingNodeMessage("omni", "location");
         } else if (lightProperties[1].nodeName !== "ambient") {
@@ -710,7 +710,7 @@ class MySceneGraph {
         const lightProperties = lightNode.children;
 
         if (lightProperties.length !== 5) {
-            return "spot invalid number of light coordinates";
+            return "spot '" + id + "' invalid number of light coordinates";
         } else if (lightProperties[0].nodeName !== "location") {
             return this.missingNodeMessage("spot", "location");
         } else if (lightProperties[1].nodeName !== "target") {
@@ -849,7 +849,7 @@ class MySceneGraph {
         const materialProperties = materialNode.children;
 
         if (materialProperties.length !== 4) {
-            return "materials invalid number of material propreties ";
+            return "material '" + id + "' invalid number of material propreties ";
         } else if (materialProperties[0].nodeName !== "emission") {
             return this.missingNodeMessage("material", "emission");
         } else if (materialProperties[1].nodeName !== "ambient") {
@@ -1020,7 +1020,7 @@ class MySceneGraph {
     parsePrimitive(primitiveNode) {
         //id
         if(!this.reader.hasAttribute(primitiveNode, "id")) {
-            return this.missingNodeAttributeMessage("transformation", "id");
+            return this.missingNodeAttributeMessage("primitive", "id");
         }
         let id = this.reader.getString(primitiveNode, "id");
 
@@ -1239,6 +1239,52 @@ class MySceneGraph {
         console.log('Parsing components', componentsNode);
 
         const components = componentsNode.children;
+
+        let err;
+        for(let i = 0; i < components.length; ++i) {
+            err = this.createComponent(components[i]);
+
+            if(err) {
+                return err;
+            }
+        }
+
+        if(this.components.size === 0) {
+            return "no components were defined";
+        }
+    }
+
+    createComponent(componentNode) {
+        //id
+        if(!this.reader.hasAttribute(componentNode, "id")) {
+            return this.missingNodeAttributeMessage("transformation", "id");
+        }
+        let id = this.reader.getString(componentNode, "id");
+
+        const componentProperties = componentNode.children;
+
+        if (componentProperties.length !== 4) {
+            return "component '" + id + "' invalid number of component properties";
+        } else if (componentProperties[0].nodeName !== "transformation") {
+            return this.missingNodeMessage("component", "transformation");
+        } else if (componentProperties[1].nodeName !== "materials") {
+            return this.missingNodeMessage("component", "materials");
+        } else if (componentProperties[2].nodeName !== "texture") {
+            return this.missingNodeMessage("component", "texture");
+        } else if (componentProperties[3].nodeName !== "children") {
+            return this.missingNodeMessage("component", "children");
+        }
+        
+        const component = {
+            id
+        };
+
+        let err = this.verifyUniqueId("component", this.components, id);
+        if (err) {
+            return err;
+        }
+
+        this.components.set(component.id, component);
     }
 
     attrIsNumber(attribute) {
