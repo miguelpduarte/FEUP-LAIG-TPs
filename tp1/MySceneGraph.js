@@ -81,12 +81,18 @@ class MySceneGraph {
         this.log("XML Loading finished.");
         const rootElement = this.reader.xmlDoc.documentElement;
 
-        // Here should go the calls for different functions to parse the various blocks
-        const error = this.parseXMLFile(rootElement);
-
-        if (error) {
-            this.onXMLError(error);
-            return;
+        try {
+            // Here should go the calls for different functions to parse the various blocks
+            const legacy_ret = this.parseXMLFile(rootElement);
+            if(legacy_ret) {
+                console.warn("Some parsing function attempted to return an error, this is legacy behaviour and will no longer be supported, please change to using exceptions");
+                console.error("Error: ", legacy_ret);
+            }
+        } catch (error) {
+            if (error) {
+                this.onXMLError(error);
+                return;
+            }
         }
 
         this.loadedOk = true;
@@ -101,7 +107,7 @@ class MySceneGraph {
      */
     parseXMLFile(rootElement) {
         if (rootElement.nodeName !== "yas") {
-            return "root tag <yas> missing";
+            throw "root tag <yas> missing";
         }
 
         const nodes = rootElement.children;
@@ -109,7 +115,7 @@ class MySceneGraph {
         //Checking elements order
         for(let i = 0; i < XML_NODES.length; ++i) {
             if(nodes[i].nodeName !== XML_NODES[i]) {
-                return "node " + XML_NODES[i] + " missing or out of order!";
+                throw "node " + XML_NODES[i] + " missing or out of order!";
             }
         }
 
@@ -117,13 +123,8 @@ class MySceneGraph {
             this.onXMLMinorError("The XML File has additional unexpected nodes. These were not parsed.");
         }
 
-        let err;
-
         for(let i = 0; i < XML_NODES.length; ++i) {
-            err = this.XML_ELEMENTS_PARSING_FUNCS[XML_NODES[i]](nodes[i]);
-            if(err) {
-                return err;
-            }
+            this.XML_ELEMENTS_PARSING_FUNCS[XML_NODES[i]](nodes[i]);
         }
     }
 
@@ -365,24 +366,23 @@ class MySceneGraph {
         return null;
     }
 
-
     /**
      * Parses the <scene> block.
      * @param {scene block element} sceneNode
      */
     parseScene(sceneNode) {
         if(!this.reader.hasAttribute(sceneNode, "root")) {
-            return this.missingNodeAttributeMessage("scene", "root");
+            throw this.missingNodeAttributeMessage("scene", "root");
         }
         
         if(!this.reader.hasAttribute(sceneNode, "axis_length")) {
-            return this.missingNodeAttributeMessage("scene", "axis_length");
+            throw this.missingNodeAttributeMessage("scene", "axis_length");
         }
         
         this.referentialLength = this.reader.getFloat(sceneNode, "axis_length");
         
         if(!this.attrIsNumber(this.referentialLength)) {
-            return this.isNanAttributeMessage("scene", "axis_length");
+            throw this.isNanAttributeMessage("scene", "axis_length");
         }
 
         this.rootElementId = this.reader.getString(sceneNode, "root");
@@ -394,7 +394,7 @@ class MySceneGraph {
      */
     parseViews(viewsNode) {
         if(!this.reader.hasAttribute(viewsNode, "default")) {
-            return this.missingNodeAttributeMessage("views", "default");
+            throw this.missingNodeAttributeMessage("views", "default");
         }
 
         this.defaultViewId = this.reader.getString(viewsNode, "default");
@@ -427,52 +427,40 @@ class MySceneGraph {
     createPerspectiveCamera(viewNode) {
         //id
         if(!this.reader.hasAttribute(viewNode, "id")) {
-            return this.missingNodeAttributeMessage("perspective", "id");
+            throw this.missingNodeAttributeMessage("perspective", "id");
         }
         let id = this.reader.getString(viewNode, "id");
 
+        //parseFloatAttr throws if attr is NaN
+
         //near
         let near = this.parseFloatAttr(viewNode, "near");
-        if (typeof near !== "number") {
-            return near;
-        }
 
         //far
         let far = this.parseFloatAttr(viewNode, "far");
-        if (typeof far !== "number") {
-            return far;
-        }
 
         //near must be smaller than far
         if (near >= far) {
-            return "perspective near attribute must be smaller than far attribute";
+            throw "perspective near attribute must be smaller than far attribute";
         }
 
         //angle
         let angle = this.parseFloatAttr(viewNode, "angle");
-        if (typeof angle !== "number") {
-            return angle;
-        }
 
         const cameraCoords = viewNode.children;
 
         if (cameraCoords.length !== 2) {
-            return "perspective '" + id + "' invalid number of camera coordinates";
+            throw "perspective '" + id + "' invalid number of camera coordinates";
         } else if (cameraCoords[0].nodeName !== "from") {
-            return this.missingNodeMessage("perspective", "from");
+            throw this.missingNodeMessage("perspective", "from");
         } else if (cameraCoords[1].nodeName !== "to") {
-            return this.missingNodeMessage("perspective", "to");
+            throw this.missingNodeMessage("perspective", "to");
         }
+
+        //parseCoords throws if coords are not valid
 
         let from = this.parseCoords(cameraCoords[0]);
-        if (typeof from === "string") {
-            return from;
-        }
-
         let to = this.parseCoords(cameraCoords[1]);
-        if (typeof to === "string") {
-            return to;
-        }
 
         const cam = {
             type: "perspective",
@@ -484,10 +472,8 @@ class MySceneGraph {
             to
         }
 
-        let err = this.verifyUniqueId("perspective", this.cameras, id);
-        if (err) {
-            return err;
-        }
+        //Throws if id not unique
+        this.verifyUniqueId("perspective", this.cameras, id);
 
         this.cameras.set(cam.id, cam);
     }
@@ -495,52 +481,28 @@ class MySceneGraph {
     createOrthoCamera(viewNode) {
         //id
         if(!this.reader.hasAttribute(viewNode, "id")) {
-            return this.missingNodeAttributeMessage("ortho", "id");
+            throw this.missingNodeAttributeMessage("ortho", "id");
         }
         let id = this.reader.getString(viewNode, "id");
 
-        ///near
         let near = this.parseFloatAttr(viewNode, "near");
-        if (typeof near !== "number") {
-            return near;
-        }
-
-        //far
         let far = this.parseFloatAttr(viewNode, "far");
-        if (typeof far !== "number") {
-            return far;
-        }
 
         //near must be smaller than far
         if (near >= far) {
-            return "ortho near attribute must be smaller than far attribute";
+            throw "ortho near attribute must be smaller than far attribute";
         }
 
         // TODO: left <= right ?
-        //left
-        let left = this.parseFloatAttr(viewNode, "left");
-        if (typeof left !== "number") {
-            return left;
-        }
 
-        //right
+        let left = this.parseFloatAttr(viewNode, "left");
         let right = this.parseFloatAttr(viewNode, "right");
-        if (typeof right !== "number") {
-            return right;
-        }
 
         // TODO: bottom <= top ?
+
         //bottom
         let bottom = this.parseFloatAttr(viewNode, "bottom");
-        if (typeof bottom !== "number") {
-            return bottom;
-        }
-
-        //top
         let top = this.parseFloatAttr(viewNode, "top");
-        if (typeof top !== "number") {
-            return top;
-        }
 
         console.log("Ortho not created: left? right? top? bottom? what?");
 
@@ -555,10 +517,7 @@ class MySceneGraph {
             top
         }
 
-        let err = this.verifyUniqueId("ortho", this.cameras, id);
-        if (err) {
-            return err;
-        }
+        this.verifyUniqueId("ortho", this.cameras, id);
 
         this.cameras.set(cam.id, cam);
     }
@@ -567,100 +526,74 @@ class MySceneGraph {
         const children = ambientNode.children;
 
         if (children.length !== 2) {
-            return "ambient invalid number of child nodes";
+            throw "ambient invalid number of child nodes";
         } else if (children[0].nodeName !== "ambient") {
-            return this.missingNodeMessage("ambient", "ambient");
+            throw this.missingNodeMessage("ambient", "ambient");
         } else if (children[1].nodeName !== "background") {
-            return this.missingNodeMessage("ambient", "background");
+            throw this.missingNodeMessage("ambient", "background");
         }
+
+        //parseRGBA throws if not valid
 
         this.ambient = this.parseRGBA(children[0]);
-        if (typeof this.ambient === "string") {
-            return this.ambient;
-        }
-
         this.background = this.parseRGBA(children[1]);
-        if (typeof this.background === "string") {
-            return this.background;
-        }
     }
 
     parseLights(lightsNode) {
         const lights = lightsNode.children;
 
-        let err;
         for(let i = 0; i < lights.length; ++i) {
             if(lights[i].nodeName === "omni") {
-                err = this.createOmniLight(lights[i]);
+                this.createOmniLight(lights[i]);
             } else if(lights[i].nodeName === "spot") {
-                err = this.createSpotLight(lights[i]);
-            }
-
-            if(err) {
-                return err;
+                this.createSpotLight(lights[i]);
             }
         }
 
         if(this.lights.size === 0) {
-            return "no lights were defined";
+            throw "no lights were defined";
         }
     }
 
     createOmniLight(lightNode) {
         //id
         if(!this.reader.hasAttribute(lightNode, "id")) {
-            return this.missingNodeAttributeMessage("omni", "id");
+            throw this.missingNodeAttributeMessage("omni", "id");
         }
         let id = this.reader.getString(lightNode, "id");
 
         //enabled
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
-            return this.missingNodeAttributeMessage("omni", "enabled");
+            throw this.missingNodeAttributeMessage("omni", "enabled");
         }
+
         const enabled = this.reader.getBoolean(lightNode, "enabled");
         if (enabled === null) {
-            return this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
+            throw this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
         }
 
         const lightProperties = lightNode.children;
 
         if (lightProperties.length !== 4) {
-            return "omni '" + id + "' invalid number of light coordinates";
+            throw "omni '" + id + "' invalid number of light coordinates";
         } else if (lightProperties[0].nodeName !== "location") {
-            return this.missingNodeMessage("omni", "location");
+            throw this.missingNodeMessage("omni", "location");
         } else if (lightProperties[1].nodeName !== "ambient") {
-            return this.missingNodeMessage("omni", "ambient");
+            throw this.missingNodeMessage("omni", "ambient");
         } else if (lightProperties[2].nodeName !== "diffuse") {
-            return this.missingNodeMessage("omni", "diffuse");
+            throw this.missingNodeMessage("omni", "diffuse");
         } else if (lightProperties[3].nodeName !== "specular") {
-            return this.missingNodeMessage("omni", "specular");
+            throw this.missingNodeMessage("omni", "specular");
         }
 
         let locationNode = lightProperties[0]
         let location = this.parseCoords(locationNode);
-        if (typeof location === "string") {
-            return location;
-        }
         let w = this.parseFloatAttr(locationNode, "w");
-        if (typeof w !== "number") {
-            return w;
-        }
         location.w = w;
 
         let ambient = this.parseRGBA(lightProperties[1]);
-        if (typeof ambient === "string") {
-            return ambient;
-        }
-
         let diffuse = this.parseRGBA(lightProperties[2]);
-        if (typeof diffuse === "string") {
-            return diffuse;
-        }
-
         let specular = this.parseRGBA(lightProperties[3]);
-        if (typeof specular === "string") {
-            return specular;
-        }
 
         const light = {
             type: "omni",
@@ -672,10 +605,7 @@ class MySceneGraph {
             specular
         }
 
-        let err = this.verifyUniqueId("omni", this.lights, id);
-        if (err) {
-            return err;
-        }
+        this.verifyUniqueId("omni", this.lights, id);
 
         this.lights.set(light.id, light);
     }
@@ -683,76 +613,46 @@ class MySceneGraph {
     createSpotLight(lightNode) {
         //id
         if(!this.reader.hasAttribute(lightNode, "id")) {
-            return this.missingNodeAttributeMessage("spot", "id");
+            throw this.missingNodeAttributeMessage("spot", "id");
         }
         let id = this.reader.getString(lightNode, "id");
 
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
-            return this.missingNodeAttributeMessage("spot", "enabled");
+            throw this.missingNodeAttributeMessage("spot", "enabled");
         }
         const enabled = this.reader.getBoolean(lightNode, "enabled");
         if (enabled === null) {
-            return this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
+            throw this.notBooleanAttributeMessage(lightNode.nodeName, "enabled");
         }
 
-        //angle
         let angle = this.parseFloatAttr(lightNode, "angle");
-        if (typeof angle !== "number") {
-            return angle;
-        }
-
-        //exponent
         let exponent = this.parseFloatAttr(lightNode, "exponent");
-        if (typeof exponent !== "number") {
-            return exponent;
-        }
 
         const lightProperties = lightNode.children;
 
         if (lightProperties.length !== 5) {
-            return "spot '" + id + "' invalid number of light coordinates";
+            throw "spot '" + id + "' invalid number of light coordinates";
         } else if (lightProperties[0].nodeName !== "location") {
-            return this.missingNodeMessage("spot", "location");
+            throw this.missingNodeMessage("spot", "location");
         } else if (lightProperties[1].nodeName !== "target") {
-            return this.missingNodeMessage("spot", "target");
+            throw this.missingNodeMessage("spot", "target");
         } else if (lightProperties[2].nodeName !== "ambient") {
-            return this.missingNodeMessage("spot", "ambient");
+            throw this.missingNodeMessage("spot", "ambient");
         } else if (lightProperties[3].nodeName !== "diffuse") {
-            return this.missingNodeMessage("spot", "diffuse");
+            throw this.missingNodeMessage("spot", "diffuse");
         } else if (lightProperties[4].nodeName !== "specular") {
-            return this.missingNodeMessage("spot", "specular");
+            throw this.missingNodeMessage("spot", "specular");
         }
 
         let locationNode = lightProperties[0]
         let location = this.parseCoords(locationNode);
-        if (typeof location === "string") {
-            return location;
-        }
         let w = this.parseFloatAttr(locationNode, "w");
-        if (typeof w !== "number") {
-            return w;
-        }
         location.w = w;
 
         let target = this.parseCoords(lightProperties[1]);
-        if (typeof target === "string") {
-            return target;
-        }
-
         let ambient = this.parseRGBA(lightProperties[2]);
-        if (typeof ambient === "string") {
-            return ambient;
-        }
-
         let diffuse = this.parseRGBA(lightProperties[3]);
-        if (typeof diffuse === "string") {
-            return diffuse;
-        }
-
         let specular = this.parseRGBA(lightProperties[4]);
-        if (typeof specular === "string") {
-            return specular;
-        }
 
         const light = {
             type: "spot",
@@ -762,13 +662,12 @@ class MySceneGraph {
             target,
             ambient,
             diffuse,
-            specular
+            specular,
+            angle,
+            exponent
         }
 
-        let err = this.verifyUniqueId("spot", this.lights, id);
-        if (err) {
-            return err;
-        }
+        this.verifyUniqueId("spot", this.lights, id);
 
         this.lights.set(light.id, light);
     }
@@ -776,30 +675,25 @@ class MySceneGraph {
     parseTextures(texturesNode) {
         const textures = texturesNode.children;
 
-        let err;
         for(let i = 0; i < textures.length; ++i) {
-            err = this.createTexture(textures[i]);
-
-            if(err) {
-                return err;
-            }
+            this.createTexture(textures[i]);
         }
 
         if(this.textures.size === 0) {
-            return "no textures were defined";
+            throw "no textures were defined";
         }
     }
 
     createTexture(textureNode) {
         //id
         if(!this.reader.hasAttribute(textureNode, "id")) {
-            return this.missingNodeAttributeMessage("texture", "id");
+            throw this.missingNodeAttributeMessage("texture", "id");
         }
         let id = this.reader.getString(textureNode, "id");
 
         //file
         if(!this.reader.hasAttribute(textureNode, "file")) {
-            return this.missingNodeAttributeMessage("texture", "file");
+            throw this.missingNodeAttributeMessage("texture", "file");
         }
         let file = this.reader.getString(textureNode, "file");
 
@@ -808,10 +702,8 @@ class MySceneGraph {
             file
         }
 
-        let err = this.verifyUniqueId("texture", this.textures, id);
-        if (err) {
-            return err;
-        }
+        //Throws if id is not unique
+        this.verifyUniqueId("texture", this.textures, id);
 
         this.textures.set(texture.id, texture);
     }
@@ -819,66 +711,42 @@ class MySceneGraph {
     parseMaterials(materialsNode) {
         const materials = materialsNode.children;
 
-        let err;
         for(let i = 0; i < materials.length; ++i) {
-            err = this.createMaterial(materials[i]);
-
-            if(err) {
-                return err;
-            }
+            this.createMaterial(materials[i]);
         }
 
         if(this.materials.size === 0) {
-            return "no materials were defined";
+            throw "no materials were defined";
         }
     }
 
     createMaterial(materialNode) {
         //id
         if(!this.reader.hasAttribute(materialNode, "id")) {
-            return this.missingNodeAttributeMessage("material", "id");
+            throw this.missingNodeAttributeMessage("material", "id");
         }
         let id = this.reader.getString(materialNode, "id");
 
-        //shininess
         let shininess = this.parseFloatAttr(materialNode, "shininess");
-        if (typeof shininess !== "number") {
-            return shininess;
-        }
 
         const materialProperties = materialNode.children;
 
         if (materialProperties.length !== 4) {
-            return "material '" + id + "' invalid number of material propreties ";
+            throw "material '" + id + "' invalid number of material propreties ";
         } else if (materialProperties[0].nodeName !== "emission") {
-            return this.missingNodeMessage("material", "emission");
+            throw this.missingNodeMessage("material", "emission");
         } else if (materialProperties[1].nodeName !== "ambient") {
-            return this.missingNodeMessage("material", "ambient");
+            throw this.missingNodeMessage("material", "ambient");
         } else if (materialProperties[2].nodeName !== "diffuse") {
-            return this.missingNodeMessage("material", "diffuse");
+            throw this.missingNodeMessage("material", "diffuse");
         } else if (materialProperties[3].nodeName !== "specular") {
-            return this.missingNodeMessage("material", "specular");
+            throw this.missingNodeMessage("material", "specular");
         }
 
         let emission = this.parseRGBA(materialProperties[0]);
-        if (typeof emission === "string") {
-            return emission;
-        }
-
         let ambient = this.parseRGBA(materialProperties[1]);
-        if (typeof ambient === "string") {
-            return ambient;
-        }
-
         let diffuse = this.parseRGBA(materialProperties[2]);
-        if (typeof diffuse === "string") {
-            return diffuse;
-        }
-
         let specular = this.parseRGBA(materialProperties[3]);
-        if (typeof specular === "string") {
-            return specular;
-        }
 
         const material = {
             id,
@@ -889,10 +757,7 @@ class MySceneGraph {
             specular
         }
 
-        let err = this.verifyUniqueId("material", this.materials, id);
-        if (err) {
-            return err;
-        }
+        this.verifyUniqueId("material", this.materials, id);
 
         this.materials.set(material.id, material);
     }
@@ -900,24 +765,19 @@ class MySceneGraph {
     parseTransformations(transformationsNode) {
         const transformations = transformationsNode.children;
 
-        let err;
         for(let i = 0; i < transformations.length; ++i) {
-            err = this.parseTransformation(transformations[i]);
-
-            if(err) {
-                return err;
-            }
+            this.parseTransformation(transformations[i]);
         }
 
         if(this.transformations.size === 0) {
-            return "no transformations were defined";
+            throw "no transformations were defined";
         }
     }
 
     parseTransformation(transformationNode) {
         //id
         if(!this.reader.hasAttribute(transformationNode, "id")) {
-            return this.missingNodeAttributeMessage("transformation", "id");
+            throw this.missingNodeAttributeMessage("transformation", "id");
         }
         let id = this.reader.getString(transformationNode, "id");
 
@@ -937,33 +797,25 @@ class MySceneGraph {
             } else if (transformations[i].nodeName === "scale") {
                 ret = this.createScale(transformations[i]);
             } else {
-                return "invalid transformation '" + transformations[i].nodeName + "' in transformation with id '" + id + "'";
+                throw "invalid transformation '" + transformations[i].nodeName + "' in transformation with id '" + id + "'";
             }
-
-            if (typeof ret === "string") {
-                return ret;
-            } else {
-                transformation.transformations.push(ret);
-            }
+            
+            transformation.transformations.push(ret);
         }
 
         if (transformation.transformations.length === 0) {
-            return "transformation with id '" + id + "' is empty";
+            throw "transformation with id '" + id + "' is empty";
         }
 
-        let err = this.verifyUniqueId("transformation", this.transformations, id);
-        if (err) {
-            return err;
-        }
+        this.verifyUniqueId("transformation", this.transformations, id);
 
         this.transformations.set(transformation.id, transformation);
     }
 
     createTranslate(transformationNode) {
         let translate = this.parseCoords(transformationNode);
-        if (typeof translate !== "string") {
-            translate.type = "translate";
-        }
+        //Is spread operator in return more elegant?
+        translate.type = "translate";
 
         return translate;
     }
@@ -971,18 +823,14 @@ class MySceneGraph {
     createRotate(transformationNode) {
         //axis
         if(!this.reader.hasAttribute(transformationNode, "axis")) {
-            return this.missingNodeAttributeMessage("transformation", "axis");
+            throw this.missingNodeAttributeMessage("transformation", "axis");
         }
         let axis = this.reader.getString(transformationNode, "axis");
         if (axis !== "x" && axis !== "y" && axis !== "z") {
-            return "rotate transformation with invalid axis (must be 'x', 'y' or 'z')";
+            throw "rotate transformation with invalid axis (must be 'x', 'y' or 'z')";
         }
 
-        //angle
         let angle = this.parseFloatAttr(transformationNode, "angle");
-        if (typeof angle !== "number") {
-            return angle;
-        }
 
         return {
             type: "rotate",
@@ -993,9 +841,8 @@ class MySceneGraph {
 
     createScale(transformationNode) {
         let scale = this.parseCoords(transformationNode);
-        if (typeof scale !== "string") {
-            scale.type = "scale";
-        }
+        //Is spread operator in return more elegant?
+        scale.type = "scale";
 
         return scale;
     }
@@ -1003,33 +850,28 @@ class MySceneGraph {
     parsePrimitives(primitivesNode) {
         const primitives = primitivesNode.children;
 
-        let err;
         for(let i = 0; i < primitives.length; ++i) {
-            err = this.parsePrimitive(primitives[i]);
-
-            if(err) {
-                return err;
-            }
+            this.parsePrimitive(primitives[i]);
         }
 
         if(this.primitives.size === 0) {
-            return "no primitives were defined";
+            throw "no primitives were defined";
         }
     }
 
     parsePrimitive(primitiveNode) {
         //id
         if(!this.reader.hasAttribute(primitiveNode, "id")) {
-            return this.missingNodeAttributeMessage("primitive", "id");
+            throw this.missingNodeAttributeMessage("primitive", "id");
         }
         let id = this.reader.getString(primitiveNode, "id");
 
         const childNodes = primitiveNode.children;
 
         if (childNodes.length > 1) {
-            return "primitive with id '" + id + "' has more than one tag";
+            throw "primitive with id '" + id + "' has more than one tag";
         } else if (childNodes.length === 0) {
-            return "primitive with id '" + id + "' is empty";
+            throw "primitive with id '" + id + "' is empty";
         }
 
         let primitiveChild = childNodes[0];
@@ -1046,43 +888,21 @@ class MySceneGraph {
         } else if (primitiveChild.nodeName === "torus") {
             primitive = this.createTorus(primitiveChild);
         } else {
-            return "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
-        }
-
-        if (typeof primitive === "string") {
-            return primitive;
+            throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
 
         primitive.id = id;
 
-        let err = this.verifyUniqueId("primitive", this.primitives, id);
-        if (err) {
-            return err;
-        }
+        this.verifyUniqueId("primitive", this.primitives, id);
 
         this.primitives.set(primitive.id, primitive);
     }
 
     createRectangle(primitiveNode) {
         let x1 = this.parseFloatAttr(primitiveNode, "x1");
-        if (typeof x1 !== "number") {
-            return x1;
-        }
-
         let y1 = this.parseFloatAttr(primitiveNode, "y1");
-        if (typeof y1 !== "number") {
-            return y1;
-        }
-
         let x2 = this.parseFloatAttr(primitiveNode, "x2");
-        if (typeof x2 !== "number") {
-            return x2;
-        }
-
         let y2 = this.parseFloatAttr(primitiveNode, "y2");
-        if (typeof y2 !== "number") {
-            return y2;
-        }
 
         return {
             type: "rectangle",
@@ -1093,50 +913,15 @@ class MySceneGraph {
 
     createTriangle(primitiveNode) {
         let x1 = this.parseFloatAttr(primitiveNode, "x1");
-        if (typeof x1 !== "number") {
-            return x1;
-        }
-
         let y1 = this.parseFloatAttr(primitiveNode, "y1");
-        if (typeof y1 !== "number") {
-            return y1;
-        }
-
         let z1 = this.parseFloatAttr(primitiveNode, "z1");
-        if (typeof z1 !== "number") {
-            return z1;
-        }
-
         let x2 = this.parseFloatAttr(primitiveNode, "x2");
-        if (typeof x2 !== "number") {
-            return x2;
-        }
-
         let y2 = this.parseFloatAttr(primitiveNode, "y2");
-        if (typeof y2 !== "number") {
-            return y2;
-        }
-
         let z2 = this.parseFloatAttr(primitiveNode, "z2");
-        if (typeof z2 !== "number") {
-            return z2;
-        }
-
         let x3 = this.parseFloatAttr(primitiveNode, "x3");
-        if (typeof x3 !== "number") {
-            return x3;
-        }
-
         let y3 = this.parseFloatAttr(primitiveNode, "y3");
-        if (typeof y3 !== "number") {
-            return y3;
-        }
-
         let z3 = this.parseFloatAttr(primitiveNode, "z3");
-        if (typeof z3 !== "number") {
-            return z3;
-        }
-           
+
         return {
             type: "triangle",
             x1, y1, z1,
@@ -1147,29 +932,10 @@ class MySceneGraph {
 
     createCylinder(primitiveNode) {
         let base = this.parseFloatAttr(primitiveNode, "base");
-        if (typeof base !== "number") {
-            return base;
-        }
-
         let top = this.parseFloatAttr(primitiveNode, "top");
-        if (typeof top !== "number") {
-            return top;
-        }
-
         let height = this.parseFloatAttr(primitiveNode, "height");
-        if (typeof height !== "number") {
-            return height;
-        }
-
         let slices = this.parseIntAttr(primitiveNode, "slices");
-        if (typeof slices !== "number") {
-            return slices;
-        }
-
         let stacks = this.parseIntAttr(primitiveNode, "stacks");
-        if (typeof stacks !== "number") {
-            return stacks;
-        }
 
         return {
             type: "cylinder",
@@ -1183,19 +949,8 @@ class MySceneGraph {
 
     createSphere(primitiveNode) {
         let radius = this.parseFloatAttr(primitiveNode, "radius");
-        if (typeof radius !== "number") {
-            return radius;
-        }
-
         let slices = this.parseIntAttr(primitiveNode, "slices");
-        if (typeof slices !== "number") {
-            return slices;
-        }
-
         let stacks = this.parseIntAttr(primitiveNode, "stacks");
-        if (typeof stacks !== "number") {
-            return stacks;
-        }
 
         return {
             type: "sphere",
@@ -1207,24 +962,9 @@ class MySceneGraph {
 
     createTorus(primitiveNode) {
         let inner = this.parseFloatAttr(primitiveNode, "inner");
-        if (typeof inner !== "number") {
-            return inner;
-        }
-
         let outer = this.parseFloatAttr(primitiveNode, "outer");
-        if (typeof outer !== "number") {
-            return outer;
-        }
-
         let slices = this.parseIntAttr(primitiveNode, "slices");
-        if (typeof slices !== "number") {
-            return slices;
-        }
-
         let loops = this.parseIntAttr(primitiveNode, "loops");
-        if (typeof loops !== "number") {
-            return loops;
-        }
 
         return {
             type: "torus",
@@ -1240,49 +980,43 @@ class MySceneGraph {
 
         const components = componentsNode.children;
 
-        let err;
         for(let i = 0; i < components.length; ++i) {
-            err = this.createComponent(components[i]);
-
-            if(err) {
-                return err;
-            }
+            this.createComponent(components[i]);
         }
 
         if(this.components.size === 0) {
-            return "no components were defined";
+            throw "no components were defined";
         }
     }
 
     createComponent(componentNode) {
         //id
         if(!this.reader.hasAttribute(componentNode, "id")) {
-            return this.missingNodeAttributeMessage("transformation", "id");
+            throw this.missingNodeAttributeMessage("transformation", "id");
         }
         let id = this.reader.getString(componentNode, "id");
 
         const componentProperties = componentNode.children;
 
         if (componentProperties.length !== 4) {
-            return "component '" + id + "' invalid number of component properties";
+            throw "component '" + id + "' invalid number of component properties";
         } else if (componentProperties[0].nodeName !== "transformation") {
-            return this.missingNodeMessage("component", "transformation");
+            throw this.missingNodeMessage("component", "transformation");
         } else if (componentProperties[1].nodeName !== "materials") {
-            return this.missingNodeMessage("component", "materials");
+            throw this.missingNodeMessage("component", "materials");
         } else if (componentProperties[2].nodeName !== "texture") {
-            return this.missingNodeMessage("component", "texture");
+            throw this.missingNodeMessage("component", "texture");
         } else if (componentProperties[3].nodeName !== "children") {
-            return this.missingNodeMessage("component", "children");
+            throw this.missingNodeMessage("component", "children");
         }
         
         const component = {
             id
         };
 
-        let err = this.verifyUniqueId("component", this.components, id);
-        if (err) {
-            return err;
-        }
+        console.log('Component parsing is clearly not done yet');
+
+        this.verifyUniqueId("component", this.components, id);
 
         this.components.set(component.id, component);
     }
@@ -1293,66 +1027,41 @@ class MySceneGraph {
     
     parseFloatAttr(node, attribute_name) {
         if(!this.reader.hasAttribute(node, attribute_name)) {
-            return this.missingNodeAttributeMessage(node.nodeName, attribute_name);
+            throw this.missingNodeAttributeMessage(node.nodeName, attribute_name);
         }
         let attr = this.reader.getFloat(node, attribute_name);
         if(!this.attrIsNumber(attr)) {
-            return this.isNanAttributeMessage(node.nodeName, attribute_name);
+            throw this.isNanAttributeMessage(node.nodeName, attribute_name);
         }
         return attr;
     }
 
     parseIntAttr(node, attribute_name) {
         let attr = this.parseFloatAttr(node, attribute_name);
-        if (typeof attr === "number" && !Number.isInteger(attr)) {
-            return this.isNotIntegerAttributeMessage(node.nodeName, attribute_name);
-        } else {
-            return attr;
+        if (!Number.isInteger(attr)) {
+            throw this.isNotIntegerAttributeMessage(node.nodeName, attribute_name);
         }
+     
+        return attr;
     }
 
     parseCoords(node) {
+        //parseFloatAttr throws if attr is NaN
         let x = this.parseFloatAttr(node, "x");
-        if (typeof x !== "number") {
-            return x;
-        }
-
         let y = this.parseFloatAttr(node, "y");
-        if (typeof y !== "number") {
-            return y;
-        }
-
         let z = this.parseFloatAttr(node, "z");
-        if (typeof z !== "number") {
-            return z;
-        }
 
         return {x, y, z};
     }
 
     parseRGBA(node) {
         let r = this.parseFloatAttr(node, "r");
-        if (typeof r !== "number") {
-            return r;
-        }
-
         let g = this.parseFloatAttr(node, "g");
-        if (typeof g !== "number") {
-            return g;
-        }
-
         let b = this.parseFloatAttr(node, "b");
-        if (typeof b !== "number") {
-            return b;
-        }
-
         let a = this.parseFloatAttr(node, "a");
-        if (typeof a !== "number") {
-            return a;
-        }
 
         if (a < 0 || a > 1) {
-            return `${node.nodeName} alpha attribute must be in the range [0, 1]`;
+            throw `${node.nodeName} alpha attribute must be in the range [0, 1]`;
         }
 
         return {r, g, b, a};
@@ -1418,19 +1127,6 @@ class MySceneGraph {
     notBooleanAttributeMessage(node_name, attribute_name) {
         return `${node_name} ${attribute_name} attribute is not of boolean type`;
     }
-    
-    /* verifyUniqueId(node_name, id) {
-        if (id === "") {
-            return `node ${node_name}: id cannot be empty`;
-        }
-        else if (this.elementIds.has(id)) {
-            return `node ${node_name}: '${id}' id already exists`;
-        }
-        else {
-            this.elementIds.add(id);
-            return false;
-        }
-    } */
 
     idInUseMessage(node_name, id) {
         return `${node_name} '${id}' id is already in use`;
@@ -1442,13 +1138,9 @@ class MySceneGraph {
 
     verifyUniqueId(node_name, container, id) {
         if (id === "") {
-            return this.emptyIdMessage(node_name);
-        }
-        else if (container.has(id)) {
-            return this.idInUseMessage(node_name, id);
-        }
-        else {
-            return false;
+            throw this.emptyIdMessage(node_name);
+        } else if (container.has(id)) {
+            throw this.idInUseMessage(node_name, id);
         }
     }
 
