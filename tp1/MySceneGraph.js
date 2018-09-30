@@ -515,8 +515,10 @@ class MySceneGraph {
             }
         }
 
-        if(this.lights.size === 0) {
+        if (this.lights.size === 0) {
             throw "no lights were defined";
+        } else if (this.lights.size > 8) {
+            this.onXMLMinorError("CGF Scenes only support 8 lights. The remaining lights will be ignored.");
         }
     }
 
@@ -986,7 +988,6 @@ class MySceneGraph {
         let x = this.parseFloatAttr(node, "x");
         let y = this.parseFloatAttr(node, "y");
         let z = this.parseFloatAttr(node, "z");
-
         return {x, y, z};
     }
 
@@ -996,8 +997,22 @@ class MySceneGraph {
         let b = this.parseFloatAttr(node, "b");
         let a = this.parseFloatAttr(node, "a");
 
-        if (a < 0 || a > 1) {
-            throw `${node.nodeName} alpha attribute must be in the range [0, 1]`;
+        if (r < 0) {
+            this.onXMLMinorError(`${node.nodeName} red attribute must be in the range [0, 1]. Assuming value 0.`);
+        } else if (r > 1) {
+            this.onXMLMinorError(`${node.nodeName} red attribute must be in the range [0, 1]. Assuming value 1.`);
+        } else if (g < 0) {
+            this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 0.`);
+        } else if (g > 1) {
+            this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 1.`);
+        } else if (b < 0) {
+            this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 0.`);
+        } else if (b > 1) {
+            this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 1.`);
+        } else if (a < 0) {
+            this.onXMLMinorError(`${node.nodeName} alpha attribute must be in the range [0, 1]. Assuming value 0.`);
+        } else if (a > 1) {
+            this.onXMLMinorError(`${node.nodeName} alpha attribute must be in the range [0, 1]. Assuming value 1.`);
         }
 
         return {r, g, b, a};

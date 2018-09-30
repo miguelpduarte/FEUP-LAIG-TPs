@@ -53,16 +53,16 @@
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="mat1" shininess="45" >
-            <emission r="1" g="2" b="3" a="0.5" />
-            <ambient r="5" g="6" b="7" a="0.5" />
-            <diffuse r="9" g="10" b="11" a="0.5" />
-            <specular r="13" g="14" b="15" a="0.5" />
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0" g="0" b="0" a="1" />
+            <specular r="0" g="0" b="1" a="1" />
         </material>
         <material id="mat2" shininess="46" >
-            <emission r="1" g="2" b="3" a="0.5" />
-            <ambient r="5" g="6" b="7" a="0.5" />
-            <diffuse r="9" g="10" b="11" a="0.5" />
-            <specular r="13" g="14" b="15" a="0.5" />
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0" g="0" b="0" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
         </material>
     </materials>
     <transformations>
