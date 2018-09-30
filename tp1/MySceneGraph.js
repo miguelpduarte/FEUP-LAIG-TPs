@@ -85,8 +85,8 @@ class MySceneGraph {
             // Here should go the calls for different functions to parse the various blocks
             const legacy_ret = this.parseXMLFile(rootElement);
             if(legacy_ret) {
-                console.warn("Some parsing function attempted to return an error, this is legacy behaviour and will no longer be supported, please change to using exceptions");
-                console.error("Error: ", legacy_ret);
+                console.warn("Some parsing function attempted to return an error, this is legacy behaviour and will no longer be supported, please use exceptions instead");
+                console.error("Legacy Error: ", legacy_ret);
             }
         } catch (error) {
             if (error) {
@@ -371,21 +371,8 @@ class MySceneGraph {
      * @param {scene block element} sceneNode
      */
     parseScene(sceneNode) {
-        if(!this.reader.hasAttribute(sceneNode, "root")) {
-            throw this.missingNodeAttributeMessage("scene", "root");
-        }
-        
-        if(!this.reader.hasAttribute(sceneNode, "axis_length")) {
-            throw this.missingNodeAttributeMessage("scene", "axis_length");
-        }
-        
-        this.referentialLength = this.reader.getFloat(sceneNode, "axis_length");
-        
-        if(!this.attrIsNumber(this.referentialLength)) {
-            throw this.isNanAttributeMessage("scene", "axis_length");
-        }
-
-        this.rootElementId = this.reader.getString(sceneNode, "root");
+        this.rootElementId = this.parseStringAttr(sceneNode, "root");
+        this.referentialLength = this.parseFloatAttr(sceneNode, "axis_length");
     }
 
     /**
@@ -393,58 +380,41 @@ class MySceneGraph {
      * @param {views block element} viewsNode
      */
     parseViews(viewsNode) {
-        if(!this.reader.hasAttribute(viewsNode, "default")) {
-            throw this.missingNodeAttributeMessage("views", "default");
-        }
+        this.defaultViewId = this.parseStringAttr(viewsNode, "default");
 
-        this.defaultViewId = this.reader.getString(viewsNode, "default");
-
-        //Check if it has one view defined at least and it matches the default view id
         const views = viewsNode.children;
-
-        let err;
+        
         for(let i = 0; i < views.length; ++i) {
             if(views[i].nodeName === "perspective") {
-                err = this.createPerspectiveCamera(views[i]);
+                this.createPerspectiveCamera(views[i]);
             } else if(views[i].nodeName === "ortho") {
-                err = this.createOrthoCamera(views[i]);
-            }
-
-            if(err) {
-                return err;
+                this.createOrthoCamera(views[i]);
             }
         }
-
+        
+        //Check if it has one view defined at least and it matches the default view id
         if(this.cameras.size === 0) {
-            return "no views were defined";
+            throw "no views were defined";
         }
 
         if(!this.cameras.has(this.defaultViewId)) {
-            return "specified default view id does not exist";
+            throw "specified default view id does not exist";
         }
     }
 
     createPerspectiveCamera(viewNode) {
-        //id
-        if(!this.reader.hasAttribute(viewNode, "id")) {
-            throw this.missingNodeAttributeMessage("perspective", "id");
-        }
-        let id = this.reader.getString(viewNode, "id");
+        const id = this.parseStringAttr(viewNode, "id");
 
         //parseFloatAttr throws if attr is NaN
 
-        //near
-        let near = this.parseFloatAttr(viewNode, "near");
-
-        //far
-        let far = this.parseFloatAttr(viewNode, "far");
+        const near = this.parseFloatAttr(viewNode, "near");
+        const far = this.parseFloatAttr(viewNode, "far");
 
         //near must be smaller than far
         if (near >= far) {
             throw "perspective near attribute must be smaller than far attribute";
         }
 
-        //angle
         let angle = this.parseFloatAttr(viewNode, "angle");
 
         const cameraCoords = viewNode.children;
@@ -459,8 +429,8 @@ class MySceneGraph {
 
         //parseCoords throws if coords are not valid
 
-        let from = this.parseCoords(cameraCoords[0]);
-        let to = this.parseCoords(cameraCoords[1]);
+        const from = this.parseCoords(cameraCoords[0]);
+        const to = this.parseCoords(cameraCoords[1]);
 
         const cam = {
             type: "perspective",
@@ -479,14 +449,10 @@ class MySceneGraph {
     }
 
     createOrthoCamera(viewNode) {
-        //id
-        if(!this.reader.hasAttribute(viewNode, "id")) {
-            throw this.missingNodeAttributeMessage("ortho", "id");
-        }
-        let id = this.reader.getString(viewNode, "id");
+        const id = this.parseStringAttr(viewNode, "id");
 
-        let near = this.parseFloatAttr(viewNode, "near");
-        let far = this.parseFloatAttr(viewNode, "far");
+        const near = this.parseFloatAttr(viewNode, "near");
+        const far = this.parseFloatAttr(viewNode, "far");
 
         //near must be smaller than far
         if (near >= far) {
@@ -495,14 +461,14 @@ class MySceneGraph {
 
         // TODO: left <= right ?
 
-        let left = this.parseFloatAttr(viewNode, "left");
-        let right = this.parseFloatAttr(viewNode, "right");
+        const left = this.parseFloatAttr(viewNode, "left");
+        const right = this.parseFloatAttr(viewNode, "right");
 
         // TODO: bottom <= top ?
 
         //bottom
-        let bottom = this.parseFloatAttr(viewNode, "bottom");
-        let top = this.parseFloatAttr(viewNode, "top");
+        const bottom = this.parseFloatAttr(viewNode, "bottom");
+        const top = this.parseFloatAttr(viewNode, "top");
 
         console.log("Ortho not created: left? right? top? bottom? what?");
 
@@ -534,7 +500,6 @@ class MySceneGraph {
         }
 
         //parseRGBA throws if not valid
-
         this.ambient = this.parseRGBA(children[0]);
         this.background = this.parseRGBA(children[1]);
     }
@@ -556,11 +521,7 @@ class MySceneGraph {
     }
 
     createOmniLight(lightNode) {
-        //id
-        if(!this.reader.hasAttribute(lightNode, "id")) {
-            throw this.missingNodeAttributeMessage("omni", "id");
-        }
-        let id = this.reader.getString(lightNode, "id");
+        const id = this.parseStringAttr(lightNode, "id");
 
         //enabled
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
@@ -611,11 +572,7 @@ class MySceneGraph {
     }
 
     createSpotLight(lightNode) {
-        //id
-        if(!this.reader.hasAttribute(lightNode, "id")) {
-            throw this.missingNodeAttributeMessage("spot", "id");
-        }
-        let id = this.reader.getString(lightNode, "id");
+        const id = this.parseStringAttr(lightNode, "id");
 
         if(!this.reader.hasAttribute(lightNode, "enabled")) {
             throw this.missingNodeAttributeMessage("spot", "enabled");
@@ -685,17 +642,8 @@ class MySceneGraph {
     }
 
     createTexture(textureNode) {
-        //id
-        if(!this.reader.hasAttribute(textureNode, "id")) {
-            throw this.missingNodeAttributeMessage("texture", "id");
-        }
-        let id = this.reader.getString(textureNode, "id");
-
-        //file
-        if(!this.reader.hasAttribute(textureNode, "file")) {
-            throw this.missingNodeAttributeMessage("texture", "file");
-        }
-        let file = this.reader.getString(textureNode, "file");
+        const id = this.parseStringAttr(textureNode, "id");
+        const file = this.parseStringAttr(textureNode, "file");
 
         const texture = {
             id,
@@ -721,13 +669,8 @@ class MySceneGraph {
     }
 
     createMaterial(materialNode) {
-        //id
-        if(!this.reader.hasAttribute(materialNode, "id")) {
-            throw this.missingNodeAttributeMessage("material", "id");
-        }
-        let id = this.reader.getString(materialNode, "id");
-
-        let shininess = this.parseFloatAttr(materialNode, "shininess");
+        const id = this.parseStringAttr(materialNode, "id");
+        const shininess = this.parseFloatAttr(materialNode, "shininess");
 
         const materialProperties = materialNode.children;
 
@@ -743,10 +686,10 @@ class MySceneGraph {
             throw this.missingNodeMessage("material", "specular");
         }
 
-        let emission = this.parseRGBA(materialProperties[0]);
-        let ambient = this.parseRGBA(materialProperties[1]);
-        let diffuse = this.parseRGBA(materialProperties[2]);
-        let specular = this.parseRGBA(materialProperties[3]);
+        const emission = this.parseRGBA(materialProperties[0]);
+        const ambient = this.parseRGBA(materialProperties[1]);
+        const diffuse = this.parseRGBA(materialProperties[2]);
+        const specular = this.parseRGBA(materialProperties[3]);
 
         const material = {
             id,
@@ -775,11 +718,7 @@ class MySceneGraph {
     }
 
     parseTransformation(transformationNode) {
-        //id
-        if(!this.reader.hasAttribute(transformationNode, "id")) {
-            throw this.missingNodeAttributeMessage("transformation", "id");
-        }
-        let id = this.reader.getString(transformationNode, "id");
+        const id = this.parseStringAttr(transformationNode, "id");
 
         let transformation = {
             id,
@@ -821,16 +760,13 @@ class MySceneGraph {
     }
 
     createRotate(transformationNode) {
-        //axis
-        if(!this.reader.hasAttribute(transformationNode, "axis")) {
-            throw this.missingNodeAttributeMessage("transformation", "axis");
-        }
-        let axis = this.reader.getString(transformationNode, "axis");
+        const axis = this.parseStringAttr(transformationNode, "axis");
+        
         if (axis !== "x" && axis !== "y" && axis !== "z") {
             throw "rotate transformation with invalid axis (must be 'x', 'y' or 'z')";
         }
 
-        let angle = this.parseFloatAttr(transformationNode, "angle");
+        const angle = this.parseFloatAttr(transformationNode, "angle");
 
         return {
             type: "rotate",
@@ -860,11 +796,7 @@ class MySceneGraph {
     }
 
     parsePrimitive(primitiveNode) {
-        //id
-        if(!this.reader.hasAttribute(primitiveNode, "id")) {
-            throw this.missingNodeAttributeMessage("primitive", "id");
-        }
-        let id = this.reader.getString(primitiveNode, "id");
+        const id = this.parseStringAttr(primitiveNode, "id");
 
         const childNodes = primitiveNode.children;
 
@@ -899,10 +831,10 @@ class MySceneGraph {
     }
 
     createRectangle(primitiveNode) {
-        let x1 = this.parseFloatAttr(primitiveNode, "x1");
-        let y1 = this.parseFloatAttr(primitiveNode, "y1");
-        let x2 = this.parseFloatAttr(primitiveNode, "x2");
-        let y2 = this.parseFloatAttr(primitiveNode, "y2");
+        const x1 = this.parseFloatAttr(primitiveNode, "x1");
+        const y1 = this.parseFloatAttr(primitiveNode, "y1");
+        const x2 = this.parseFloatAttr(primitiveNode, "x2");
+        const y2 = this.parseFloatAttr(primitiveNode, "y2");
 
         return {
             type: "rectangle",
@@ -912,15 +844,15 @@ class MySceneGraph {
     }
 
     createTriangle(primitiveNode) {
-        let x1 = this.parseFloatAttr(primitiveNode, "x1");
-        let y1 = this.parseFloatAttr(primitiveNode, "y1");
-        let z1 = this.parseFloatAttr(primitiveNode, "z1");
-        let x2 = this.parseFloatAttr(primitiveNode, "x2");
-        let y2 = this.parseFloatAttr(primitiveNode, "y2");
-        let z2 = this.parseFloatAttr(primitiveNode, "z2");
-        let x3 = this.parseFloatAttr(primitiveNode, "x3");
-        let y3 = this.parseFloatAttr(primitiveNode, "y3");
-        let z3 = this.parseFloatAttr(primitiveNode, "z3");
+        const x1 = this.parseFloatAttr(primitiveNode, "x1");
+        const y1 = this.parseFloatAttr(primitiveNode, "y1");
+        const z1 = this.parseFloatAttr(primitiveNode, "z1");
+        const x2 = this.parseFloatAttr(primitiveNode, "x2");
+        const y2 = this.parseFloatAttr(primitiveNode, "y2");
+        const z2 = this.parseFloatAttr(primitiveNode, "z2");
+        const x3 = this.parseFloatAttr(primitiveNode, "x3");
+        const y3 = this.parseFloatAttr(primitiveNode, "y3");
+        const z3 = this.parseFloatAttr(primitiveNode, "z3");
 
         return {
             type: "triangle",
@@ -931,11 +863,11 @@ class MySceneGraph {
     }
 
     createCylinder(primitiveNode) {
-        let base = this.parseFloatAttr(primitiveNode, "base");
-        let top = this.parseFloatAttr(primitiveNode, "top");
-        let height = this.parseFloatAttr(primitiveNode, "height");
-        let slices = this.parseIntAttr(primitiveNode, "slices");
-        let stacks = this.parseIntAttr(primitiveNode, "stacks");
+        const base = this.parseFloatAttr(primitiveNode, "base");
+        const top = this.parseFloatAttr(primitiveNode, "top");
+        const height = this.parseFloatAttr(primitiveNode, "height");
+        const slices = this.parseIntAttr(primitiveNode, "slices");
+        const stacks = this.parseIntAttr(primitiveNode, "stacks");
 
         return {
             type: "cylinder",
@@ -948,9 +880,9 @@ class MySceneGraph {
     }
 
     createSphere(primitiveNode) {
-        let radius = this.parseFloatAttr(primitiveNode, "radius");
-        let slices = this.parseIntAttr(primitiveNode, "slices");
-        let stacks = this.parseIntAttr(primitiveNode, "stacks");
+        const radius = this.parseFloatAttr(primitiveNode, "radius");
+        const slices = this.parseIntAttr(primitiveNode, "slices");
+        const stacks = this.parseIntAttr(primitiveNode, "stacks");
 
         return {
             type: "sphere",
@@ -961,10 +893,10 @@ class MySceneGraph {
     }
 
     createTorus(primitiveNode) {
-        let inner = this.parseFloatAttr(primitiveNode, "inner");
-        let outer = this.parseFloatAttr(primitiveNode, "outer");
-        let slices = this.parseIntAttr(primitiveNode, "slices");
-        let loops = this.parseIntAttr(primitiveNode, "loops");
+        const inner = this.parseFloatAttr(primitiveNode, "inner");
+        const outer = this.parseFloatAttr(primitiveNode, "outer");
+        const slices = this.parseIntAttr(primitiveNode, "slices");
+        const loops = this.parseIntAttr(primitiveNode, "loops");
 
         return {
             type: "torus",
@@ -990,11 +922,7 @@ class MySceneGraph {
     }
 
     createComponent(componentNode) {
-        //id
-        if(!this.reader.hasAttribute(componentNode, "id")) {
-            throw this.missingNodeAttributeMessage("transformation", "id");
-        }
-        let id = this.reader.getString(componentNode, "id");
+        const id = this.parseStringAttr(componentNode, "id");
 
         const componentProperties = componentNode.children;
 
@@ -1014,11 +942,19 @@ class MySceneGraph {
             id
         };
 
-        console.log('Component parsing is clearly not done yet');
+        console.warn('Component parsing is clearly not done yet');
 
         this.verifyUniqueId("component", this.components, id);
 
         this.components.set(component.id, component);
+    }
+
+    parseStringAttr(node, attribute_name) {
+        //TODO: Check if empty?
+        if(!this.reader.hasAttribute(node, attribute_name)) {
+            throw this.missingNodeAttributeMessage(node.nodeName, attribute_name);
+        }
+        return this.reader.getString(node, attribute_name);
     }
 
     attrIsNumber(attribute) {
