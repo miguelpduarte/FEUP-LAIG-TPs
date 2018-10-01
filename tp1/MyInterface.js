@@ -20,6 +20,9 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
 
+        //Internal data model
+        this.model = {};
+
         // add a group of controls (and open/expand by defult)
 
         return true;
@@ -27,20 +30,20 @@ class MyInterface extends CGFinterface {
 
     /**
      * Adds a folder containing the IDs of the lights passed as parameter.
-     * @param {array} lights
+     * @param {Map} lights
      */
-    addLightsGroup(lights) {
-
+    createLightsCheckboxes(lights) {
         var group = this.gui.addFolder("Lights");
-        group.open();
 
         // add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
         // e.g. this.option1=true; this.option2=false;
 
-        for (var key in lights) {
-            if (lights.hasOwnProperty(key)) {
-                this.scene.lightValues[key] = lights[key][0];
-                group.add(this.scene.lightValues, key);
+        for (let [id, light] of lights) {
+            if (light.id) {
+                this.model[`light_${light.id}`] = light.enabled;
+                group.add(this.model, `light_${light.id}`).name(`Light ${light.id}`).onChange(val => {
+                    this.scene.setLightState(light.id, val);
+                });
             }
         }
     }

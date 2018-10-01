@@ -25,7 +25,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
+        this.defaultCameras();
 
         this.enableTextures(true);
 
@@ -40,9 +40,46 @@ class XMLscene extends CGFscene {
     /**
      * Initializes the scene cameras.
      */
-    initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    defaultCameras() {
+        this.default_camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = this.default_camera;
     }
+
+    initCameras() {
+        this.cameras = new Map();
+        const FOV = 0.4;
+
+        for(let [id, camera] of this.graph.cameras) {
+            if(camera.type === "ortho") {
+                console.warn("Not creating ortho cameras - ask teacher");
+            } else if(camera.type === "perspective") {
+                let cam = new CGFcamera(FOV, camera.near, camera.far, vec3.fromValues(...Object.values(camera.from)), vec3.fromValues(...Object.values(camera.to)));
+                console.warn("Not using camera angle yet - ask teacher");
+                this.cameras.set(id, cam);
+            }
+        }
+
+        const initial_camera = this.cameras.get(this.graph.defaultViewId);
+
+        if(!initial_camera) {
+            console.warn("The specified initial camera was not found!\nUsing a default camera instead");
+        }
+
+        this.camera = this.cameras.get(this.graph.defaultViewId) || this.default_camera;
+    }
+
+    setLightState(lightId, newVal) {
+        const light = this.lights.find(element => {
+            return element.id === lightId;
+        });
+
+        if(newVal) {
+            light.enable();
+        } else {
+            light.disable();
+        }
+    }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
@@ -50,6 +87,7 @@ class XMLscene extends CGFscene {
         let num_created_lights = 0;
         const lights = this.graph.lights.values();
 
+        console.warn("Change initLights loop to a better looking one");
         let result = lights.next();
         while(!result.done) {
             let light = result.value;
@@ -61,6 +99,7 @@ class XMLscene extends CGFscene {
                 this.lights[num_created_lights].setSpecular(...Object.values(light.specular));
 
                 this.lights[num_created_lights].setVisible(true);
+                this.lights[num_created_lights].id = light.id;
                 if(light.enabled) {
                     this.lights[num_created_lights].enable();
                 } else {
@@ -89,19 +128,17 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        // this.camera.near = this.graph.near;
-        // this.camera.far = this.graph.far;
-
         // Change referential length according to parsed graph
         this.axis = new CGFaxis(this, this.graph.referentialLength);
 
-        // TODO: Change ambient and background details according to parsed graph
-		this.gl.clearColor(...Object.values(this.graph.background));
+        this.gl.clearColor(...Object.values(this.graph.background));
+        this.setGlobalAmbientLight(...Object.values(this.graph.ambient));
 
         this.initLights();
+        this.initCameras();
 
-        // Adds lights group.
-        this.interface.addLightsGroup(this.graph.lights);
+        // Adds lights checkboxes
+        this.interface.createLightsCheckboxes(this.graph.lights);
 
         this.sceneInited = true;
     }
