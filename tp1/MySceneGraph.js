@@ -921,6 +921,10 @@ class MySceneGraph {
         if(this.components.size === 0) {
             throw "no components were defined";
         }
+
+        if(!this.components.has(this.rootElementId)) {
+            throw `Root Component with id '${this.rootElementId}' is missing.`;
+        }
     }
 
     createComponent(componentNode) {
@@ -962,6 +966,7 @@ class MySceneGraph {
 
         //children
         const children = componentProperties[3].children;
+        let primitiveIds = [];
         for (let child of children) {
             if (child.nodeName === "componentref") {
                 const childId = this.parseStringAttr(child, "id");
@@ -974,12 +979,14 @@ class MySceneGraph {
                     console.log("ERROR");
                     throw `${primitive} with id '${id}' is not defined.`;
                 }
+                else {
+                    primitiveIds.push(childId);
+                }
             }
             else {
-                //this.onXMLMinorError(`Invalid '${child.nodeName}' child tag in component children.`);
+                this.onXMLMinorError(`Invalid '${child.nodeName}' child tag in component children. It will be ignored.`);
             }
         }
-        
         
         const component = {
             id,
@@ -988,7 +995,8 @@ class MySceneGraph {
                 length_s,
                 length_t
             },
-            materialIds
+            materialIds,
+            primitiveIds
         };
 
         console.warn('Component parsing is clearly not done yet');

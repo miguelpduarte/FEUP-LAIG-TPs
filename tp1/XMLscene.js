@@ -85,13 +85,10 @@ class XMLscene extends CGFscene {
      */
     initLights() {
         let num_created_lights = 0;
-        const lights = this.graph.lights.values();
 
-        console.warn("Change initLights loop to a better looking one");
-        let result = lights.next();
-        while(!result.done) {
-            let light = result.value;
-
+        for(let entry of this.graph.lights) {
+            const id = entry[0];
+            const light = entry[1];
             if (light.type === "omni") {
                 this.lights[num_created_lights].setPosition(...Object.values(light.location));
                 this.lights[num_created_lights].setAmbient(...Object.values(light.ambient));
@@ -99,7 +96,7 @@ class XMLscene extends CGFscene {
                 this.lights[num_created_lights].setSpecular(...Object.values(light.specular));
 
                 this.lights[num_created_lights].setVisible(true);
-                this.lights[num_created_lights].id = light.id;
+                //this.lights[num_created_lights].id = light.id;
                 if(light.enabled) {
                     this.lights[num_created_lights].enable();
                 } else {
@@ -117,8 +114,32 @@ class XMLscene extends CGFscene {
             if (++num_created_lights == MAX_LIGHTS) {
                 break;
             }
+        }
+    }
 
-            result = lights.next();
+    initMaterials() {
+        this.materials = {};
+        for (let entry of this.graph.materials) {
+            const id = entry[0];
+            const material = entry[1];
+
+            this.materials[id] = new CGFappearance(this);
+            this.materials[id].setAmbient(...Object.values(material.ambient));
+            this.materials[id].setDiffuse(...Object.values(material.diffuse));
+            this.materials[id].setSpecular(...Object.values(material.specular));
+            this.materials[id].setEmission(...Object.values(material.emission));
+            this.materials[id].setShininess(material.shininess);
+        }
+    }
+
+    initTextures() {
+        this.textures = {};
+        for (let entry of this.graph.textures) {
+            const id = entry[0];
+            const texture = entry[1];
+
+            this.textures[id] = new CGFappearance(this);
+            this.textures[id].setAmbient(texture.file);
         }
     }
 
@@ -136,6 +157,8 @@ class XMLscene extends CGFscene {
 
         this.initLights();
         this.initCameras();
+        this.initMaterials();
+        this.initTextures();
 
         // Adds lights checkboxes
         this.interface.createLightsCheckboxes(this.graph.lights);

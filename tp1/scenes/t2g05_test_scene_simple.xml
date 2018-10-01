@@ -1,7 +1,7 @@
 <yas>
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="ss" axis_length="10" />
+    <scene root="comp2" axis_length="10" />
     <views default="ortho1" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
@@ -16,8 +16,8 @@
         <ortho id="ortho1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
     </views>
     <ambient>
-        <ambient r="0.2" g="0.2" b="0.2" a="0.4" />
-        <background r="0.71" g="0.97" b="0.8" a="1" />
+        <ambient r="0.1" g="0.1" b="0.1" a="0.4" />
+        <background r="0.06" g="0.06" b="0.06" a="1" />
     </ambient>
     <lights>
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
@@ -29,7 +29,7 @@
             <specular r="0.3" g="0.8" b="0.4" a="1" />
         </omni>
         <omni id="omni2" enabled="true" >
-            <location x="2" y="3" z="4" w="1" />
+            <location x="-2" y="3" z="4" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.9" g="0.5" b="0.5" a="1" />
             <specular r="0.7" g="0.26" b="0.26" a="1" />
@@ -54,15 +54,15 @@
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <material id="mat1" shininess="45" >
             <emission r="0" g="0" b="0" a="1" />
-            <ambient r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.3" b="0.4" a="1" />
             <diffuse r="0" g="0" b="0" a="1" />
             <specular r="0" g="0" b="1" a="1" />
         </material>
         <material id="mat2" shininess="46" >
             <emission r="0" g="0" b="0" a="1" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0" g="0" b="0" a="1" />
-            <specular r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.1" b="0.1" a="1" />
+            <specular r="0.3" g="0" b="0" a="1" />
         </material>
     </materials>
     <transformations>
@@ -172,6 +172,7 @@
             <texture id="tex1" length_s="1" length_t="1" />
             <children>
                 <componentref id="ss" />
+                <componentref id="prim1" />
                 <primitiveref id="prim2" />
             </children>
         </component>
