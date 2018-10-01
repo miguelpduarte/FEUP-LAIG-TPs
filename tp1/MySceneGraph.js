@@ -939,9 +939,56 @@ class MySceneGraph {
         } else if (componentProperties[3].nodeName !== "children") {
             throw this.missingNodeMessage("component", "children");
         }
+
+        //materials
+        const materials = componentProperties[1].children;
+        let materialIds = [];        
+        for (let material of materials) {
+            if (material.nodeName !== "material") {
+                this.onXMLMinorError(`Invalid '${material.nodeName}' material tag in component materials.`);
+            } else {
+                const matId = this.parseStringAttr(material, "id");
+                this.verifyInheritableId("material", matId, this.materials);
+                materialIds.push(matId);
+            }
+        } 
+
+        //texture
+        const textureNode = componentProperties[2];
+        const texId = this.parseStringAttr(textureNode, "id");
+        const length_s = this.parseFloatAttr(textureNode, "length_s");
+        const length_t = this.parseFloatAttr(textureNode, "length_t");
+        this.verifyInheritableId("texture", texId, this.textures);
+
+        //children
+        const children = componentProperties[3].children;
+        for (let child of children) {
+            if (child.nodeName === "componentref") {
+                const childId = this.parseStringAttr(child, "id");
+                // TODO
+            }
+            else if (child.nodeName === "primitiveref") {
+                const childId = this.parseStringAttr(child, "id");
+                console.log("CHILD ID: " , childId);
+                if (!this.primitives.has(childId)) {
+                    console.log("ERROR");
+                    throw `${primitive} with id '${id}' is not defined.`;
+                }
+            }
+            else {
+                //this.onXMLMinorError(`Invalid '${child.nodeName}' child tag in component children.`);
+            }
+        }
+        
         
         const component = {
-            id
+            id,
+            texture: {
+                id: texId,
+                length_s,
+                length_t
+            },
+            materialIds
         };
 
         console.warn('Component parsing is clearly not done yet');
@@ -949,6 +996,9 @@ class MySceneGraph {
         this.verifyUniqueId("component", this.components, id);
 
         this.components.set(component.id, component);
+    }
+
+    parseComponentTexture(component, textureNode) {
     }
 
     parseStringAttr(node, attribute_name) {
@@ -999,20 +1049,28 @@ class MySceneGraph {
 
         if (r < 0) {
             this.onXMLMinorError(`${node.nodeName} red attribute must be in the range [0, 1]. Assuming value 0.`);
+            r = 0;
         } else if (r > 1) {
             this.onXMLMinorError(`${node.nodeName} red attribute must be in the range [0, 1]. Assuming value 1.`);
+            r = 1;
         } else if (g < 0) {
             this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 0.`);
+            g = 0;
         } else if (g > 1) {
             this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 1.`);
+            g = 1;
         } else if (b < 0) {
             this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 0.`);
+            b = 0;
         } else if (b > 1) {
             this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 1.`);
+            b = 1;
         } else if (a < 0) {
             this.onXMLMinorError(`${node.nodeName} alpha attribute must be in the range [0, 1]. Assuming value 0.`);
+            a = 0;
         } else if (a > 1) {
             this.onXMLMinorError(`${node.nodeName} alpha attribute must be in the range [0, 1]. Assuming value 1.`);
+            a = 1;
         }
 
         return {r, g, b, a};
@@ -1042,6 +1100,12 @@ class MySceneGraph {
      */
     log(message) {
         console.log("XMLParserLog:   ", message);
+    }
+
+    verifyInheritableId(node_name, id, container) {
+        if (!container.has(id) && id !== "inherit") {
+            throw `${node_name} with id '${id}' is not defined.`;
+        }
     }
 
     /**

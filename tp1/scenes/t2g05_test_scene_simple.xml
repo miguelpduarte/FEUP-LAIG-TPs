@@ -132,7 +132,7 @@
             <!-- o material muda para o proximo material da lista; do -->
             <!-- ultimo material da lista volta ao primeiro -->
             <materials>
-                <material id="ss" />
+                <material id="mat1" />
             </materials>
             <!-- declaracao obrigatoria de texture -->
             <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
@@ -149,14 +149,14 @@
             <!-- do tipo escalamento violem esta regra. -->
             <!-- Nao e' necessario aplicar fatores de escala em -->
             <!-- quadricas (esfera, cilindro...) -->
-            <texture id="ss" length_s="ff" length_t="ff" />
+            <texture id="inherit" length_s="1" length_t="2" />
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
                 <componentref id="ss" />
-                <primitiveref id="ss" />
+                <primitiveref id="prim1" />
             </children>
         </component>
         <component id="comp2">
@@ -167,12 +167,12 @@
                 <scale x="ff" y="ff" z="ff" />
             </transformation>
             <materials>
-                <material id="ss" />
+                <material id="mat2" />
             </materials>
-            <texture id="ss" length_s="ff" length_t="ff" />
+            <texture id="tex1" length_s="1" length_t="1" />
             <children>
                 <componentref id="ss" />
-                <primitiveref id="ss" />
+                <primitiveref id="prim2" />
             </children>
         </component>
     </components>
