@@ -23,25 +23,49 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="omni1" enabled="t" >
-            <location x="1" y="1" z="1" w="1" />
+            <location x="3" y="3" z="3" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.9" g="0.9" b="0.9" a="1" />
             <specular r="0.9" g="0.9" b="0.9" a="1" />
         </omni>
         <omni id="omni2" enabled="t" >
-            <location x="1" y="5" z="1" w="1" />
+            <location x="3" y="3" z="-3" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.9" g="0.9" b="0.9" a="1" />
             <specular r="0.9" g="0.9" b="0.9" a="1" />
         </omni>
         <omni id="omni3" enabled="t" >
-            <location x="5" y="1" z="1" w="1" />
+            <location x="3" y="-3" z="-3" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.9" g="0.9" b="0.9" a="1" />
             <specular r="0.9" g="0.9" b="0.9" a="1" />
         </omni>
         <omni id="omni4" enabled="t" >
-            <location x="5" y="5" z="1" w="1" />
+            <location x="-3" y="-3" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni5" enabled="t" >
+            <location x="-3" y="-3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni6" enabled="t" >
+            <location x="-3" y="3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni7" enabled="t" >
+            <location x="3" y="-3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni8" enabled="t" >
+            <location x="-3" y="3" z="-3" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.9" g="0.9" b="0.9" a="1" />
             <specular r="0.9" g="0.9" b="0.9" a="1" />
@@ -162,7 +186,7 @@
             <cylinder base="2" top="2" height="2" slices="2" stacks="3" />
         </primitive >
         <primitive id="prim4">
-            <sphere radius="2" slices="2" stacks="3" />
+            <sphere radius="1" slices="12" stacks="12" />
         </primitive >
         <primitive id="prim5">
             <torus inner="2" outer="2" slices="5" loops="5" />

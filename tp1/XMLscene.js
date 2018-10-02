@@ -156,6 +156,9 @@ class XMLscene extends CGFscene {
         Object.keys(PRIMITIVE_CREATION_FUNCS)
             .forEach(key => PRIMITIVE_CREATION_FUNCS[key] = PRIMITIVE_CREATION_FUNCS[key].bind(this));
 
+        
+        console.log(PRIMITIVE_CREATION_FUNCS);
+
         this.primitives = {};
         for (let [id, primitive] of this.graph.primitives) {
             PRIMITIVE_CREATION_FUNCS[primitive.type](primitive);
@@ -163,7 +166,12 @@ class XMLscene extends CGFscene {
     }
 
     createRectangle(rectangle) {
-        this.primitives[rectangle.id] = new Rectangle(this, rectangle.x1, rectangle.y1, rectangle.x2, rectangle.y2); 
+        //this.primitives[rectangle.id] = new Rectangle(this, rectangle.x1, rectangle.y1, rectangle.x2, rectangle.y2); 
+    }
+
+    createSphere(sphere) {
+        console.log(sphere);
+        this.primitives[sphere.id] = new Sphere(this, sphere.slices, sphere.stacks, sphere.radius);
     }
 
     createTriangle(triangle) {
@@ -171,10 +179,6 @@ class XMLscene extends CGFscene {
     }
 
     createCylinder(cylinder) {
-        // TODO
-    }
-
-    createSphere(sphere) {
         // TODO
     }
 
