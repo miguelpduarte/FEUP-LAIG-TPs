@@ -49,13 +49,13 @@ class XMLscene extends CGFscene {
 
     initCameras() {
         this.cameras = new Map();
-        const FOV = 0.4;
 
         for(let [id, camera] of this.graph.cameras) {
             if(camera.type === "ortho") {
                 console.warn("Not creating ortho cameras - ask teacher");
+                // TODO
             } else if(camera.type === "perspective") {
-                let cam = new CGFcamera(FOV, camera.near, camera.far, vec3.fromValues(...Object.values(camera.from)), vec3.fromValues(...Object.values(camera.to)));
+                let cam = new CGFcamera(camera.angle*DEGREE_TO_RAD, camera.near, camera.far, vec3.fromValues(...Object.values(camera.from)), vec3.fromValues(...Object.values(camera.to)));
                 console.warn("Not using camera angle yet - ask teacher");
                 this.cameras.set(id, cam);
             }
@@ -68,6 +68,7 @@ class XMLscene extends CGFscene {
         }
 
         this.camera = this.cameras.get(this.graph.defaultViewId) || this.default_camera;
+        this.interface.setActiveCamera(this.camera);
     }
 
     setLightState(lightId, newVal) {

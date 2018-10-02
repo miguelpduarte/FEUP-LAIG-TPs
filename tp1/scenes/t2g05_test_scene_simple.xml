@@ -2,15 +2,15 @@
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
     <scene root="comp2" axis_length="10" />
-    <views default="ortho1" >
+    <views default="perspective1" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
-        <perspective id="perspective1" near="2.5" far="3.2" angle="38">
-            <from x="1" y="2" z="3" />
-            <to x="4.1" y="5.2" z="6.3" />
+        <perspective id="perspective1" near="1" far="90" angle="72">
+            <from x="1" y="1" z="10" />
+            <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="perspective2" near="0.2" far="10" angle="38">
-            <from x="5" y="5" z="5.2" />
+        <perspective id="perspective2" near="1" far="90" angle="40">
+            <from x="10" y="-10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
         <ortho id="ortho1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
