@@ -35,6 +35,8 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+        
+        this.p = new CGFquadPyramid(this, 10, 2);
     }
 
     /**
@@ -69,14 +71,12 @@ class XMLscene extends CGFscene {
     }
 
     setLightState(lightId, newVal) {
-        const light = this.lights.find(element => {
-            return element.id === lightId;
-        });
-
+        const light_index = this.lightsMap[lightId];
+        
         if(newVal) {
-            light.enable();
+            this.lights[light_index].enable();
         } else {
-            light.disable();
+            this.lights[light_index].disable();
         }
     }
 
@@ -85,30 +85,35 @@ class XMLscene extends CGFscene {
      */
     initLights() {
         let num_created_lights = 0;
+        this.lightsMap = {};
 
-        for(let entry of this.graph.lights) {
-            const id = entry[0];
-            const light = entry[1];
-            if (light.type === "omni") {
-                this.lights[num_created_lights].setPosition(...Object.values(light.location));
-                this.lights[num_created_lights].setAmbient(...Object.values(light.ambient));
-                this.lights[num_created_lights].setDiffuse(...Object.values(light.diffuse));
-                this.lights[num_created_lights].setSpecular(...Object.values(light.specular));
+        for(let [id, light] of this.graph.lights) {
+            this.lights[num_created_lights].setPosition(...Object.values(light.location));
+            this.lights[num_created_lights].setAmbient(...Object.values(light.ambient));
+            this.lights[num_created_lights].setDiffuse(...Object.values(light.diffuse));
+            this.lights[num_created_lights].setSpecular(...Object.values(light.specular));
 
-                this.lights[num_created_lights].setVisible(true);
-                //this.lights[num_created_lights].id = light.id;
-                if(light.enabled) {
-                    this.lights[num_created_lights].enable();
-                } else {
-                    this.lights[num_created_lights].disable();
-                }
+            if (light.type === "spot") {
+                this.lights[num_created_lights].setSpotCutOff(light.angle * DEGREE_TO_RAD);
+                this.lights[num_created_lights].setSpotExponent(light.exponent);
 
-                this.lights[num_created_lights].update();
+                let direction = [light.target.x - light.location.x, 
+                                 light.target.y - light.location.y,
+                                 light.target.z - light.location.z
+                                ];
+
+                this.lights[num_created_lights].setSpotDirection(...direction);
             }
-            else if (light.type === "spot") {
-                console.log("Spot");
-                // TODO: this
+
+            this.lights[num_created_lights].setVisible(true);
+            this.lightsMap[id] = num_created_lights;
+            if(light.enabled) {
+                this.lights[num_created_lights].enable();
+            } else {
+                this.lights[num_created_lights].disable();
             }
+
+            this.lights[num_created_lights].update();
 
             // Only eight lights allowed by WebGL.
             if (++num_created_lights == MAX_LIGHTS) {
@@ -119,10 +124,7 @@ class XMLscene extends CGFscene {
 
     initMaterials() {
         this.materials = {};
-        for (let entry of this.graph.materials) {
-            const id = entry[0];
-            const material = entry[1];
-
+        for (let [id, material] of this.graph.materials) {
             this.materials[id] = new CGFappearance(this);
             this.materials[id].setAmbient(...Object.values(material.ambient));
             this.materials[id].setDiffuse(...Object.values(material.diffuse));
@@ -134,15 +136,56 @@ class XMLscene extends CGFscene {
 
     initTextures() {
         this.textures = {};
-        for (let entry of this.graph.textures) {
-            const id = entry[0];
-            const texture = entry[1];
-
+        for (let [id, texture] of this.graph.textures) {
             this.textures[id] = new CGFappearance(this);
-            this.textures[id].setAmbient(texture.file);
+            this.textures[id].loadTexture(texture.file);
         }
     }
 
+    initPrimitives() {
+        let PRIMITIVE_CREATION_FUNCS = {
+            "rectangle": this.createRectangle,
+            "triangle": this.createTriangle,
+            "cylinder": this.createCylinder,
+            "sphere": this.createSphere,
+            "torus": this.createTorus
+        }
+
+        //Binding this
+        Object.keys(PRIMITIVE_CREATION_FUNCS)
+            .forEach(key => PRIMITIVE_CREATION_FUNCS[key] = PRIMITIVE_CREATION_FUNCS[key].bind(this));
+
+        this.primitives = {};
+        for (let [id, primitive] of this.graph.primitives) {
+            PRIMITIVE_CREATION_FUNCS[primitive.type](primitive);
+        }
+    }
+
+    createRectangle(rectangle) {
+        this.primitives[rectangle.id] = new Rectangle(this, rectangle.x1, rectangle.y1, rectangle.x2, rectangle.y2); 
+    }
+
+    createTriangle(triangle) {
+        // TODO
+    }
+
+    createCylinder(cylinder) {
+        // TODO
+    }
+
+    createSphere(sphere) {
+        // TODO
+    }
+
+    createTorus(torus) {
+        // TODO
+    }
+
+    updateLights() {
+        for (let light of this.lights) {
+            light.update();
+        }
+	}
 
     /*
      * Handler called when the graph is finally loaded. 
@@ -159,6 +202,7 @@ class XMLscene extends CGFscene {
         this.initCameras();
         this.initMaterials();
         this.initTextures();
+        this.initPrimitives();
 
         // Adds lights checkboxes
         this.interface.createLightsCheckboxes(this.graph.lights);
@@ -179,6 +223,7 @@ class XMLscene extends CGFscene {
 
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
+        this.updateLights();
         this.loadIdentity();
 
         // Apply transformations corresponding to the camera position relative to the origin
@@ -208,6 +253,11 @@ class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
+            // TODO
+            Object.values(this.textures)[0].apply();
+            for (let item of Object.values(this.primitives)) {
+                item.display();
+            } 
         }
         else {
             // Draw axis
