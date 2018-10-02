@@ -166,11 +166,18 @@ class XMLscene extends CGFscene {
     }
 
     createRectangle(rectangle) {
-        this.primitives[rectangle.id] = new Rectangle(this, rectangle.x1, rectangle.y1, rectangle.x2, rectangle.y2); 
+        this.primitives[rectangle.id] = new Rectangle(this, 
+            rectangle.x1, rectangle.y1, 
+            rectangle.x2, rectangle.y2
+        ); 
     }
 
     createSphere(sphere) {
-        this.primitives[sphere.id] = new Sphere(this, sphere.slices, sphere.stacks, sphere.radius);
+        this.primitives[sphere.id] = new Sphere(this, 
+            sphere.slices, 
+            sphere.stacks, 
+            sphere.radius
+        );
     }
 
     createTriangle(triangle) {
@@ -182,7 +189,13 @@ class XMLscene extends CGFscene {
     }
 
     createCylinder(cylinder) {
-        // TODO
+        this.primitives[cylinder.id] = new Cylinder(this, 
+            cylinder.slices, 
+            cylinder.stacks,
+            cylinder.height,
+            cylinder.base,
+            cylinder.top
+        );
     }
 
     createTorus(torus) {

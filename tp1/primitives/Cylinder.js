@@ -1,15 +1,18 @@
 /**
- * MyCylinder
+ * Cylinder
  * @constructor
  */
-class MyCylinder extends CGFobject
+class Cylinder extends CGFobject
 {
-	constructor(scene, slices, stacks)
+	constructor(scene, slices, stacks, height, base, top)
 	{
 		super(scene);
 
 		this.slices = slices;
 		this.stacks = stacks;
+		this.height = height;
+		this.base = base;
+		this.top = top;
 
 		this.initBuffers();
 	};
@@ -22,22 +25,29 @@ class MyCylinder extends CGFobject
 		this.texCoords = [];
 
 		let step_angle = 2*Math.PI/this.slices;
-		let stack_step = 1/this.stacks;
+		let stack_step = this.height/this.stacks;
+		let radius_step = (this.top - this.base)/this.stacks;
+
+		console.log("RADIUS STEP: ", radius_step);
 
 		for(let i = 0; i <= this.slices; ++i) {
 
 			for(let j = 0; j <= this.stacks; ++j) {
 
 				this.vertices.push(
-					Math.cos(step_angle*i), Math.sin(step_angle*i), j*stack_step
+					(this.base + radius_step*j) * Math.cos(step_angle*i), 
+					(this.base + radius_step*j) * Math.sin(step_angle*i), 
+					j*stack_step
 				);
 
 				this.texCoords.push(
-					i*1/this.slices, j*1/this.stacks
+					i*1/this.slices, 
+					1 - (j*1/this.stacks)
 				);
 
 				this.normals.push(
-					Math.cos(step_angle*i), Math.sin(step_angle*i), 0
+					Math.cos(step_angle*i), 
+					Math.sin(step_angle*i), 0
 				);
 
 			}
@@ -56,4 +66,12 @@ class MyCylinder extends CGFobject
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
+
+	display() {
+		// TODO: REMOVE THIS
+		this.scene.pushMatrix();
+			this.scene.translate(0,0,5);
+			super.display();
+		this.scene.popMatrix();
+	}
 };
