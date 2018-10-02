@@ -23,6 +23,10 @@ class Rectangle extends CGFobject
 			x1, y1, 0,
 			x2, y1, 0,
 			x1, y2, 0,
+			x2, y2, 0,
+			x1, y1, 0,
+			x2, y1, 0,
+			x1, y2, 0,
 			x2, y2, 0
 		];
 
@@ -30,22 +34,34 @@ class Rectangle extends CGFobject
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
-			0, 0, 1
+			0, 0, 1,
+			0, 0, -1,
+			0, 0, -1,
+			0, 0, -1,
+			0, 0, -1
 		]
 
 		this.indices = [
 			0, 1, 2, 
-			3, 2, 1
+			3, 2, 1,
+			5, 6, 7,
+			6, 5, 4
 		];
 
 		this.texCoords = [
 			this.minS, this.maxT,
 			this.maxS, this.maxT,
 			this.minS, this.minT,
+			this.maxS, this.minT,
+			this.minS, this.maxT,
+			this.maxS, this.maxT,
+			this.minS, this.minT,
 			this.maxS, this.minT
 		];
+		console.log("Here1");
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
+		console.log("Here2");
 	};
 };

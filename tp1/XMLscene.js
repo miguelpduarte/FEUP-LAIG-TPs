@@ -166,16 +166,19 @@ class XMLscene extends CGFscene {
     }
 
     createRectangle(rectangle) {
-        //this.primitives[rectangle.id] = new Rectangle(this, rectangle.x1, rectangle.y1, rectangle.x2, rectangle.y2); 
+        this.primitives[rectangle.id] = new Rectangle(this, rectangle.x1, rectangle.y1, rectangle.x2, rectangle.y2); 
     }
 
     createSphere(sphere) {
-        console.log(sphere);
         this.primitives[sphere.id] = new Sphere(this, sphere.slices, sphere.stacks, sphere.radius);
     }
 
     createTriangle(triangle) {
-        // TODO
+        this.primitives[triangle.id] = new Triangle(this, 
+            triangle.x1, triangle.y1, triangle.z1, 
+            triangle.x2, triangle.y2, triangle.z2, 
+            triangle.x3, triangle.y3, triangle.z3
+        );
     }
 
     createCylinder(cylinder) {

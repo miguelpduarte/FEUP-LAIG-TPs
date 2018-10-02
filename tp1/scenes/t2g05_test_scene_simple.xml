@@ -82,7 +82,7 @@
     <textures>
         <!-- Deve existir um ou mais blocos "texture" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="tex1" file="scenes/images/vidral.jpg" />
+        <texture id="tex1" file="scenes/images/portrait.jpg" />
         <texture id="tex2" file="/home/notfound/123.png" />
     </textures>
     <materials>
@@ -123,7 +123,7 @@
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <primitive id="prim1">
-            <rectangle x1="0" y1="0" x2="6" y2="6" />
+            <rectangle x1="3" y1="3" x2="6" y2="6" />
         </primitive >
         <!-- <primitive id="prim1">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
@@ -178,9 +178,9 @@
             <!-- rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente, -->
             <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
-            <triangle x1="2" y1="2" z1="2"
-                      x2="3" y2="3" z2="7"
-                      x3="4" y3="5" z3="6" />
+            <triangle x1="4" y1="0" z1="0"
+                      x2="0" y2="0" z2="4"
+                      x3="4" y3="4" z3="4" />
         </primitive >
         <primitive id="prim3">
             <cylinder base="2" top="2" height="2" slices="2" stacks="3" />
