@@ -38,9 +38,9 @@ class Component extends CGFobject {
 
 	display() {
         this.scene.pushMatrix();
+        this.applyTransformations();
         for (let child of this.children) {
             //This is not the correct way but it is the current solution
-            this.applyTransformations();
             this.applyMaterials();
             this.applyTextures();
 
@@ -61,6 +61,6 @@ class Component extends CGFobject {
     }
 
     applyTextures() {
-        
+        this.materials[0].setTexture(this.texture);
     }
 };

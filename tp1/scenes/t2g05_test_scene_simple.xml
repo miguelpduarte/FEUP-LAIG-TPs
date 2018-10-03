@@ -255,7 +255,7 @@
             <!-- do tipo escalamento violem esta regra. -->
             <!-- Nao e' necessario aplicar fatores de escala em -->
             <!-- quadricas (esfera, cilindro...) -->
-            <texture id="inherit" length_s="1" length_t="2" />
+            <texture id="tex1" length_s="1" length_t="2" />
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
@@ -275,7 +275,7 @@
             <materials>
                 <material id="mat_blue" />
             </materials>
-            <texture id="tex1" length_s="1" length_t="1" />
+            <texture id="tex3" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="prim2" />
                 <primitiveref id="prim5" />

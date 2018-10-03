@@ -142,8 +142,7 @@ class XMLscene extends CGFscene {
     initTextures() {
         this.textures = new Map();
         for (let [id, texture] of this.graph.textures) {
-            let tex = new CGFappearance(this);
-            tex.loadTexture(texture.file);
+            let tex = new CGFtexture(this, texture.file);
             this.textures.set(id, tex);
         }
     }
@@ -210,9 +209,6 @@ class XMLscene extends CGFscene {
             }
             component.setChildren(child_arr);
         }
-
-        console.log('ai', this.cgf_components);
-        console.log('ui', this.cgf_primitives);
 
         this.rootComponent = this.cgf_components.get(this.graph.rootElementId);
     }
