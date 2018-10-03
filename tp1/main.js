@@ -20,6 +20,8 @@ serialInclude([
     'primitives/Sphere.js',
     'primitives/Triangle.js',
     'primitives/Cylinder.js',
+    'primitives/Circle.js',
+    'primitives/CylinderSide.js',
 
 
     main=function() {
