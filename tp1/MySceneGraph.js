@@ -754,6 +754,12 @@ class MySceneGraph {
             throw `component with id '${id}' has no children`;
         }
 
+        //transformations
+        const transformations = componentProperties[0].children;
+        for(let transformation of transformations) {
+            
+        }
+
         //materials
         const materials = componentProperties[1].children;
         let materialIds = [];        

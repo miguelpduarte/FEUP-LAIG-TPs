@@ -18,7 +18,7 @@ class Component extends CGFobject {
             if(materialId === "inherit") {
                 this.materials.push("inherit");
             } else {
-                this.materials.push(this.scene.materials.get());
+                this.materials.push(this.scene.materials.get(materialId));
             }
         }
     }
@@ -38,10 +38,12 @@ class Component extends CGFobject {
 
 	display() {
         this.scene.pushMatrix();
+        for (let child of this.children) {
+            //This is not the correct way but it is the current solution
             this.applyTransformations();
             this.applyMaterials();
             this.applyTextures();
-            for (let child of this.children) {
+
                 child.display();
             }         
         this.scene.popMatrix();     
@@ -52,8 +54,10 @@ class Component extends CGFobject {
         // this.scene.multMatrix(this.transformation_mat);
     }
 
-    applyMaterials() {
+    //THIS IMPLEMENTATION IS TEMPORARY
 
+    applyMaterials() {
+        this.materials[0].apply();
     }
 
     applyTextures() {

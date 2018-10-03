@@ -101,6 +101,12 @@
             <diffuse r="0.9" g="0.1" b="0.1" a="1" />
             <specular r="0.3" g="0" b="0" a="1" />
         </material>
+        <material id="mat_blue" shininess="55">
+            <emission r="0" g="0" b="0.4" a="1" />
+            <ambient r="0" g="0" b="0.2" a="1" />
+            <diffuse r="0.2" g="0.2" b="0.9" a="1" />
+            <specular r="0.1" g="0.1" b="0.8" a="1" />
+        </material>
     </materials>
     <transformations>
         <!-- Deve existir um ou mais blocos "transformation" -->
@@ -267,7 +273,7 @@
                 <scale x="ff" y="ff" z="ff" />
             </transformation>
             <materials>
-                <material id="mat2" />
+                <material id="mat_blue" />
             </materials>
             <texture id="tex1" length_s="1" length_t="1" />
             <children>
