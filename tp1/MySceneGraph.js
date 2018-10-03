@@ -969,12 +969,4 @@ class MySceneGraph {
             }
         }
     }
-
-    /**
-     * Displays the scene, processing each node, starting in the root node.
-     */
-    displayScene() {
-        // entry point for graph rendering
-        //TODO: Render loop starting at root of graph
-    }
 }

@@ -225,10 +225,44 @@ class XMLscene extends CGFscene {
         this.initTextures();
         this.initPrimitives();
 
+        this.createSceneGraph();
+
         // Adds lights checkboxes
         this.interface.createLightsCheckboxes(this.graph.lights);
 
         this.sceneInited = true;
+    }
+
+    createSceneGraph() {
+        this.cgf_components = new Map();
+        this.cgf_primitives = new Map();
+
+        //Create primitives
+        for(let [id, primitive_model] of this.graph.primitives) {
+            const cgf_primitive = PrimitiveFactory.create(primitive_model);
+            this.cgf_primitives.set(id, cgf_primitive);
+        }
+
+        //Create components
+        for(let [id, component_model] of this.graph.components) {
+            const cgf_component = new Component(this, component_model);
+            this.cgf_components.set(id, cgf_component);
+        }
+
+        //Setting component children
+        for(let [id, component] of this.cgf_components) {
+            let child_arr = [];
+            const component_model = this.graph.components.get(id);
+            for(let child_component_id of component_model.children.componentIds) {
+                child_arr.push(this.cgf_components.get(child_component_id));
+            }
+            for(let child_primitive_id of component_model.children.primitiveIds) {
+                child_arr.push(this.cgf_primitives.get(child_primitive_id));
+            }
+            component.setChildren(child_arr);
+        }
+
+        this.rootComponent = this.cgf_components.get(this.graph.rootElementId);
     }
 
 
