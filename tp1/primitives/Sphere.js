@@ -42,8 +42,8 @@ class Sphere extends CGFobject
 
                 // TODO: divide by 4 instead of 2 (in X)?
 				this.texCoords.push(
-                    ((Math.cos(alpha_angle*j)*Math.cos(omega_angle*i))+1)/2,
-                    1 - ((Math.cos(alpha_angle*j)*Math.sin(omega_angle*i))+1)/2 
+                    1 - (omega_angle*i / (2*Math.PI)),
+                    (alpha_angle*j + Math.PI/2) / Math.PI
 				);
 
 			}
@@ -66,6 +66,7 @@ class Sphere extends CGFobject
 	display() {
 		this.scene.pushMatrix();
 			this.scene.translate(4,0,2);
+			this.scene.rotate(Math.PI/2, 1, 0, 0);
 			super.display();
 		this.scene.popMatrix();
 	}
