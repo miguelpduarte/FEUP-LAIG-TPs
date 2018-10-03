@@ -634,6 +634,16 @@ class MySceneGraph {
         const slices = this.parseIntAttr(primitiveNode, "slices");
         const stacks = this.parseIntAttr(primitiveNode, "stacks");
 
+        if (height <= 0) {
+            throw `cylinder primitive with id '${id}' height must be a positive number`;
+        }
+        else if (slices < 2) {
+            throw `cylinder primitive with id '${id}' must have at least 2 slices`;
+        }
+        else if (stacks < 2) {
+            throw `cylinder primitive with id '${id}' must have at least 2 stacks`;
+        }
+
         return {
             type: "cylinder",
             base,
@@ -649,6 +659,16 @@ class MySceneGraph {
         const slices = this.parseIntAttr(primitiveNode, "slices");
         const stacks = this.parseIntAttr(primitiveNode, "stacks");
 
+        if (radius <= 0) {
+            throw `sphere primitive with id '${id}' radius must be a positive number`;
+        }
+        else if (slices < 2) {
+            throw `sphere primitive with id '${id}' must have at least 2 slices`;
+        }
+        else if (stacks < 2) {
+            throw `sphere primitive with id '${id}' must have at least 2 stacks`;
+        }
+
         return {
             type: "sphere",
             radius,
@@ -662,6 +682,22 @@ class MySceneGraph {
         const outer = this.parseFloatAttr(primitiveNode, "outer");
         const slices = this.parseIntAttr(primitiveNode, "slices");
         const loops = this.parseIntAttr(primitiveNode, "loops");
+
+        if (inner <= 0) {
+            throw `torus primitive with id '${id}' inner radius must be a positive number`;
+        }
+        else if (outer <= 0) {
+            throw `torus primitive with id '${id}' outer radius must be a positive number`;
+        }
+        else if (inner >= outer) {
+            throw `torus primitive with id '${id}' outer radius must be bigger than the inner radius`;
+        }
+        else if (slices < 2) {
+            throw `torus primitive with id '${id}' must have at least 2 slices`;
+        }
+        else if (loops < 2) {
+            throw `torus primitive with id '${id}' must have at least 2 loops`;
+        }
 
         return {
             type: "torus",
