@@ -579,11 +579,11 @@ class MySceneGraph {
         } else if (primitiveChild.nodeName === "triangle") {
             primitive = this.createTriangle(primitiveChild);
         } else if (primitiveChild.nodeName === "cylinder") {
-            primitive = this.createCylinder(primitiveChild);
+            primitive = this.createCylinder(primitiveChild, id);
         } else if (primitiveChild.nodeName === "sphere") {
-            primitive = this.createSphere(primitiveChild);
+            primitive = this.createSphere(primitiveChild, id);
         } else if (primitiveChild.nodeName === "torus") {
-            primitive = this.createTorus(primitiveChild);
+            primitive = this.createTorus(primitiveChild, id);
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
@@ -627,7 +627,7 @@ class MySceneGraph {
         }
     }
 
-    createCylinder(primitiveNode) {
+    createCylinder(primitiveNode, id) {
         const base = this.parseFloatAttr(primitiveNode, "base");
         const top = this.parseFloatAttr(primitiveNode, "top");
         const height = this.parseFloatAttr(primitiveNode, "height");
@@ -644,7 +644,7 @@ class MySceneGraph {
         }
     }
 
-    createSphere(primitiveNode) {
+    createSphere(primitiveNode, id) {
         const radius = this.parseFloatAttr(primitiveNode, "radius");
         const slices = this.parseIntAttr(primitiveNode, "slices");
         const stacks = this.parseIntAttr(primitiveNode, "stacks");
@@ -657,7 +657,7 @@ class MySceneGraph {
         }
     }
 
-    createTorus(primitiveNode) {
+    createTorus(primitiveNode, id) {
         const inner = this.parseFloatAttr(primitiveNode, "inner");
         const outer = this.parseFloatAttr(primitiveNode, "outer");
         const slices = this.parseIntAttr(primitiveNode, "slices");

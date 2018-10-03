@@ -189,7 +189,7 @@
             <sphere radius="1" slices="12" stacks="12" />
         </primitive >
         <primitive id="prim5">
-            <torus inner="2" outer="2" slices="5" loops="5" />
+            <torus inner="1" outer="2" slices="20" loops="20" />
         </primitive >
     </primitives >
     <components>

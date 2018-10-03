@@ -199,7 +199,13 @@ class XMLscene extends CGFscene {
     }
 
     createTorus(torus) {
-        // TODO
+        console.log("TORUS: ", torus);
+        this.primitives[torus.id] = new Torus(this, 
+            torus.inner, 
+            torus.outer, 
+            torus.slices, 
+            torus.loops
+        );
     }
 
     updateLights() {
@@ -225,7 +231,7 @@ class XMLscene extends CGFscene {
         this.initTextures();
         this.initPrimitives();
 
-        this.createSceneGraph();
+        //this.createSceneGraph();
 
         // Adds lights checkboxes
         this.interface.createLightsCheckboxes(this.graph.lights);
@@ -307,7 +313,7 @@ class XMLscene extends CGFscene {
             }
 
             // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
+            //this.graph.displayScene();
             // TODO
             Object.values(this.textures)[0].apply();
             for (let item of Object.values(this.primitives)) {
