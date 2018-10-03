@@ -39,6 +39,7 @@ class MySceneGraph {
         this.primitives = new Map();
         this.components = new Map();
 
+        this.requestedChildComponentIds = new Set();
         this.tree = {};
 
         this.axisCoords = [];
@@ -676,6 +677,11 @@ class MySceneGraph {
 
         const components = componentsNode.children;
 
+        //For verification that all the components were defined two data structures will be used:
+        //The map that will store the actual components information (and its id)
+        // and a set that will store the "requested" component ids of the children
+        // in the end, these data structures should only differ by one element (the root component)
+
         for(let i = 0; i < components.length; ++i) {
             this.createComponent(components[i]);
         }
@@ -685,8 +691,10 @@ class MySceneGraph {
         }
 
         if(!this.components.has(this.rootElementId)) {
-            throw `Root Component with id '${this.rootElementId}' is missing.`;
+            throw `root component with id '${this.rootElementId}' is missing.`;
         }
+
+        this.verifyComponentChildren();
     }
 
     createComponent(componentNode) {
@@ -704,6 +712,10 @@ class MySceneGraph {
             throw this.missingNodeMessage("component", "texture");
         } else if (componentProperties[3].nodeName !== "children") {
             throw this.missingNodeMessage("component", "children");
+        }
+
+        if (componentProperties[3].children.length === 0) {
+            throw `component with id '${id}' has no children`;
         }
 
         //materials
@@ -728,25 +740,35 @@ class MySceneGraph {
 
         //children
         const children = componentProperties[3].children;
-        let primitiveIds = [];
+        let primitiveIds = new Set();
+        let componentIds = new Set();
+
         for (let child of children) {
             if (child.nodeName === "componentref") {
                 const childId = this.parseStringAttr(child, "id");
-                // TODO
-            }
-            else if (child.nodeName === "primitiveref") {
+                if(childId === id) {
+                    throw `component with id '${id}' includes itself in its children`;
+                }
+                if(componentIds.has(childId)) {
+                    this.onXMLMinorError(`component with id '${id}' has a duplicate child component with id '${childId}'. It will be ignored.`);
+                } else {
+                    componentIds.add(childId);
+                    //Registering that the child component id was requested for further validation
+                    this.registerRequestedChildComponent(childId);
+                }
+            } else if (child.nodeName === "primitiveref") {
                 const childId = this.parseStringAttr(child, "id");
-                console.log("CHILD ID: " , childId);
                 if (!this.primitives.has(childId)) {
-                    console.log("ERROR");
-                    throw `${primitive} with id '${id}' is not defined.`;
+                    throw `primitive child with id '${childId}' in component with id '${id}' is not defined.`;
+                } else {
+                    if(primitiveIds.has(childId)) {
+                        this.onXMLMinorError(`component with id '${id}' has a duplicate child primitive with id '${childId}'. It will be ignored.`);
+                    } else {
+                        primitiveIds.add(childId);
+                    }
                 }
-                else {
-                    primitiveIds.push(childId);
-                }
-            }
-            else {
-                this.onXMLMinorError(`Invalid '${child.nodeName}' child tag in component children. It will be ignored.`);
+            } else {
+                this.onXMLMinorError(`invalid '${child.nodeName}' child tag in component children. It will be ignored.`);
             }
         }
         
@@ -758,7 +780,10 @@ class MySceneGraph {
                 length_t
             },
             materialIds,
-            primitiveIds
+            children: {
+                primitiveIds,
+                componentIds
+            }
         };
 
         console.warn('Component parsing is clearly not done yet');
@@ -926,6 +951,22 @@ class MySceneGraph {
             throw this.emptyIdMessage(node_name);
         } else if (container.has(id)) {
             throw this.idInUseMessage(node_name, id);
+        }
+    }
+
+    registerRequestedChildComponent(child_component_id) {
+        this.requestedChildComponentIds.add(child_component_id);
+    }
+
+    verifyComponentChildren() {
+        if(this.components.length < this.requestedChildComponentIds.length) {
+            throw "some requested component ids were not found";
+        }
+
+        for(let child_component_id of this.requestedChildComponentIds) {
+            if(!this.components.has(child_component_id)) {
+                throw `child component with id ${child_component_id} was not defined!`;
+            }
         }
     }
 

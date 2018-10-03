@@ -2,10 +2,8 @@
  * Rectangle
  * @constructor
  */
-class Rectangle extends CGFobject
-{
-	constructor(scene, x1, y1, x2, y2, minS, maxS, minT, maxT) 
-	{
+class Rectangle extends CGFobject {
+	constructor(scene, x1, y1, x2, y2, minS, maxS, minT, maxT) {
 		super(scene);
 
 		this.minS = minS || 0;
@@ -17,8 +15,7 @@ class Rectangle extends CGFobject
 	};
 
 
-	initBuffers(x1, y1, x2, y2, minS, maxS, minT, maxT) 
-	{
+	initBuffers(x1, y1, x2, y2, minS, maxS, minT, maxT) {
 		this.vertices = [
 			x1, y1, 0,
 			x2, y1, 0,

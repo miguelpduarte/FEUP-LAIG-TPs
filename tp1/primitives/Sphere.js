@@ -15,8 +15,7 @@ class Sphere extends CGFobject
 		this.initBuffers();
 	};
 
-	initBuffers()
-	{
+	initBuffers() {
 		this.vertices = [];
 		this.indices = [];
 		this.normals = [];
