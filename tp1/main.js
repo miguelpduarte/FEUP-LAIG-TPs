@@ -23,7 +23,8 @@ serialInclude([
     'primitives/Circle.js',
     'primitives/CylinderSide.js',
     'primitives/Torus.js',
-
+    'PrimitiveFactory.js',
+    'Component.js',
 
     main=function() {
         // Standard application, scene and interface setup

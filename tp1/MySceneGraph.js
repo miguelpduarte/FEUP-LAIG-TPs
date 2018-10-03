@@ -772,6 +772,7 @@ class MySceneGraph {
         const texId = this.parseStringAttr(textureNode, "id");
         const length_s = this.parseFloatAttr(textureNode, "length_s");
         const length_t = this.parseFloatAttr(textureNode, "length_t");
+        console.warn("The texture id can also be none - change that");
         this.verifyInheritableId("texture", texId, this.textures);
 
         //children
@@ -822,7 +823,7 @@ class MySceneGraph {
             }
         };
 
-        console.warn('Component parsing is clearly not done yet');
+        console.warn('Component parsing is missing transformation parsing (was only done in actual transformations)');
 
         this.verifyUniqueId("component", this.components, id);
 

@@ -1,7 +1,7 @@
 <yas>
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="comp2" axis_length="10" />
+    <scene root="root_comp" axis_length="10" />
     <views default="perspective1" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
@@ -84,6 +84,7 @@
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <texture id="tex1" file="scenes/images/portrait.jpg" />
         <texture id="tex2" file="/home/notfound/123.png" />
+        <texture id="tex3" file="scenes/images/rocks.jpg" />
     </textures>
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->
@@ -116,6 +117,9 @@
             <!-- instrucoes a usar sem limite nem ordem -->
             <!-- deve existir pelo menos uma transformacao -->
             <translate x="0.2" y="7" z="2.5" />
+        </transformation>
+        <transformation id="transform_test1">
+            <translate x="0" y="5" z="15" />
         </transformation>
     </transformations>
     <primitives>
@@ -193,6 +197,18 @@
         </primitive >
     </primitives >
     <components>
+        <component id="root_comp">
+            <transformation>
+                <transformationref id="transform_test1" />
+            </transformation>
+            <materials>
+                <material id="mat1" />
+            </materials>
+            <texture id="tex3" length_s="1" length_t="1" />
+            <children>
+                <componentref id="comp1" />
+            </children>
+        </component>
         <component id="comp1">
             <!-- Uma "component" e' um objeto composto e pode ser -->
             <!-- usada em nos intermédios -->
@@ -256,6 +272,7 @@
             <texture id="tex1" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="prim2" />
+                <primitiveref id="prim5" />
             </children>
         </component>
     </components>
