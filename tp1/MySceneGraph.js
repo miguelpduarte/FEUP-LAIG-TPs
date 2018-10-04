@@ -709,8 +709,6 @@ class MySceneGraph {
     }
 
     parseComponents(componentsNode) {
-        console.log('Parsing components', componentsNode);
-
         const components = componentsNode.children;
 
         //For verification that all the components were defined two data structures will be used:
@@ -815,8 +813,7 @@ class MySceneGraph {
         const texId = this.parseStringAttr(textureNode, "id");
         const length_s = this.parseFloatAttr(textureNode, "length_s");
         const length_t = this.parseFloatAttr(textureNode, "length_t");
-        console.warn("The texture id can also be none - change that");
-        this.verifyInheritableId("texture", texId, this.textures);
+        this.verifyInheritableNoneId("texture", texId, this.textures);
 
         //children
         const children = componentProperties[3].children;
@@ -867,10 +864,6 @@ class MySceneGraph {
             transformationref,
             explicitTransformations
         };
-
-        console.log("COMPONENT WITH ID " , id);
-        console.log("TRANSFORMATION REF: " , transformationref);
-        console.log("EXPLICITS: " , explicitTransformations);
 
         this.verifyUniqueId("component", this.components, id);
 
@@ -983,6 +976,12 @@ class MySceneGraph {
 
     verifyInheritableId(node_name, id, container) {
         if (!container.has(id) && id !== "inherit") {
+            throw `${node_name} with id '${id}' is not defined.`;
+        }
+    }
+
+    verifyInheritableNoneId(node_name, id, container) {
+        if (!container.has(id) && id !== "inherit" && id !== "none") {
             throw `${node_name} with id '${id}' is not defined.`;
         }
     }

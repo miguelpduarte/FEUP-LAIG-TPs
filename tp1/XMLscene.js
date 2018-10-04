@@ -37,6 +37,17 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+
+        this.createDefaultMaterial();
+    }
+
+    createDefaultMaterial() {
+        this.defaultMaterial = new CGFappearance(this);
+        this.defaultMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        this.defaultMaterial.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.defaultMaterial.setSpecular(0.5, 0.5, 0.5, 1);
+        this.defaultMaterial.setEmission(0, 0, 0, 1);
+        this.defaultMaterial.setShininess(55);
     }
 
     /**
@@ -219,6 +230,12 @@ class XMLscene extends CGFscene {
         }
 
         this.rootComponent = this.cgf_components.get(this.graph.rootElementId);
+
+        this.textureStack = [];
+        this.materialStack = [];
+
+        this.materialStack.push(this.defaultMaterial);
+        this.textureStack.push(null);
     }
 
 

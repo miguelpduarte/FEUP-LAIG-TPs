@@ -147,7 +147,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="mat_default" />
+                <material id="inherit" />
             </materials>
             <texture id="tex_default_leaves" length_s="1" length_t="1" />
             <children>
@@ -313,7 +313,7 @@
                 <translate x="0" y="0" z="0.01" />
             </transformation>
             <materials>
-                <material id="mat_glass" />
+                <material id="inherit" />
             </materials>
             <texture id="tex_window" length_s="1" length_t="1" />
             <children>
