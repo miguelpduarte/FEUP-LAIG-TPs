@@ -19,57 +19,29 @@
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <omni id="omni1" enabled="t" >
-            <location x="3" y="3" z="3" w="1" />
+            <location x="3.5" y="5" z="3.5" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
         </omni>
         <omni id="omni2" enabled="t" >
-            <location x="3" y="3" z="-3" w="1" />
+            <location x="6" y="1" z="6" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
         </omni>
-        <omni id="omni3" enabled="t" >
-            <location x="3" y="-3" z="-3" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
-        </omni>
-        <omni id="omni4" enabled="t" >
-            <location x="-3" y="-3" z="-3" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
-        </omni>
-        <omni id="omni5" enabled="t" >
-            <location x="-3" y="-3" z="3" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
-        </omni>
-        <omni id="omni6" enabled="t" >
-            <location x="-3" y="3" z="3" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
-        </omni>
-        <omni id="omni7" enabled="t" >
-            <location x="3" y="-3" z="3" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
-        </omni>
-        <omni id="omni8" enabled="t" >
-            <location x="-3" y="3" z="-3" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
-            <specular r="0.9" g="0.9" b="0.9" a="1" />
-        </omni>
-        <spot id="spot1" enabled="f" angle="1" exponent="1">
+        <spot id="spot1" enabled="t" angle="1" exponent="1">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <location x="2" y="2" z="1" w="1" />
-            <target x="2" y="2" z="0" />
+            <location x="0.7" y="5.5" z="5.2" w="1" />
+            <target x="0" y="4" z="5.2" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.65" g="0.65" b="0.65" a="1" />
+            <specular r="0.65" g="0.65" b="0.65" a="1" />
+        </spot>
+        <spot id="spot2" enabled="t" angle="1" exponent="1">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <location x="0.7" y="5.5" z="2" w="1" />
+            <target x="0" y="4" z="2" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="0.65" g="0.65" b="0.65" a="1" />
             <specular r="0.65" g="0.65" b="0.65" a="1" />
@@ -81,6 +53,9 @@
         <texture id="tex_vidral" file="scenes/images/vidral.jpg" />
         <texture id="tex_world" file="scenes/images/world.jpg" />
         <texture id="tex_default_leaves" file="scenes/images/leaves.jpg" />
+        <texture id="tex_window" file="scenes/images/window.jpg" />
+        <texture id="tex_frame" file="scenes/images/frame.jpg" />
+        <texture id="tex_frame2" file="scenes/images/frame2.jpg" />
     </textures>
     <materials>
         <material id="mat_default" shininess="55" >
@@ -92,8 +67,20 @@
         <material id="mat_metal" shininess="80" >
             <emission r="0" g="0" b="0" a="1" />
             <ambient r="0.2" g="0.2" b="0" a="1" />
-            <diffuse r="0.8" g="0.8" b="0.4" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1" />
             <specular r="0.4" g="0.4" b="0.2" a="1" />
+        </material>
+        <material id="mat_wood" shininess="20" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.0545" g="0.0271" b="0.0075" a="1" />
+            <diffuse r="0.110" g="0.054" b="0.015" a="1" />
+            <specular r="0.0545" g="0.0271" b="0.0075" a="1" />
+        </material>
+        <material id="mat_light_wood" shininess="20" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.0545" g="0.0271" b="0.0075" a="1" />
+            <diffuse r="0.200" g="0.108" b="0.030" a="1" />
+            <specular r="0.0545" g="0.0271" b="0.0075" a="1" />
         </material>
         <material id="mat_blue" shininess="55">
             <emission r="0" g="0" b="0.4" a="1" />
@@ -113,43 +100,123 @@
             <rotate axis="x" angle="-90" />
         </transformation>
         <transformation id="trf_lift_y">
-            <translate x="0" y="0" z="6" />
+            <translate x="0" y="1.2" z="0" />
         </transformation>
         <transformation id="trf_unused">
             <scale x="6" y="4" z="4" />
             <translate x="0.2" y="7" z="2.5" />
             <translate x="44" y="55" z="66" />
         </transformation>
-        <transformation id="trf_scale_down">
-            <scale x="0.2" y="0.2" z="0.2" />
+        <transformation id="trf_shift_to_room_middle">
+            <translate x="3.5" y="0" z="3.5" />
         </transformation>
     </transformations>
     <primitives>
         <primitive id="window">
-            <rectangle x1="3" y1="3" x2="6" y2="6" />
+            <rectangle x1="2" y1="2" x2="5" y2="5" />
         </primitive>
-        <primitive id="unused1">
-            <triangle x1="6" y1="0" z1="0"
-                      x2="8" y2="0" z2="4"
-                      x3="6" y3="4" z3="2" />
+        <primitive id="wall">
+            <rectangle x1="0" y1="0" x2="7" y2="7" />
+        </primitive>
+        <primitive id="frame">
+            <rectangle x1="0" y1="0" x2="2.736" y2="3.27" />
+        </primitive>
+        <primitive id="frame2">
+            <rectangle x1="0" y1="0" x2="2.52" y2="3.44" />
+        </primitive>
+        <primitive id="ceiling">
+            <triangle x1="0" y1="7" z1="7"
+                      x2="0" y2="7" z2="0"
+                      x3="7" y3="7" z3="0" />
         </primitive>
         <primitive id="cone_base">
-            <cylinder base="3" top="0" height="2" slices="10" stacks="6" />
+            <cylinder base="0.35" top="0" height="0.24" slices="10" stacks="6" />
         </primitive>
         <primitive id="cyl_core">
-            <cylinder base="1" top="1" height="9" slices="10" stacks="6" />
+            <cylinder base="0.12" top="0.12" height="1.6" slices="10" stacks="6" />
         </primitive>
         <primitive id="world">
-            <sphere radius="4" slices="12" stacks="12" />
+            <sphere radius="0.8" slices="20" stacks="20" />
         </primitive>
         <primitive id="torus_holder">
-            <torus inner="3.5" outer="4" slices="20" loops="20" />
+            <torus inner="0.75" outer="0.8" slices="20" loops="20" />
         </primitive>
     </primitives>
     <components>
         <component id="root_comp">
             <transformation>
-                <transformationref id="trf_scale_down" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_default_leaves" length_s="1" length_t="1" />
+            <children>
+                <componentref id="desk_globe" />
+                <componentref id="window" />
+                <componentref id="right_wall" />
+                <componentref id="left_wall" />
+                <componentref id="floor" />
+                <componentref id="frame_comp" />
+                <componentref id="frame_comp2" />
+                <componentref id="ceiling" />
+            </children>
+        </component>
+
+        <component id="right_wall">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="wall" />
+            </children>
+        </component>
+
+        <component id="left_wall">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="-7" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="wall" />
+            </children>
+        </component>
+
+        <component id="ceiling">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="mat_light_wood" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="ceiling" />
+            </children>
+        </component>
+
+        <component id="floor">
+            <transformation>
+                <translate x="0" y="0" z="7" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="mat_light_wood" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="wall" />
+            </children>
+        </component>
+
+        <component id="desk_globe">
+            <transformation>
+                <transformationref id="trf_shift_to_room_middle" />
             </transformation>
             <materials>
                 <material id="mat_default" />
@@ -159,61 +226,65 @@
                 <componentref id="holder_base" />
                 <componentref id="holder_core" />
                 <componentref id="holder_around" />
-                <componentref id="world" />
-                <componentref id="window" />
+                <componentref id="world" /> 
             </children>
         </component>
+
         <component id="holder_base">
             <transformation>
                 <transformationref id="trf_standup_y" />
             </transformation>
             <materials>
-                <material id="mat_metal" />
+                <material id="mat_wood" />
             </materials>
             <texture id="tex_metal_wip" length_s="1" length_t="2" />
             <children>
                 <primitiveref id="cone_base" />
             </children>
         </component>
+
         <component id="holder_core">
             <transformation>
                 <transformationref id="trf_standup_y" />
             </transformation>
             <materials>
-                <material id="mat_metal" />
+                <material id="mat_wood" />
             </materials>
             <texture id="tex_metal_wip" length_s="1" length_t="2" />
             <children>
                 <primitiveref id="cyl_core" />
             </children>
         </component>
+ 
         <component id="holder_around">
             <transformation>
-                <transformationref id="trf_standup_y" />
+                <transformationref id="trf_lift_y" />
             </transformation>
             <materials>
-                <material id="mat_metal" />
+                <material id="mat_wood" />
             </materials>
             <texture id="tex_metal_wip" length_s="1" length_t="2" />
             <children>
                 <componentref id="holder_around_core" />
             </children>
         </component>
+
         <component id="holder_around_core">
             <transformation>
-                <transformationref id="trf_lift_y" />
+                <transformationref id="trf_standup_y" />
             </transformation>
             <materials>
-                <material id="mat_metal" />
+                <material id="mat_wood" />
             </materials>
             <texture id="tex_metal_wip" length_s="1" length_t="2" />
             <children>
                 <primitiveref id="torus_holder" />
             </children>
         </component>
+
         <component id="world">
             <transformation>
-                <translate x="0" y="6" z="0" />
+                <transformationref id="trf_lift_y" />
             </transformation>
             <materials>
                 <material id="mat_default" />
@@ -223,9 +294,10 @@
                 <componentref id="world_core" />
             </children>
         </component>
+
         <component id="world_core">
             <transformation>
-                <transformationref id="trf_standup_y" />
+                <rotate axis="x" angle="90" />
             </transformation>
             <materials>
                 <material id="mat_default" />
@@ -235,16 +307,45 @@
                 <primitiveref id="world" />
             </children>
         </component>
+
         <component id="window">
             <transformation>
-                <scale x="2" y="2" z="1" />
+                <translate x="0" y="0" z="0.01" />
             </transformation>
             <materials>
                 <material id="mat_glass" />
             </materials>
-            <texture id="tex_vidral" length_s="1" length_t="1" />
+            <texture id="tex_window" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="window" />
+            </children>
+        </component>
+
+        <component id="frame_comp">
+            <transformation>
+                <translate x="0.01" y="2" z="6.5" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_frame" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="frame" />
+            </children>
+        </component>
+
+        <component id="frame_comp2">
+            <transformation>
+                <translate x="0.01" y="1.9" z="3.2" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_frame2" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="frame2" />
             </children>
         </component>
     </components>
