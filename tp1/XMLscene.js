@@ -14,6 +14,8 @@ class XMLscene extends CGFscene {
 
         this.interface = myinterface;
         this.lightValues = {};
+        this.transformation_scene = new CGFscene();
+        this.transformation_factory = new TransformationFactory(this.transformation_scene);
     }
 
     /**
@@ -23,6 +25,7 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
+        //Move to constructor (?)
         this.sceneInited = false;
 
         this.defaultCameras();
@@ -35,8 +38,6 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        
-        this.p = new CGFquadPyramid(this, 10, 2);
     }
 
     /**
@@ -147,6 +148,15 @@ class XMLscene extends CGFscene {
         }
     }
 
+    initTransformations() {
+        this.transformations = new Map();
+        
+        for(let [id, transformation_model] of this.graph.transformation) {
+            let transf = this.transformation_factory.create(transformation_model);
+            this.transformations.set(id, transf);
+        }
+    }
+
     updateLights() {
         for (let light of this.lights) {
             light.update();
@@ -182,8 +192,6 @@ class XMLscene extends CGFscene {
         this.cgf_primitives = new Map();
         //Creates a primitive factory for this scene
         const primitive_factory = new PrimitiveFactory(this);
-        //Creates a dummy scene for use in computing transformations
-        let dummy_scene = new CGFscene();
 
         //Create primitives
         for(let [id, primitive_model] of this.graph.primitives) {
@@ -193,7 +201,7 @@ class XMLscene extends CGFscene {
 
         //Create components
         for(let [id, component_model] of this.graph.components) {
-            const cgf_component = new Component(this, component_model, dummy_scene);
+            const cgf_component = new Component(this, component_model, this.transformation_scene);
             this.cgf_components.set(id, cgf_component);
         }
 

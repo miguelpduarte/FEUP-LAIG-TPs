@@ -24,6 +24,7 @@ serialInclude([
     'primitives/CylinderSide.js',
     'primitives/Torus.js',
     'PrimitiveFactory.js',
+    'TransformationFactory.js',
     'Component.js',
 
     main=function() {

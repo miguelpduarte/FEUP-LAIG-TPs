@@ -756,8 +756,45 @@ class MySceneGraph {
 
         //transformations
         const transformations = componentProperties[0].children;
+        let explicit_transformation_found = false;
+        let transformationref = null;
+        let explicitTransformations = [];
+        
         for(let transformation of transformations) {
-            
+            if(transformation.nodeName === "transformationref") {
+                if (explicit_transformation_found) {                    
+                    this.onXMLMinorError(`component '${id}': an explicit transformation has already been found, ignoring transformation references.`);
+                    continue;
+                }
+
+                const transformation_id = this.parseStringAttr(transformation, "id");
+
+                if (!this.transformations.has(transformation_id)) {
+                    throw `component '${id}': transformation with id '${transformation_id}' is not defined.`;
+                }
+
+                if (transformations.length > 1) {
+                    this.onXMLMinorError(`component '${id}': only one transformation reference in allowed in each component. Further references will be ignored.`);
+                }
+
+                transformationref = transformation_id;
+                break;
+            }
+            else {                
+                let ret;
+                if (transformation.nodeName === "translate") {
+                    ret = this.createTranslate(transformation);
+                } else if (transformation.nodeName === "rotate") {
+                    ret = this.createRotate(transformation);
+                } else if (transformation.nodeName === "scale") {
+                    ret = this.createScale(transformation);
+                } else {
+                    throw `invalid transformation '${transformation.nodeName}' in component with id '${id}'.`
+                }
+
+                explicit_transformation_found = true;
+                explicitTransformations.push(ret);
+            }
         }
 
         //materials
@@ -826,10 +863,14 @@ class MySceneGraph {
             children: {
                 primitiveIds,
                 componentIds
-            }
+            },
+            transformationref,
+            explicitTransformations
         };
 
-        console.warn('Component parsing is missing transformation parsing (was only done in actual transformations)');
+        console.log("COMPONENT WITH ID " , id);
+        console.log("TRANSFORMATION REF: " , transformationref);
+        console.log("EXPLICITS: " , explicitTransformations);
 
         this.verifyUniqueId("component", this.components, id);
 

@@ -1,13 +1,13 @@
 class Component extends CGFobject {
-	constructor(scene, component_model, dummy_scene) {
+	constructor(scene, component_model, transformation_scene) {
         super(scene);
 
-        this.precomputeTransformationMatrix(component_model, dummy_scene);
+        this.precomputeTransformationMatrix(component_model, transformation_scene);
         this.getMaterials(component_model);
         this.getTexture(component_model);
     };
     
-    precomputeTransformationMatrix(component_model, dummy_scene) {
+    precomputeTransformationMatrix(component_model, transformation_scene) {
         //Calculates the transformation matrix based on the component model
         //(precomputed transformations referenced and "hardcoded" inline transformations)
     }
@@ -41,8 +41,8 @@ class Component extends CGFobject {
         this.applyTransformations();
         for (let child of this.children) {
             //This is not the correct way but it is the current solution
-            this.applyMaterials();
             this.applyTextures();
+            this.applyMaterials();
 
                 child.display();
             }         

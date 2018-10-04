@@ -7,7 +7,7 @@ class PrimitiveFactory {
             "cylinder": this.createCylinder,
             "sphere": this.createSphere,
             "torus": this.createTorus
-        }
+        };
 
         //Binding this
         Object.keys(this.PRIMITIVE_CREATION_FUNCS)
