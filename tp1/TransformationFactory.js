@@ -1,7 +1,7 @@
-class TransformationFactory {
-    constructor(transformation_scene) {
-        this.transformation_scene = transformation_scene;
+// const DEGREE_TO_RAD = Math.PI / 180;
 
+class TransformationFactory {
+    constructor() {
         this.TRANSFORMATION_CREATION_FUNCS = {
             "translate": this.createTranslate,
             "rotate": this.createRotate,
@@ -14,39 +14,40 @@ class TransformationFactory {
     }
 
     create(transformation_model) {
-        let transformation = {
-            id: transformation_model.id,
-        };
+        this.mat = mat4.create();
 
-        this.transformation_scene.loadIdentity();
-        for(let transformation_item of transformation_model) {
+        for(let transformation_item of transformation_model.transformations) {
             this.TRANSFORMATION_CREATION_FUNCS[transformation_item.type](transformation_item);
         }
 
-        transformation.matrix = this.transformation_scene.getMatrix();
-
-        return transformation;
+        //Returns the computed transformation matrix
+        return this.mat;
     }
 
-    createTranslate(tranformation_item_model) {
-        this.transformation_scene.translate(tranformation_item_model.x, transformation_item_model.y, tranformation_item_model.z);
+    createTranslate(transformation_item_model) {
+        // console.log('Creating a translate: ', transformation_item_model);
+        mat4.translate(this.mat, this.mat, vec3.fromValues(transformation_item_model.x, transformation_item_model.y, transformation_item_model.z));
     }
 
-    createRotate(tranformation_item_model) {
-        switch(this.transformation_scene.angle) {
+    createRotate(transformation_item_model) {
+        // console.log('Creating a rotate: ', transformation_item_model);
+        const angle = DEGREE_TO_RAD * transformation_item_model.angle;
+
+        switch(transformation_item_model.axis) {
             case "x":
-                this.transformation_scene.rotate(tranformation_item_model.angle, 1, 0, 0);
+                mat4.rotateX(this.mat, this.mat, angle);
                 break;
             case "y":
-                this.transformation_scene.rotate(tranformation_item_model.angle, 0, 1, 0);
+                mat4.rotateY(this.mat, this.mat, angle);
                 break;
             case "z":
-                this.transformation_scene.rotate(tranformation_item_model.angle, 0, 0, 1);
+                mat4.rotateZ(this.mat, this.mat, angle);
                 break;
         }
     }
 
-    createScale(tranformation_item_model) {
-        this.transformation_scene.scale(tranformation_item_model.x, transformation_item_model.y, tranformation_item_model.z);
+    createScale(transformation_item_model) {
+        // console.log('Creating a scale: ', transformation_item_model);
+        mat4.scale(this.mat, this.mat, vec3.fromValues(transformation_item_model.x, transformation_item_model.y, transformation_item_model.z));
     }
 }

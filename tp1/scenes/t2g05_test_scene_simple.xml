@@ -124,7 +124,12 @@
             <translate x="0.2" y="7" z="2.5" />
         </transformation>
         <transformation id="transform_test1">
-            <translate x="0" y="5" z="15" />
+            <rotate axis="y" angle="45" />
+            <!-- <translate x="10" y="0" z="0" /> -->
+        </transformation>
+        <transformation id="transform_test2">
+            <!-- <translate x="0" y="2" z="3" /> -->
+            <scale x="1" y="1" z="1" />
         </transformation>
     </transformations>
     <primitives>
@@ -133,7 +138,7 @@
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <primitive id="prim1">
             <rectangle x1="3" y1="3" x2="6" y2="6" />
-        </primitive >
+        </primitive>
         <!-- <primitive id="prim1">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive >
@@ -190,17 +195,20 @@
             <triangle x1="6" y1="0" z1="0"
                       x2="8" y2="0" z2="4"
                       x3="6" y3="4" z3="2" />
-        </primitive >
+        </primitive>
         <primitive id="prim3">
             <cylinder base="1.2" top="1.8" height="2" slices="10" stacks="6" />
-        </primitive >
+        </primitive>
         <primitive id="prim4">
             <sphere radius="1" slices="12" stacks="12" />
-        </primitive >
+        </primitive>
         <primitive id="prim5">
             <torus inner="1" outer="2" slices="20" loops="20" />
-        </primitive >
-    </primitives >
+        </primitive>
+        <primitive id="sphere_1">
+            <sphere radius="2" slices="12" stacks="12" />
+        </primitive>
+    </primitives>
     <components>
         <component id="root_comp">
             <transformation>
@@ -228,9 +236,13 @@
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="2" y="3" z="4" />
+                
+                <!-- temporary commenting -->
+                <!-- <translate x="2" y="3" z="4" />
                 <rotate axis="x" angle="10" />
-                <scale x="1" y="1" z="1" />
+                <scale x="1" y="1" z="1" /> -->
+
+
             </transformation>
             <!-- declaracao obrigatoria de pelo menos um material; -->
             <!-- o material id="inherit", mantem (herda) material do "pai" -->
@@ -268,7 +280,7 @@
         </component>
         <component id="comp2">
             <transformation>
-                <transformationref id="transform_test1" />
+                <transformationref id="transform_test2" />
             </transformation>
             <materials>
                 <material id="mat_blue" />

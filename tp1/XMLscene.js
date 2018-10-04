@@ -14,8 +14,7 @@ class XMLscene extends CGFscene {
 
         this.interface = myinterface;
         this.lightValues = {};
-        this.transformation_scene = new CGFscene();
-        this.transformation_factory = new TransformationFactory(this.transformation_scene);
+        this.transformation_factory = new TransformationFactory();
     }
 
     /**
@@ -151,9 +150,9 @@ class XMLscene extends CGFscene {
     initTransformations() {
         this.transformations = new Map();
         
-        for(let [id, transformation_model] of this.graph.transformation) {
-            let transf = this.transformation_factory.create(transformation_model);
-            this.transformations.set(id, transf);
+        for(let [id, transformation_model] of this.graph.transformations) {
+            let transf_mat = this.transformation_factory.create(transformation_model);
+            this.transformations.set(id, transf_mat);
         }
     }
 
@@ -176,6 +175,7 @@ class XMLscene extends CGFscene {
 
         this.initLights();
         this.initCameras();
+        this.initTransformations();
         this.initMaterials();
         this.initTextures();
 
@@ -201,7 +201,7 @@ class XMLscene extends CGFscene {
 
         //Create components
         for(let [id, component_model] of this.graph.components) {
-            const cgf_component = new Component(this, component_model, this.transformation_scene);
+            const cgf_component = new Component(this, component_model, this.transformation_factory);
             this.cgf_components.set(id, cgf_component);
         }
 

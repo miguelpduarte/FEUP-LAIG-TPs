@@ -62,11 +62,4 @@ class Torus extends CGFobject {
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
     };
-    
-    display() {
-        this.scene.pushMatrix();
-            this.scene.translate(0,0,-3);
-            super.display();
-        this.scene.popMatrix();
-    }
 };
