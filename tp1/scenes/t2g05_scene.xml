@@ -1,0 +1,251 @@
+<yas>
+    <scene root="root_comp" axis_length="8" />
+    <views default="perspective1" >
+        <perspective id="perspective1" near="1" far="90" angle="72">
+            <from x="5" y="5" z="5" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <perspective id="perspective2" near="1" far="90" angle="40">
+            <from x="10" y="-10" z="10" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <ortho id="ortho1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
+    </views>
+    <ambient>
+        <ambient r="0.4" g="0.4" b="0.4" a="1" />
+        <background r="0.05" g="0.05" b="0.05" a="1" />
+    </ambient>
+    <lights>
+        <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <omni id="omni1" enabled="t" >
+            <location x="3" y="3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni2" enabled="t" >
+            <location x="3" y="3" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni3" enabled="t" >
+            <location x="3" y="-3" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni4" enabled="t" >
+            <location x="-3" y="-3" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni5" enabled="t" >
+            <location x="-3" y="-3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni6" enabled="t" >
+            <location x="-3" y="3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni7" enabled="t" >
+            <location x="3" y="-3" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <omni id="omni8" enabled="t" >
+            <location x="-3" y="3" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.9" g="0.9" b="0.9" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </omni>
+        <spot id="spot1" enabled="f" angle="1" exponent="1">
+            <!-- atencao, "target" e' diferente de "direction" -->
+            <location x="2" y="2" z="1" w="1" />
+            <target x="2" y="2" z="0" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.65" g="0.65" b="0.65" a="1" />
+            <specular r="0.65" g="0.65" b="0.65" a="1" />
+        </spot>
+    </lights>
+    <textures>
+        <texture id="tex_portrait" file="scenes/images/portrait.jpg" />
+        <texture id="tex_metal_wip" file="scenes/images/bank.jpg" />
+        <texture id="tex_vidral" file="scenes/images/vidral.jpg" />
+        <texture id="tex_world" file="scenes/images/world.jpg" />
+        <texture id="tex_default_leaves" file="scenes/images/leaves.jpg" />
+    </textures>
+    <materials>
+        <material id="mat_default" shininess="55" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </material>
+        <material id="mat_metal" shininess="80" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.2" b="0" a="1" />
+            <diffuse r="0.8" g="0.8" b="0.4" a="1" />
+            <specular r="0.4" g="0.4" b="0.2" a="1" />
+        </material>
+        <material id="mat_blue" shininess="55">
+            <emission r="0" g="0" b="0.4" a="1" />
+            <ambient r="0" g="0" b="0.2" a="1" />
+            <diffuse r="0.2" g="0.2" b="0.9" a="1" />
+            <specular r="0.1" g="0.1" b="0.8" a="1" />
+        </material>
+        <material id="mat_glass" shininess="90">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </material>
+    </materials>
+    <transformations>
+        <transformation id="trf_standup_y">
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_lift_y">
+            <translate x="0" y="0" z="6" />
+        </transformation>
+        <transformation id="trf_unused">
+            <scale x="6" y="4" z="4" />
+            <translate x="0.2" y="7" z="2.5" />
+            <translate x="44" y="55" z="66" />
+        </transformation>
+        <transformation id="trf_scale_down">
+            <scale x="0.2" y="0.2" z="0.2" />
+        </transformation>
+    </transformations>
+    <primitives>
+        <primitive id="window">
+            <rectangle x1="3" y1="3" x2="6" y2="6" />
+        </primitive>
+        <primitive id="unused1">
+            <triangle x1="6" y1="0" z1="0"
+                      x2="8" y2="0" z2="4"
+                      x3="6" y3="4" z3="2" />
+        </primitive>
+        <primitive id="cone_base">
+            <cylinder base="3" top="0" height="2" slices="10" stacks="6" />
+        </primitive>
+        <primitive id="cyl_core">
+            <cylinder base="1" top="1" height="9" slices="10" stacks="6" />
+        </primitive>
+        <primitive id="world">
+            <sphere radius="4" slices="12" stacks="12" />
+        </primitive>
+        <primitive id="torus_holder">
+            <torus inner="3.5" outer="4" slices="20" loops="20" />
+        </primitive>
+    </primitives>
+    <components>
+        <component id="root_comp">
+            <transformation>
+                <transformationref id="trf_scale_down" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_default_leaves" length_s="1" length_t="1" />
+            <children>
+                <componentref id="holder_base" />
+                <componentref id="holder_core" />
+                <componentref id="holder_around" />
+                <componentref id="world" />
+                <componentref id="window" />
+            </children>
+        </component>
+        <component id="holder_base">
+            <transformation>
+                <transformationref id="trf_standup_y" />
+            </transformation>
+            <materials>
+                <material id="mat_metal" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="2" />
+            <children>
+                <primitiveref id="cone_base" />
+            </children>
+        </component>
+        <component id="holder_core">
+            <transformation>
+                <transformationref id="trf_standup_y" />
+            </transformation>
+            <materials>
+                <material id="mat_metal" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="2" />
+            <children>
+                <primitiveref id="cyl_core" />
+            </children>
+        </component>
+        <component id="holder_around">
+            <transformation>
+                <transformationref id="trf_standup_y" />
+            </transformation>
+            <materials>
+                <material id="mat_metal" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="2" />
+            <children>
+                <componentref id="holder_around_core" />
+            </children>
+        </component>
+        <component id="holder_around_core">
+            <transformation>
+                <transformationref id="trf_lift_y" />
+            </transformation>
+            <materials>
+                <material id="mat_metal" />
+            </materials>
+            <texture id="tex_metal_wip" length_s="1" length_t="2" />
+            <children>
+                <primitiveref id="torus_holder" />
+            </children>
+        </component>
+        <component id="world">
+            <transformation>
+                <translate x="0" y="6" z="0" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_world" length_s="1" length_t="1" />
+            <children>
+                <componentref id="world_core" />
+            </children>
+        </component>
+        <component id="world_core">
+            <transformation>
+                <transformationref id="trf_standup_y" />
+            </transformation>
+            <materials>
+                <material id="mat_default" />
+            </materials>
+            <texture id="tex_world" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="world" />
+            </children>
+        </component>
+        <component id="window">
+            <transformation>
+                <scale x="2" y="2" z="1" />
+            </transformation>
+            <materials>
+                <material id="mat_glass" />
+            </materials>
+            <texture id="tex_vidral" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="window" />
+            </children>
+        </component>
+    </components>
+</yas>

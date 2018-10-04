@@ -41,6 +41,11 @@ class Component extends CGFobject {
         this.children = children_arr;
     }
 
+    rotateMaterial() {
+        //Cycles to the next material, if it exists
+        //Called when the user presses 'M'
+    }
+
 	display() {
         for (let child of this.children) {
             //This is not the correct way (I think) but it is the current solution
