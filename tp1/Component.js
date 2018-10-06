@@ -73,6 +73,10 @@ class Component extends CGFobject {
     }
 
     applyAppearance() {
+        this.scene.materialStack[this.scene.materialStack.length - 1].setTexture(
+            this.scene.textureStack[this.scene.textureStack.length - 1]
+        );
+
         this.scene.materialStack[this.scene.materialStack.length - 1].apply();
     }
 
@@ -95,9 +99,5 @@ class Component extends CGFobject {
         else {
             this.scene.textureStack.push(this.texture);
         }
-
-        this.scene.materialStack[this.scene.materialStack.length - 1].setTexture(
-            this.scene.textureStack[this.scene.textureStack.length - 1]
-        );
     }
 };
