@@ -1,11 +1,11 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
     <views default="perspective1" >
-        <perspective id="perspective1" near="1" far="90" angle="72">
+        <perspective id="perspective1" near="0.1" far="90" angle="72">
             <from x="5" y="5" z="5" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="perspective2" near="1" far="90" angle="40">
+        <perspective id="perspective2" near="0.1" far="90" angle="40">
             <from x="10" y="-10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -57,12 +57,12 @@
             <diffuse r="0.65" g="0.65" b="0.65" a="1" />
             <specular r="0.65" g="0.65" b="0.65" a="1" />
         </spot>
-        <spot id="floor_light" enabled="t" angle="20" exponent="1">
-            <location x="6" y="1" z="6" w="1" />
-            <target x="6" y="0" z="6" />
-            <ambient r="0.2" g="0.2" b="0.2" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="1" a="1" />
+        <spot id="donut_light" enabled="f" angle="10" exponent="4">
+            <location x="1.9" y="3" z="4.6" w="1" />
+            <target x="2.1" y="2.4" z="4.1" />
+            <ambient r="0.3" g="0.2" b="0.2" a="1" />
+            <diffuse r="1" g="0.4" b="0.4" a="0.4" />
+            <specular r="1" g="0.4" b="0.4" a="0.4" />
         </spot>
     </lights>
     <textures>
@@ -72,11 +72,12 @@
         <texture id="tex_frame" file="scenes/images/frame.jpg" />
         <texture id="tex_frame2" file="scenes/images/frame2.jpg" />
         <texture id="tex_wood" file="scenes/images/wood.png" />
+        <texture id="tex_donut" file="scenes/images/donut.png" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
             <emission r="0" g="0" b="0" a="1" />
-            <ambient r="0.2" g="0.2" b="0.3" a="1" />
+            <ambient r="0.1" g="0.1" b="0.15" a="1" />
             <diffuse r="0.4" g="0.4" b="0.5" a="1" />
             <specular r="0.4" g="0.4" b="0.5" a="1" />
         </material>
@@ -115,6 +116,14 @@
         <transformation id="trf_shift_to_room_middle">
             <translate x="3.5" y="0" z="3.5" />
         </transformation>
+        <transformation id="trf_donut_plate_to_table">
+            <translate x="2.1" y="2.4" z="4.1" />
+            <scale x="1.5" y="1.5" z="1.5" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_donut_to_plate">
+            <translate x="0" y="0" z="0.075" />
+        </transformation>
     </transformations>
     <primitives>
         <primitive id="window">
@@ -152,6 +161,12 @@
         <primitive id="table_top_part">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
+        <primitive id="simpson_donut">
+            <torus inner="0.06" outer="0.12" slices="20" loops="20" />
+        </primitive>
+        <primitive id="donut_plate">
+            <cylinder base="0.26" top="0.26" height="0.015" slices="30" stacks="3" />
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
@@ -171,6 +186,7 @@
                 <componentref id="frame_comp2" />
                 <componentref id="ceiling" />
                 <componentref id="table" />
+                <componentref id="plate_with_donut" />
             </children>
         </component>
 
@@ -538,6 +554,45 @@
             <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="plate_with_donut">
+            <transformation>
+                <transformationref id="trf_donut_plate_to_table" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="donut_plate" />
+                <componentref id="simpson_donut" />
+            </children>
+        </component>
+
+        <component id="donut_plate">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="donut_plate" />
+            </children>
+        </component>
+
+        <component id="simpson_donut">
+            <transformation>
+                <transformationref id="trf_donut_to_plate" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="tex_donut" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="simpson_donut" />
             </children>
         </component>
 

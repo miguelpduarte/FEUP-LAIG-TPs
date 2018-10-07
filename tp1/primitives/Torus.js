@@ -20,9 +20,8 @@ class Torus extends CGFobject {
 		this.normals = [];
 		this.texCoords = [];
 
-		let step_angle = 2*Math.PI/this.slices;
-		let stack_step = 2*Math.PI/this.loops;
-		let radius_step = (this.outer_radius - this.inner_radius)/this.loops;
+		let slice_angle = 2*Math.PI/this.slices;
+		let loop_angle = 2*Math.PI/this.loops;
 
 		// Cylinder
 		for(let i = 0; i <= this.slices; ++i) {
@@ -30,19 +29,19 @@ class Torus extends CGFobject {
 			for(let j = 0; j <= this.loops; ++j) {
 
 				this.vertices.push(
-					(this.outer_radius + this.inner_radius*Math.cos(stack_step*j)) * Math.cos(step_angle*i), 
-					(this.outer_radius + this.inner_radius*Math.cos(stack_step*j)) * Math.sin(step_angle*i), 
-					this.inner_radius * Math.sin(stack_step*j)
+					(this.outer_radius + this.inner_radius*Math.cos(loop_angle*j)) * Math.cos(slice_angle*i), 
+					(this.outer_radius + this.inner_radius*Math.cos(loop_angle*j)) * Math.sin(slice_angle*i), 
+					this.inner_radius * Math.sin(loop_angle*j)
 				);
 
 				this.texCoords.push(
 					i*1/this.slices, 
-					1 - (j*1/this.loops)
+					j*1/this.loops	
 				);
 
 				this.normals.push(
-					Math.cos(stack_step*j) * Math.cos(step_angle*i), 
-                    Math.cos(stack_step*j) * Math.sin(step_angle*i),
+					Math.cos(loop_angle*j) * Math.cos(slice_angle*i), 
+                    Math.cos(loop_angle*j) * Math.sin(slice_angle*i),
                     0
 				);
 
