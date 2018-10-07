@@ -86,6 +86,17 @@ class XMLscene extends CGFscene {
         this.interface.setActiveCamera(this.camera);
     }
 
+    setCurrentCamera(camera_id) {
+        const selected_camera = this.cameras.get(camera_id);
+
+        if(!selected_camera) {
+            console.warn(`Camera with id '${camera_id}' was not found, falling back to default camera`);
+        }
+
+        this.camera = selected_camera || this.default_camera;
+        this.interface.setActiveCamera(this.camera);
+    }
+
     setLightState(lightId, newVal) {
         const light_index = this.lightsMap[lightId];
         
@@ -203,10 +214,7 @@ class XMLscene extends CGFscene {
 
         this.createSceneGraph();
 
-        // Create interface options
-        this.interface.createLightsCheckboxes(this.graph.lights);
-        this.interface.createAxisCheckbox();
-        this.interface.createToggleLightsCheckbox();
+        this.interface.createInterface();
 
         this.sceneInited = true;
     }

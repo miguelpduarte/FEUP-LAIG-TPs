@@ -28,11 +28,20 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
+    createInterface() {
+        this.createLightsCheckboxes();
+        this.createAxisCheckbox();
+        this.createToggleLightsCheckbox();
+        this.createCamerasDropdown();
+    }
+
     /**
      * Adds a folder containing the IDs of the lights passed as parameter.
      * @param {Map} lights
      */
-    createLightsCheckboxes(lights) {
+    createLightsCheckboxes() {
+        const lights = this.scene.graph.lights;
+
         var group = this.gui.addFolder("Lights");
 
         for (let [id, light] of lights) {
@@ -47,15 +56,29 @@ class MyInterface extends CGFinterface {
 
     createAxisCheckbox() {
         this.model['Axis'] = true;
-        this.gui.add(this.model, 'Axis').onChange((val) => {
+        this.gui.add(this.model, 'Axis').onChange(val => {
             this.scene.toggleAxis();
         });
     }
 
     createToggleLightsCheckbox() {
         this.model['Show Lights'] = true;
-        this.gui.add(this.model, 'Show Lights').onChange((val) => {
+        this.gui.add(this.model, 'Show Lights').onChange(val => {
             this.scene.toggleViewLights();
         });
+    }
+
+    createCamerasDropdown() {
+        const cameras = this.scene.cameras;
+
+        const cameraDropdownModel = [
+            ...cameras.keys()
+        ];
+
+        this.model.cameraIndex = 0;
+
+        this.gui.add(this.model, "cameraIndex", cameraDropdownModel).name("Current camera").onChange(val => {
+            this.scene.setCurrentCamera(val);
+        })
     }
 }
