@@ -1,14 +1,31 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
-    <views default="perspective1" >
-        <perspective id="perspective1" near="0.1" far="90" angle="72">
+    <views default="room_overview" >
+        <perspective id="room_closer" near="0.1" far="90" angle="72">
             <from x="7" y="6" z="7" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="perspective2" near="0.1" far="90" angle="40">
-            <from x="10" y="-10" z="10" />
-            <to x="0" y="0" z="0" />
+
+        <perspective id="donut_closeup" near="0.1" far="90" angle="35">
+            <from x="2.3" y="4" z="6" />
+            <to x="2.3" y="2.5" z="4" />
         </perspective>
+
+        <perspective id="room_overview" near="0.1" far="90" angle="60">
+            <from x="10" y="5" z="12" />
+            <to x="0" y="1" z="0" />
+        </perspective>
+
+        <perspective id="paintings_closeup_cutting_close" near="7" far="90" angle="40">
+            <from x="8" y="4" z="4" />
+            <to x="0" y="4" z="4" />
+        </perspective>
+
+        <perspective id="world_closeup" near="0.1" far="90" angle="45">
+            <from x="3.7" y="4.5" z="7" />
+            <to x="3.7" y="3.5" z="4" />
+        </perspective>
+
         <ortho id="ortho1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
     </views>
     <ambient>
