@@ -35,9 +35,6 @@ class MyInterface extends CGFinterface {
     createLightsCheckboxes(lights) {
         var group = this.gui.addFolder("Lights");
 
-        // add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
-        // e.g. this.option1=true; this.option2=false;
-
         for (let [id, light] of lights) {
             if (light.id) {
                 this.model[`light_${light.id}`] = light.enabled;
@@ -46,5 +43,19 @@ class MyInterface extends CGFinterface {
                 });
             }
         }
+    }
+
+    createAxisCheckbox() {
+        this.model['Axis'] = true;
+        this.gui.add(this.model, 'Axis').onChange((val) => {
+            this.scene.toggleAxis();
+        });
+    }
+
+    createToggleLightsCheckbox() {
+        this.model['Show Lights'] = true;
+        this.gui.add(this.model, 'Show Lights').onChange((val) => {
+            this.scene.toggleViewLights();
+        });
     }
 }

@@ -27,7 +27,7 @@ class XMLscene extends CGFscene {
         //Move to constructor (?)
         this.sceneInited = false;
 
-        this.defaultCameras();
+        this.initDefaultCamera();
 
         this.enableTextures(true);
 
@@ -37,6 +37,7 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+        this.axisIsActive = true;
 
         this.createDefaultMaterial();
     }
@@ -53,7 +54,7 @@ class XMLscene extends CGFscene {
     /**
      * Initializes the scene cameras.
      */
-    defaultCameras() {
+    initDefaultCamera() {
         this.default_camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
         this.camera = this.default_camera;
     }
@@ -167,6 +168,16 @@ class XMLscene extends CGFscene {
         }
     }
 
+	toggleAxis() {
+		this.axisIsActive = !this.axisIsActive;
+	}
+
+	toggleViewLights() {
+		for (let light of this.lights) {
+            light.setVisible(!light.visible);
+        }
+	}
+
     updateLights() {
         for (let light of this.lights) {
             light.update();
@@ -192,8 +203,10 @@ class XMLscene extends CGFscene {
 
         this.createSceneGraph();
 
-        // Adds lights checkboxes
+        // Create interface options
         this.interface.createLightsCheckboxes(this.graph.lights);
+        this.interface.createAxisCheckbox();
+        this.interface.createToggleLightsCheckbox();
 
         this.sceneInited = true;
     }
@@ -260,7 +273,8 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
         
         // Draw axis
-        this.axis.display();
+        
+        this.axisIsActive && this.axis.display();
 
         if (this.sceneInited) {
             

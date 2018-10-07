@@ -2,7 +2,7 @@
     <scene root="root_comp" axis_length="8" />
     <views default="perspective1" >
         <perspective id="perspective1" near="0.1" far="90" angle="72">
-            <from x="5" y="5" z="5" />
+            <from x="7" y="6" z="7" />
             <to x="0" y="0" z="0" />
         </perspective>
         <perspective id="perspective2" near="0.1" far="90" angle="40">
