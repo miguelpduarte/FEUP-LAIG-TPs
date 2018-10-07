@@ -75,7 +75,7 @@ class MyInterface extends CGFinterface {
             ...cameras.keys()
         ];
 
-        this.model.cameraIndex = 0;
+        this.model.cameraIndex = this.scene.graph.defaultViewId;
 
         this.gui.add(this.model, "cameraIndex", cameraDropdownModel).name("Current camera").onChange(val => {
             this.scene.setCurrentCamera(val);
