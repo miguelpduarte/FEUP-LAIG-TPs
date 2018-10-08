@@ -811,9 +811,12 @@ class MySceneGraph {
         //texture
         const textureNode = componentProperties[2];
         const texId = this.parseStringAttr(textureNode, "id");
-        const length_s = this.parseFloatAttr(textureNode, "length_s");
-        const length_t = this.parseFloatAttr(textureNode, "length_t");
         this.verifyInheritableNoneId("texture", texId, this.textures);
+        let length_s, length_t;
+        if (texId !== "none") {
+            length_s = this.parseFloatAttr(textureNode, "length_s");
+            length_t = this.parseFloatAttr(textureNode, "length_t");
+        }
 
         //children
         const children = componentProperties[3].children;
