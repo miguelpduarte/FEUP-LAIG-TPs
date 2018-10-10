@@ -6,19 +6,30 @@ class Triangle extends PrimitiveObject {
 	constructor(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
 		super(scene);
 
-		this.initBuffers(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+		this.x1 = x1;
+		this.y1 = y1;
+		this.z1 = z1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.z2 = z2;
+		this.x3 = x3;
+		this.y3 = y3;
+		this.z3 = z3;
+
+		this.initBuffers();
 	};
 
 
-	initBuffers(x1, y1, z1, x2, y2, z2, x3, y3, z3) {
+	initBuffers() {
 		this.vertices = [
-			x1, y1, z1,
-			x2, y2, z2,
-			x3, y3, z3
+			this.x1, this.y1, this.z1,
+			this.x2, this.y2, this.z2,
+			this.x3, this.y3, this.z3
 		];
 
-		let v1 = [x2-x1, y2-y1, z2-z1];
-		let v2 = [x3-x1, y3-y1, z3-z1];
+		//normals
+		let v1 = [this.x2-this.x1, this.y2-this.y1, this.z2-this.z1];
+		let v2 = [this.x3-this.x1, this.y3-this.y1, this.z3-this.z1];
 
 		let nx = v1[1]*v2[2] - v1[2]*v2[1];
 		let ny = v1[2]*v2[0] - v1[0]*v2[2];
@@ -29,6 +40,7 @@ class Triangle extends PrimitiveObject {
 			nx, ny, nz,
 			nx, ny, nz
 		]
+		//end normals
 
 		this.indices = [
 			0, 1, 2
@@ -45,6 +57,14 @@ class Triangle extends PrimitiveObject {
 	};
 
 	setTexLengths(length_s, length_t) {
-		// TODO
+		let a = Math.sqrt(Math.pow((this.x1-this.x3),2) + Math.pow((this.y1-this.y3),2) + Math.pow((this.z1-this.z3),2));
+		let b = Math.sqrt(Math.pow((this.x2-this.x1),2) + Math.pow((this.y2-this.y1),2) + Math.pow((this.z2-this.z1),2));
+		let c = Math.sqrt(Math.pow((this.x3-this.x2),2) + Math.pow((this.y3-this.y2),2) + Math.pow((this.z3-this.z2),2));
+
+		let cos_alpha = (-Math.pow(a,2) + Math.pow(b,2) + Math.pow(c,2))/(2*b*c);
+		let cos_beta = (Math.pow(a,2) - Math.pow(b,2) + Math.pow(c,2))/(2*a*c);
+		let cos_gamma = (Math.pow(a,2) + Math.pow(b,2) - Math.pow(c,2))/(2*a*b);
+
+		// TODO: end this
     }
 };
