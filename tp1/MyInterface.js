@@ -47,9 +47,11 @@ class MyInterface extends CGFinterface {
         for (let [id, light] of lights) {
             if (light.id) {
                 this.model[`light_${light.id}`] = light.enabled;
-                group.add(this.model, `light_${light.id}`).name(`Light ${light.id}`).onChange(val => {
-                    this.scene.setLightState(light.id, val);
-                });
+                group.add(this.model, `light_${light.id}`)
+                    .name(`Light ${light.id}`)
+                    .onChange(val => {
+                        this.scene.setLightState(light.id, val);
+                    });
             }
         }
     }
@@ -77,8 +79,8 @@ class MyInterface extends CGFinterface {
 
         this.model.cameraIndex = this.scene.graph.defaultViewId;
 
-        this.gui.add(this.model, "cameraIndex", cameraDropdownModel).name("Current camera").onChange(val => {
-            this.scene.setCurrentCamera(val);
-        })
+        this.gui.add(this.model, "cameraIndex", cameraDropdownModel)
+            .name("Current camera")
+            .onChange(this.scene.setCurrentCamera);
     }
 }
