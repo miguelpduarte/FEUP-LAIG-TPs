@@ -26,7 +26,20 @@
             <to x="3.7" y="3.5" z="4" />
         </perspective>
 
-        <ortho id="ortho1" near="2" far="3" left="1" right="2" top="3" bottom="4" />
+        <ortho id="room_front_ortho_plane" near="0.1" far="70" left="-10" right="10" top="10" bottom="-10">
+            <from x="5" y="5" z="20" />
+            <to x="5" y="5" z="0" />
+        </ortho>
+
+        <ortho id="room_side_ortho_plane" near="0.1" far="70" left="-10" right="10" top="10" bottom="-10">
+            <from x="15" y="5" z="5" />
+            <to x="0" y="5" z="5" />
+        </ortho>
+
+        <ortho id="room_overview_ortho_pane" near="0.1" far="70" left="-7" right="7" top="7" bottom="-7">
+            <from x="10" y="10" z="10" />
+            <to x="0" y="0" z="0" />
+        </ortho>
     </views>
     <ambient>
         <ambient r="0.6" g="0.6" b="0.6" a="1" />

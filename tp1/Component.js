@@ -57,7 +57,7 @@ class Component extends CGFobject {
         this.applyAppearance();
 
         for (let child of this.children) {
-                child.display();
+            child.display();
         }    
 
         this.scene.popMatrix();    

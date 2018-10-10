@@ -235,6 +235,21 @@ class MySceneGraph {
 
         console.log("Ortho not created: left? right? top? bottom? what?");
 
+        const cameraCoords = viewNode.children;
+
+        if (cameraCoords.length !== 2) {
+            throw "perspective '" + id + "' invalid number of camera coordinates";
+        } else if (cameraCoords[0].nodeName !== "from") {
+            throw this.missingNodeMessage("perspective", "from");
+        } else if (cameraCoords[1].nodeName !== "to") {
+            throw this.missingNodeMessage("perspective", "to");
+        }
+
+        //parseCoords throws if coords are not valid
+
+        const from = this.parseCoords(cameraCoords[0]);
+        const to = this.parseCoords(cameraCoords[1]);
+
         const cam = {
             type: "ortho",
             id,
@@ -243,7 +258,9 @@ class MySceneGraph {
             left,
             right,
             bottom,
-            top
+            top,
+            from,
+            to
         }
 
         this.verifyUniqueId("ortho", this.cameras, id);

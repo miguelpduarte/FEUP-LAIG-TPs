@@ -64,14 +64,23 @@ class XMLscene extends CGFscene {
 
         for(let [id, camera] of this.graph.cameras) {
             if(camera.type === "ortho") {
-                console.warn("Not creating ortho cameras - ask teacher");
-                // TODO
+                //left, right, bottom, top, near, far, position, target, up
+                const cam = new CGFcameraOrtho(
+                    camera.left, camera.right, camera.bottom, camera.top,
+                    camera.near, camera.far,
+                    vec3.fromValues(...Object.values(camera.from)), 
+                    vec3.fromValues(...Object.values(camera.to)),
+                    vec3.fromValues(0, 1, 0)
+                );
+                
+                this.cameras.set(id, cam);
             } else if(camera.type === "perspective") {
-                let cam = new CGFcamera(
+                const cam = new CGFcamera(
                     camera.angle*DEGREE_TO_RAD, camera.near,
                     camera.far, vec3.fromValues(...Object.values(camera.from)),
                     vec3.fromValues(...Object.values(camera.to))
                 );
+
                 this.cameras.set(id, cam);
             }
         }
