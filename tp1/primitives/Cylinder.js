@@ -2,7 +2,7 @@
  * Cylinder
  * @constructor
  */
-class Cylinder extends CGFobject {
+class Cylinder extends PrimitiveObject {
 	constructor(scene, slices, stacks, height, base, top) {
 		super(scene);
 

@@ -167,6 +167,7 @@ class XMLscene extends CGFscene {
             mat.setSpecular(...Object.values(material.specular));
             mat.setEmission(...Object.values(material.emission));
             mat.setShininess(material.shininess);
+            mat.setTextureWrap('REPEAT', 'REPEAT');
             this.materials.set(id, mat);
         }
     }

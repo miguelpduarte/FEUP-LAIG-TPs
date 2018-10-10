@@ -2,7 +2,7 @@
  * Rectangle
  * @constructor
  */
-class Rectangle extends CGFobject {
+class Rectangle extends PrimitiveObject {
 	constructor(scene, x1, y1, x2, y2, minS, maxS, minT, maxT) {
 		super(scene);
 
@@ -11,16 +11,21 @@ class Rectangle extends CGFobject {
 		this.minT = minT || 0;
 		this.maxT = maxT || 1;
 
-		this.initBuffers(x1, y1, x2, y2);
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+
+		this.initBuffers();
 	};
 
 
-	initBuffers(x1, y1, x2, y2, minS, maxS, minT, maxT) {
+	initBuffers() {
 		this.vertices = [
-			x1, y1, 0,
-			x2, y1, 0,
-			x1, y2, 0,
-			x2, y2, 0
+			this.x1, this.y1, 0,
+			this.x2, this.y1, 0,
+			this.x1, this.y2, 0,
+			this.x2, this.y2, 0
 		];
 
 		this.normals = [
@@ -45,4 +50,19 @@ class Rectangle extends CGFobject {
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
+
+	setTexLengths(length_s, length_t) {
+		const width = Math.abs(this.x2 - this.x1);
+		const height = Math.abs(this.y2 - this.y1);
+
+
+		this.texCoords = [
+			0, height/length_t,
+			width/length_s, height/length_t,
+			0, 0,
+			width/length_s, 0
+		];
+		
+		this.updateTexCoordsGLBuffers();
+    }
 };

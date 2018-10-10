@@ -16,6 +16,7 @@ serialInclude([
     'XMLscene.js', 
     'MySceneGraph.js', 
     'MyInterface.js', 
+    'primitives/PrimitiveObject.js', 
     'primitives/Rectangle.js', 
     'primitives/Sphere.js',
     'primitives/Triangle.js',

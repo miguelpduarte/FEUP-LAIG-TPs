@@ -2,7 +2,7 @@
  * Triangle
  * @constructor
  */
-class Triangle extends CGFobject {
+class Triangle extends PrimitiveObject {
 	constructor(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
 		super(scene);
 
@@ -43,4 +43,8 @@ class Triangle extends CGFobject {
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
+
+	setTexLengths(length_s, length_t) {
+		// TODO
+    }
 };

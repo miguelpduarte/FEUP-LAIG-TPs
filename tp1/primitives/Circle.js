@@ -2,7 +2,7 @@
  * Circle
  * @constructor
  */
-class Circle extends CGFobject {
+class Circle extends PrimitiveObject {
 	constructor(scene, sides) {
 		super(scene);
 

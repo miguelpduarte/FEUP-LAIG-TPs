@@ -2,7 +2,7 @@
  * Sphere
  * @constructor
  */
-class Sphere extends CGFobject
+class Sphere extends PrimitiveObject
 {
 	constructor(scene, slices, stacks, radius)
 	{

@@ -2,7 +2,7 @@
  * CylinderSide
  * @constructor
  */
-class CylinderSide extends CGFobject {
+class CylinderSide extends PrimitiveObject {
 	constructor(scene, slices, stacks, height, base, top) {
 		super(scene);
 

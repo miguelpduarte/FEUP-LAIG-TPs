@@ -2,7 +2,7 @@
  * Torus
  * @constructor
  */
-class Torus extends CGFobject {
+class Torus extends PrimitiveObject {
 	constructor(scene, inner, outer, slices, loops) {
 		super(scene);
 

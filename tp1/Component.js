@@ -2,6 +2,9 @@ class Component extends CGFobject {
 	constructor(scene, component_model, transformation_factory) {
         super(scene);
 
+        this.length_s = component_model.texture.length_s;
+        this.length_t = component_model.texture.length_t;
+
         this.precomputeTransformationMatrix(component_model, transformation_factory);
         this.getMaterials(component_model);
         this.getTexture(component_model);
@@ -57,6 +60,9 @@ class Component extends CGFobject {
         this.applyAppearance();
 
         for (let child of this.children) {
+            if(child instanceof PrimitiveObject) {
+                child.setTexLengths(this.length_s, this.length_t);
+            }
             child.display();
         }    
 
@@ -65,7 +71,9 @@ class Component extends CGFobject {
         this.scene.textureStack.pop();
     }
 
-    
+    setTexLengths() {
+
+    }
 
     applyTransformations() {
         //Apply precomputed transformations to the scene using this.scene.multMatrix
