@@ -61,10 +61,15 @@ class Triangle extends PrimitiveObject {
 		let b = Math.sqrt(Math.pow((this.x2-this.x1),2) + Math.pow((this.y2-this.y1),2) + Math.pow((this.z2-this.z1),2));
 		let c = Math.sqrt(Math.pow((this.x3-this.x2),2) + Math.pow((this.y3-this.y2),2) + Math.pow((this.z3-this.z2),2));
 
-		let cos_alpha = (-Math.pow(a,2) + Math.pow(b,2) + Math.pow(c,2))/(2*b*c);
 		let cos_beta = (Math.pow(a,2) - Math.pow(b,2) + Math.pow(c,2))/(2*a*c);
-		let cos_gamma = (Math.pow(a,2) + Math.pow(b,2) - Math.pow(c,2))/(2*a*b);
+		let sin_beta = Math.sqrt(1 - Math.pow(cos_beta, 2));
 
-		// TODO: end this
+		this.texCoords = [
+			(c - a*cos_beta)/length_s, (length_t - a*sin_beta)/length_t,
+			0, 1,
+			c/length_s, 1
+		];
+		
+		this.updateTexCoordsGLBuffers();
     }
 };

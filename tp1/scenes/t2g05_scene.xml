@@ -104,6 +104,7 @@
         <texture id="tex_wood" file="scenes/images/wood.png" />
         <texture id="tex_donut" file="scenes/images/donut.png" />
         <texture id="tex_floor" file="scenes/images/floor.png" />
+        <texture id="tex_homer" file="scenes/images/homer.png" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -111,6 +112,12 @@
             <ambient r="0.1" g="0.1" b="0.15" a="1" />
             <diffuse r="0.4" g="0.4" b="0.5" a="1" />
             <specular r="0.4" g="0.4" b="0.5" a="1" />
+        </material>
+        <material id="mat_regular" shininess="40" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
         </material>
         <material id="mat_wood" shininess="20" >
             <emission r="0" g="0" b="0" a="1" />
@@ -176,9 +183,9 @@
             <rectangle x1="0" y1="0" x2="2.52" y2="3.44" />
         </primitive>
         <primitive id="ceiling">
-            <triangle x1="0" y1="7" z1="7"
-                      x2="0" y2="7" z2="0"
-                      x3="7" y3="7" z3="0" />
+            <triangle x3="0" y3="7" z3="7"
+                      x1="0" y1="7" z1="0"
+                      x2="7" y2="7" z2="0" />
         </primitive>
         <primitive id="cone_base">
             <cylinder base="0.35" top="0" height="0.24" slices="10" stacks="6" />
@@ -210,7 +217,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="mat_regular" />
             </materials>
             <texture id="none" length_s="1" length_t="1" />
             <children>
@@ -257,9 +264,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="mat_wood" />
+                <material id="inherit" />
             </materials>
-            <texture id="tex_rough" length_s="1" length_t="1" />
+            <texture id="tex_homer" length_s="8.9" length_t="5" />
             <children>
                 <primitiveref id="ceiling" />
             </children>
