@@ -8,7 +8,7 @@ class Torus extends PrimitiveObject {
 
 		this.slices = slices;
 		this.loops = loops;
-		this.inner_radius = outer-inner;
+		this.inner_radius = inner;
 		this.outer_radius = outer;
 
 		this.initBuffers();
