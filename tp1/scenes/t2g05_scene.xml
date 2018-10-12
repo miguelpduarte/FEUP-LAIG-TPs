@@ -190,7 +190,7 @@
             <sphere radius="0.8" slices="20" stacks="20" />
         </primitive>
         <primitive id="torus_holder">
-            <torus inner="0.75" outer="0.8" slices="20" loops="20" />
+            <torus inner="0.05" outer="0.8" slices="20" loops="20" />
         </primitive>
         <primitive id="table_leg">
             <cylinder base="0.1" top="0.1" height="2.2" slices="10" stacks="3" />

@@ -81,6 +81,6 @@ class MyInterface extends CGFinterface {
 
         this.gui.add(this.model, "cameraIndex", cameraDropdownModel)
             .name("Current camera")
-            .onChange(this.scene.setCurrentCamera);
+            .onChange(val => this.scene.setCurrentCamera(val));
     }
 }
