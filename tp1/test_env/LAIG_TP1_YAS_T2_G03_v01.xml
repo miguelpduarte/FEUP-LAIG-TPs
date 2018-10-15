@@ -1,0 +1,608 @@
+<yas>
+    <scene root="bedroom" axis_length="15" />
+    <views default="persp">
+        <perspective id="persp" near="0.1" far="500" angle="40">
+            <from x="60" y="25" z="60" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+    </views>
+    <ambient>
+        <ambient r="0" g="0" b="0" a="1" />
+        <background r="0" g="0" b="0" a="1" />
+    </ambient>
+    <lights>
+        <omni id="light1" enabled="1">
+            <location x="0" y="30" z="0" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="light2" enabled="1">
+            <location x="0" y="30" z="-30" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="light3" enabled="1">
+            <location x="30" y="30" z="30" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="light4" enabled="1">
+            <location x="30" y="30" z="0" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="light5" enabled="1">
+            <location x="-30" y="30" z="30" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+    </lights>
+    <textures>
+        <texture id="white" file="test_env/images/white_wall.jpg" />
+        <texture id="lightwood" file="test_env/images/light_wood.jpg" />
+        <texture id="darkwood" file="test_env/images/dark_wood.jpg" />
+        <texture id="rug" file="test_env/images/grey_rug.jpg" />
+        <texture id="windowglass" file="test_env/images/window_glass.jpg" />
+        <texture id="duvet" file="test_env/images/duvet.png" />
+        <texture id="copper" file="test_env/images/copper.jpg" />
+        <texture id="lamp" file="test_env/images/lamp.jpg" />
+    </textures>
+    <materials>
+        <material id="wood" shininess = "0">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.678" g="0.698" b="0.741" a="1" />
+            <specular r="0.03" g="0.03" b="0.03" a="1" />
+        </material>
+    </materials>
+    <transformations>
+        <transformation id="face1">
+            <translate x="0.5" y="0" z="0" />
+            <rotate axis="y" angle="90" />
+        </transformation>
+        <transformation id="face2">
+            <translate x="0" y="0" z="0.5" />
+        </transformation>
+        <transformation id="face3">
+            <translate x="0" y="0" z="-0.5" />
+            <rotate axis="y" angle="-180" />
+        </transformation>
+        <transformation id="face4">
+            <translate x="-0.5" y="0" z="0" />
+            <rotate axis="y" angle="-90" />
+        </transformation>
+        <transformation id="face5">
+            <translate x="0" y="0.5" z="0" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="face6">
+            <translate x="0" y="-0.5" z="0" />
+            <rotate axis="x" angle="90" />
+        </transformation>
+        <transformation id="headboard">
+            <translate x="0" y="5" z="-0.5" />
+            <scale x="12" y="5" z="1" />
+        </transformation>
+        <transformation id="frame">
+            <translate x="0" y="2" z="7" />
+            <scale x="12" y="1" z="16" />
+        </transformation>
+        <transformation id="mattress">
+            <translate x="0" y="3.5" z="7.5" />
+            <scale x="12" y="2" z="15" />
+        </transformation>
+        <transformation id="bedfoot">
+            <scale x="1" y="2.5" z="1" />
+            <translate x="0" y="0.1" z="-0.5" />
+        </transformation>
+        <transformation id="cube">
+            <translate x="2" y="0.5" z="2" />
+        </transformation>
+        <transformation id="bedfoot1">
+            <translate x="5.5" y="0" z="0"/>
+        </transformation>
+        <transformation id="bedfoot2">
+            <translate x="-5.5" y="0" z="0"/>
+        </transformation>
+        <transformation id="bedfoot3">
+            <translate x="5.5" y="0" z="15"/>
+        </transformation>
+        <transformation id="bedfoot4">3
+            <translate x="-5.5" y="0" z="15"/>
+        </transformation>
+        <transformation id="wall1">
+            <translate x="15" y="10" z="0" />
+            <scale x="30" y="20" z="0.1" />
+        </transformation>
+        <transformation id="wall2">
+            <translate x="0" y="10" z="20" />
+            <scale x="0.1" y="20" z="40" />
+            <rotate axis="y" angle="90" />
+        </transformation>
+        <transformation id="floor">
+            <translate x="15" y="0" z="20" />
+            <scale x="30" y="0.1" z="40" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="bed">
+            <translate x="15" y="1" z="2" />
+        </transformation>
+        <transformation id="rug">
+            <translate x="15" y="0" z="20" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="lampbase">
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="lampshade">
+            <translate x="0" y="10" z="0" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="lamppilar">
+            <translate x="0" y="0.5" z="0" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="lamp">
+            <translate x="4" y="0" z="3.5" />
+        </transformation>
+        <transformation id="windowglass">
+            <scale x="7" y="4" z="0.1" />
+        </transformation>
+        <transformation id="windowframe1">
+            <translate x="0" y="2" z="0" />
+            <scale x="7.5" y="0.5" z="0.5" />
+        </transformation>
+        <transformation id="windowframe2">
+            <translate x="0" y="-2" z="0" />
+            <scale x="7.5" y="0.5" z="0.5" />
+        </transformation>
+        <transformation id="windowframe3">
+            <translate x="3.5" y="0" z="0" />
+            <scale x="0.5" y="4.5" z="0.5" />
+        </transformation>
+        <transformation id="windowframe4">
+            <translate x="-3.5" y="0" z="0" />
+            <scale x="0.5" y="4.5" z="0.5" />
+        </transformation>
+        <transformation id="window">
+            <translate x="0" y="10" z="15" />
+            <scale x="1" y="2" z="2" />
+            <rotate axis="y" angle="90" />
+        </transformation>
+    </transformations>
+    <primitives>
+        <primitive id="quad">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+        <primitive id="sphere1">
+            <sphere radius="5" slices="50" stacks="50" />
+        </primitive>
+        <primitive id="rug">
+            <cylinder base="10" top="10" height="0.1" slices="50" stacks="20" />
+        </primitive>
+        <primitive id="lamppilar">
+            <cylinder base="0.25" top="0.25" height="10" slices="50" stacks="20" />
+        </primitive>
+        <primitive id="lampbase">
+            <cylinder base="1.5" top="0.25" height="0.5" slices="50" stacks="20" />
+        </primitive>
+        <primitive id="lampshade">
+            <cylinder base="3" top="2" height="4" slices="50" stacks="20" />
+        </primitive>
+        <primitive id="torus">
+            <torus inner="4" outer="5" slices="20" loops="10" />
+        </primitive>
+    </primitives>
+    <components>
+        <component id="face1">
+            <transformation>
+                <transformationref id="face1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="0" length_t="1" />
+            <children>
+                <primitiveref id="quad" />
+            </children>
+        </component>
+        <component id="face2">
+            <transformation>
+                <transformationref id="face2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad" />
+            </children>
+        </component>
+        <component id="face3">
+            <transformation>
+                <transformationref id="face3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad" />
+            </children>
+        </component>
+        <component id="face4">
+            <transformation>
+                <transformationref id="face4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad"/>
+            </children>
+        </component>
+        <component id="face5">
+            <transformation>
+                <transformationref id="face5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad"/>
+            </children>
+        </component>
+        <component id="face6">
+            <transformation>
+                <transformationref id="face6" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad"/>
+            </children>
+        </component>
+        <component id="cube">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="face1" />
+                <componentref id="face2" />
+                <componentref id="face3" />
+                <componentref id="face4" />
+                <componentref id="face5" />
+                <componentref id="face6" />
+            </children>
+        </component>
+        <component id="headboard">
+            <transformation>
+                <transformationref id="headboard" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+        <component id="frame">
+            <transformation>
+                <transformationref id="frame" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+        <component id="mattress">
+            <transformation>
+                <transformationref id="mattress" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="duvet" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+        <component id="bedfoot">
+            <transformation>
+                <transformationref id="bedfoot" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+        <component id="bedfoot1">
+            <transformation>
+                <transformationref id="bedfoot1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bedfoot"/>
+            </children>
+        </component>
+        <component id="bedfoot2">
+            <transformation>
+                <transformationref id="bedfoot2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bedfoot"/>
+            </children>
+        </component>
+        <component id="bedfoot3">
+            <transformation>
+                <transformationref id="bedfoot3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bedfoot"/>
+            </children>
+        </component>
+        <component id="bedfoot4">
+            <transformation>
+                <transformationref id="bedfoot4" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bedfoot"/>
+            </children>
+        </component>
+        <component id="bedframe">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="lightwood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bedfoot1" />
+                <componentref id="bedfoot2" />
+                <componentref id="bedfoot3" />
+                <componentref id="bedfoot4" />
+                <componentref id="headboard" />
+                <componentref id="frame" />
+            </children>
+        </component>
+        <component id="bed">
+            <transformation>
+                <transformationref id="bed" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="white" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bedframe" />
+                <componentref id="mattress" />
+            </children>
+        </component>
+        <component id="wall1">
+            <transformation>
+                <transformationref id="wall1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="white" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad"/>
+            </children>
+        </component>
+        <component id="wall2">
+            <transformation>
+                <transformationref id="wall2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="white" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="quad"/>
+            </children>
+        </component>
+        <component id="floor">
+            <transformation>
+                <transformationref id="floor" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="darkwood" length_s="30" length_t="40" />
+            <children>
+                <primitiveref id="quad"/>
+            </children>
+        </component>
+        <component id="rug">
+            <transformation>
+                <transformationref id="rug" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="rug" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rug"/>
+            </children>
+        </component>
+        <component id="lampbase">
+            <transformation>
+                <transformationref id="lampbase" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="copper" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="lampbase"/>
+            </children>
+        </component>
+        <component id="lamppilar">
+            <transformation>
+                <transformationref id="lamppilar" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="copper" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="lamppilar"/>
+            </children>
+        </component>
+        <component id="lampshade">
+            <transformation>
+                <transformationref id="lampshade" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="lamp" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="lampshade"/>
+            </children>
+        </component>
+        <component id="lamp">
+            <transformation>
+                <transformationref id="lamp" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="lamp" length_s="1" length_t="1" />
+            <children>
+                <componentref id="lampbase" />
+                <componentref id="lamppilar" />
+                <componentref id="lampshade" />
+            </children>
+        </component>
+        <component id="windowglass">
+            <transformation>
+                <transformationref id="windowglass" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="windowglass" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="windowframe1">
+            <transformation>
+                <transformationref id="windowframe1" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="darkwood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="windowframe2">
+            <transformation>
+                <transformationref id="windowframe2" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="darkwood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="windowframe3">
+            <transformation>
+                <transformationref id="windowframe3" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="darkwood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="windowframe4">
+            <transformation>
+                <transformationref id="windowframe4" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="darkwood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="window">
+            <transformation>
+                <transformationref id="window" />
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="white" length_s="1" length_t="1" />
+            <children>
+                <componentref id="windowglass" />
+                <componentref id="windowframe1" />
+                <componentref id="windowframe2" />
+                <componentref id="windowframe3" />
+                <componentref id="windowframe4" />
+            </children>
+        </component>
+        <component id="bedroom">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="wood" />
+            </materials>
+            <texture id="white" length_s="1" length_t="1" />
+            <children>
+                <componentref id="bed" />
+                <componentref id="wall1" />
+                <componentref id="wall2" />
+                <componentref id="floor" />
+                <componentref id="rug" />
+                <componentref id="lamp" />
+                <componentref id="window" />
+            </children>
+        </component>
+    </components>
+</yas>
+
