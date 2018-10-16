@@ -25,12 +25,10 @@ class TransformationFactory {
     }
 
     createTranslate(transformation_item_model) {
-        // console.log('Creating a translate: ', transformation_item_model);
         mat4.translate(this.mat, this.mat, vec3.fromValues(transformation_item_model.x, transformation_item_model.y, transformation_item_model.z));
     }
 
     createRotate(transformation_item_model) {
-        // console.log('Creating a rotate: ', transformation_item_model);
         const angle = DEGREE_TO_RAD * transformation_item_model.angle;
 
         switch(transformation_item_model.axis) {
@@ -47,7 +45,6 @@ class TransformationFactory {
     }
 
     createScale(transformation_item_model) {
-        // console.log('Creating a scale: ', transformation_item_model);
         mat4.scale(this.mat, this.mat, vec3.fromValues(transformation_item_model.x, transformation_item_model.y, transformation_item_model.z));
     }
 }

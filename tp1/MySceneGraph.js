@@ -222,18 +222,19 @@ class MySceneGraph {
             throw "ortho near attribute must be smaller than far attribute";
         }
 
-        // TODO: left <= right ?
-
         const left = this.parseFloatAttr(viewNode, "left");
         const right = this.parseFloatAttr(viewNode, "right");
-
-        // TODO: bottom <= top ?
-
-        //bottom
+        
+        if(left >= right) {
+            throw `left is larger than or equal to right for ortho camera with id '${id}'`;
+        }
+        
         const bottom = this.parseFloatAttr(viewNode, "bottom");
         const top = this.parseFloatAttr(viewNode, "top");
-
-        console.log("Ortho not created: left? right? top? bottom? what?");
+        
+        if(bottom >= top) {
+            throw `bottom is larger than or equal to top for ortho camera with id '${id}'`;
+        }
 
         const cameraCoords = viewNode.children;
 

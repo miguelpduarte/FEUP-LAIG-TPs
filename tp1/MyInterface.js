@@ -33,6 +33,22 @@ class MyInterface extends CGFinterface {
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
+        this.initKeys();
+    }
+
+    initKeys() {
+        this.scene.gui = this;
+        this.processKeyboard = () => {};
+    }
+
+    processKeyDown(event) {
+
+    }
+
+    processKeyUp(event) {
+        if(event.code === "KeyM") {
+            this.scene.rotateMaterials();
+        }
     }
 
     /**

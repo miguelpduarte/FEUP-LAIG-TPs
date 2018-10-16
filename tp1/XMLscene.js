@@ -116,6 +116,10 @@ class XMLscene extends CGFscene {
         }
     }
 
+    rotateMaterials() {
+        this.rootComponent.rotateMaterial();
+    }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */

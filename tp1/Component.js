@@ -34,7 +34,6 @@ class Component extends CGFobject {
     }
 
     getTexture(component_model) {
-        console.warn("Texture length attributes not being used for now");
         if(component_model.texture.id === "none" || component_model.texture.id === "inherit") {
             this.texture = component_model.texture.id;
         } else {
@@ -49,7 +48,13 @@ class Component extends CGFobject {
     rotateMaterial() {
         //Cycles to the next material, if it exists
         //Called when the user presses 'M'
-        // this.currentMaterialIndex = (this.currentMaterialIndex + 1) % this.materials.length;
+        this.currentMaterialIndex = (this.currentMaterialIndex + 1) % this.materials.length;
+
+        for(const child of this.children) {
+            if(child instanceof Component) {
+                child.rotateMaterial();
+            }
+        }
     }
 
 	display() {
@@ -64,7 +69,7 @@ class Component extends CGFobject {
                 child.setTexLengths(this.length_s, this.length_t);
             }
             child.display();
-        }    
+        }
 
         this.scene.popMatrix();    
         this.scene.materialStack.pop();
@@ -91,8 +96,7 @@ class Component extends CGFobject {
     pushMaterials() {
         if (this.materials[this.currentMaterialIndex] === "inherit") {
             this.scene.materialStack.push(this.scene.materialStack[this.scene.materialStack.length - 1]);
-        }
-        else {
+        } else {
             this.scene.materialStack.push(this.materials[this.currentMaterialIndex]);
         }
     }
@@ -100,11 +104,9 @@ class Component extends CGFobject {
     pushTextures() {
         if (this.texture === "inherit") {
             this.scene.textureStack.push(this.scene.textureStack[this.scene.textureStack.length - 1]);
-        } 
-        else if (this.texture === "none") {
+        } else if (this.texture === "none") {
             this.scene.textureStack.push(null);
-        } 
-        else {
+        } else {
             this.scene.textureStack.push(this.texture);
         }
     }
