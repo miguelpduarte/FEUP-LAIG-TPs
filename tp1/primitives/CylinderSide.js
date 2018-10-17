@@ -38,7 +38,7 @@ class CylinderSide extends PrimitiveObject {
 
 				this.texCoords.push(
 					i*1/this.slices, 
-					1 - (j*1/this.stacks)
+					j*1/this.stacks
 				);
 
 				this.normals.push(
