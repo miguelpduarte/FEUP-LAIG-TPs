@@ -180,6 +180,14 @@ class MySceneGraph {
 
         let angle = this.parseFloatAttr(viewNode, "angle");
 
+        if (angle <= 0) {
+            this.onXMLMinorError(`perspective camera with id '${id}': camera angle should be bigger than 0º, setting angle to 0.1º`);
+            angle = 0.1;
+        } else if (angle > 180) {
+            this.onXMLMinorError(`perspective camera with id '${id}': camera angle should be smaller or equal to 180º, setting angle to 180º`);
+            angle = 180;
+        }
+
         const cameraCoords = viewNode.children;
 
         if (cameraCoords.length !== 2) {
@@ -374,6 +382,15 @@ class MySceneGraph {
         }
 
         let angle = this.parseFloatAttr(lightNode, "angle");
+
+        if (angle <= 0) {
+            this.onXMLMinorError(`spot light with id '${id}': light angle should be bigger than 0º, setting angle to 0.1º`);
+            angle = 0.1;
+        } else if (angle > 180) {
+            this.onXMLMinorError(`spot light with id '${id}': light angle should be smaller or equal to 180º, setting angle to 180º`);
+            angle = 180;
+        }
+
         let exponent = this.parseFloatAttr(lightNode, "exponent");
 
         const lightProperties = lightNode.children;
@@ -897,9 +914,6 @@ class MySceneGraph {
         this.verifyUniqueId("component", this.components, id);
 
         this.components.set(component.id, component);
-    }
-
-    parseComponentTexture(component, textureNode) {
     }
 
     parseStringAttr(node, attribute_name) {
