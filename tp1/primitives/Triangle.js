@@ -52,22 +52,23 @@ class Triangle extends PrimitiveObject {
 			0.5, 0
 		];
 
+
+		this.a = Math.sqrt(Math.pow((this.x1-this.x3),2) + Math.pow((this.y1-this.y3),2) + Math.pow((this.z1-this.z3),2));
+		this.b = Math.sqrt(Math.pow((this.x2-this.x1),2) + Math.pow((this.y2-this.y1),2) + Math.pow((this.z2-this.z1),2));
+		this.c = Math.sqrt(Math.pow((this.x3-this.x2),2) + Math.pow((this.y3-this.y2),2) + Math.pow((this.z3-this.z2),2));
+
+		this.cos_beta = (Math.pow(this.a,2) - Math.pow(this.b,2) + Math.pow(this.c,2))/(2*this.a*this.c);
+		this.sin_beta = Math.sqrt(1 - Math.pow(this.cos_beta, 2));
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
 
 	setTexLengths(length_s, length_t) {
-		let a = Math.sqrt(Math.pow((this.x1-this.x3),2) + Math.pow((this.y1-this.y3),2) + Math.pow((this.z1-this.z3),2));
-		let b = Math.sqrt(Math.pow((this.x2-this.x1),2) + Math.pow((this.y2-this.y1),2) + Math.pow((this.z2-this.z1),2));
-		let c = Math.sqrt(Math.pow((this.x3-this.x2),2) + Math.pow((this.y3-this.y2),2) + Math.pow((this.z3-this.z2),2));
-
-		let cos_beta = (Math.pow(a,2) - Math.pow(b,2) + Math.pow(c,2))/(2*a*c);
-		let sin_beta = Math.sqrt(1 - Math.pow(cos_beta, 2));
-
 		this.texCoords = [
-			(c - a*cos_beta)/length_s, (length_t - a*sin_beta)/length_t,
+			(this.c - this.a*this.cos_beta)/length_s, (length_t - this.a*this.sin_beta)/length_t,
 			0, 1,
-			c/length_s, 1
+			this.c/length_s, 1
 		];
 		
 		this.updateTexCoordsGLBuffers();
