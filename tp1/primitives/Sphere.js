@@ -42,8 +42,8 @@ class Sphere extends PrimitiveObject
 
                 // TODO: divide by 4 instead of 2 (in X)?
 				this.texCoords.push(
-                    1 - (omega_angle*i / (2*Math.PI)),
-                    (alpha_angle*j + Math.PI/2) / Math.PI
+                    omega_angle*i / (2*Math.PI),
+                    1- ((alpha_angle*j + Math.PI/2) / Math.PI)
 				);
 
 			}
