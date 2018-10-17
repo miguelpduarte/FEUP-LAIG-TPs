@@ -134,7 +134,7 @@ class XMLscene extends CGFscene {
             this.lights[num_created_lights].setSpecular(...Object.values(light.specular));
 
             if (light.type === "spot") {
-                this.lights[num_created_lights].setSpotCutOff(light.angle * DEGREE_TO_RAD);
+                this.lights[num_created_lights].setSpotCutOff(light.angle);
                 this.lights[num_created_lights].setSpotExponent(light.exponent);
 
                 let direction = [light.target.x - light.location.x, 

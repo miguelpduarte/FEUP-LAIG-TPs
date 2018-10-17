@@ -175,7 +175,7 @@ class MySceneGraph {
 
         //near must be smaller than far
         if (near >= far) {
-            throw "perspective near attribute must be smaller than far attribute";
+            throw `perspective camera with id '${id}': near attribute must be smaller than far attribute`;
         }
 
         let angle = this.parseFloatAttr(viewNode, "angle");
@@ -194,6 +194,10 @@ class MySceneGraph {
 
         const from = this.parseCoords(cameraCoords[0]);
         const to = this.parseCoords(cameraCoords[1]);
+
+        if (from.x === to.x && from.y === to.y && from.z === to.z) {
+            throw `perspective camera with id '${id}': 'from' and 'to' attributes cannot be the same point in space`;
+        }
 
         const cam = {
             type: "perspective",
@@ -219,7 +223,7 @@ class MySceneGraph {
 
         //near must be smaller than far
         if (near >= far) {
-            throw "ortho near attribute must be smaller than far attribute";
+            throw `ortho camera with id '${id}': near attribute must be smaller than far attribute`;
         }
 
         const left = this.parseFloatAttr(viewNode, "left");
@@ -250,6 +254,10 @@ class MySceneGraph {
 
         const from = this.parseCoords(cameraCoords[0]);
         const to = this.parseCoords(cameraCoords[1]);
+
+        if (from.x === to.x && from.y === to.y && from.z === to.z) {
+            throw `ortho camera with id '${id}': 'from' and 'to' attributes cannot be the same point in space`;
+        }
 
         const cam = {
             type: "ortho",
