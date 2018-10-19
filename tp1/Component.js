@@ -4,6 +4,7 @@ class Component extends CGFobject {
 
         this.length_s = component_model.texture.length_s;
         this.length_t = component_model.texture.length_t;
+        this.hasOwnTexCoords = (this.length_s !== undefined && this.length_t !== undefined);
 
         this.precomputeTransformationMatrix(component_model, transformation_factory);
         this.getMaterials(component_model);
@@ -65,7 +66,7 @@ class Component extends CGFobject {
         this.applyAppearance();
 
         for (let child of this.children) {
-            if(child instanceof PrimitiveObject) {
+            if(child instanceof PrimitiveObject || child.texture === "inherit") {
                 child.setTexLengths(this.length_s, this.length_t);
             }
             child.display();
@@ -76,8 +77,11 @@ class Component extends CGFobject {
         this.scene.textureStack.pop();
     }
 
-    setTexLengths() {
-
+    setTexLengths(length_s, length_t) {
+        if (!this.hasOwnTexCoords) {
+            this.length_s = length_s;
+            this.length_t = length_t;
+        }
     }
 
     applyTransformations() {
