@@ -1,0 +1,587 @@
+<yas>
+    <scene root="root" axis_length="5"/>
+    
+    <views default="unique_perspective">
+        <perspective id="unique_perspective" near="0" far="10" angle="45">
+            <from x="10" y="10" z="10" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <ortho id="unique_ortho" near="1" far="1.5" left="1" right="1" top="1" bottom="1"/>
+    </views>
+
+    <ambient>
+        <ambient r="0.2" g="0.2" b="0.2" a="1" />
+        <background r="0" g="0" b="0" a="1" />
+    </ambient>
+
+    <lights>
+        <omni id="unique_light" enabled="1" >
+            <location x="5" y="5" z="5" w="1" />
+            <ambient r="1" g="1" b="1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+    </lights>
+
+    <textures>
+        <texture id="rocks" file="rocks.jpg" />
+    </textures>
+
+    <materials>
+        <material id="red" shininess = "1" >
+            <emission r="0.5" g="0.3" b="0.1" a="1" />
+            <ambient r="0.5" g="0.3" b="0.1" a="1" />
+            <diffuse r="0.5" g="0.3" b="0.1" a="1" />
+            <specular r="0.5" g="0.3" b="0.1" a="1" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="identity">
+            <translate x="0" y="0" z="0"/>
+        </transformation>
+
+        <transformation id="set_saturn">
+            <translate x="8" y="8" z="8"/>
+        </transformation>
+
+        <transformation id="set_hoop">
+            <rotate axis="x" angle="60"/>
+        </transformation>
+
+        <transformation id="set_leg0">
+            <translate x="1.1" y="1" z="1.6"/>
+            <scale x="0.2" y="2" z="0.2"/>
+        </transformation>
+
+        <transformation id="set_leg1">
+            <translate x="4.9" y="1" z="1.6"/>
+            <scale x="0.2" y="2" z="0.2"/>
+        </transformation>
+
+        <transformation id="set_leg2">
+            <translate x="1.1" y="1" z="3.4"/>
+            <scale x="0.2" y="2" z="0.2"/>
+        </transformation>
+
+        <transformation id="set_leg3">
+            <translate x="4.9" y="1" z="3.4"/>
+            <scale x="0.2" y="2" z="0.2"/>
+        </transformation>
+
+        <transformation id="set_table_top">
+            <translate x="3" y="2" z="2.5"/>
+            <scale x="4" y="0.4" z="2"/>
+        </transformation>
+
+        <transformation id="set_tv">
+            <translate x="3" y="3.1" z="3"/>
+        </transformation>
+
+        <transformation id="set_tv_screen">
+            <scale x="2.5" y="1.5" z="0.1"/>
+        </transformation>
+
+        <transformation id="set_tv_stand_arm">
+            <translate x="0" y="-0.75" z="0"/>
+            <scale x="0.25" y="0.25" z="0.05"/>
+        </transformation>
+
+        <transformation id="set_tv_stand_base">
+            <translate x="0" y="-0.9" z="0"/>
+            <scale x="1.5" y="0.1" z="0.75"/>
+        </transformation>
+
+        <transformation id="set_ceiling_lamp">
+            <translate x="4" y="5" z="4"/>
+        </transformation>
+
+        <transformation id="set_ceiling_lamp_shade">
+            <scale x="0.5" y="0.5" z="0.5"/>
+            <rotate axis="x" angle="-90"/>
+        </transformation>
+
+        <transformation id="set_ceiling_lamp_wire">
+            <translate x="0" y="0.5" z="0"/>
+            <scale x="0.05" y="0.5" z="0.05"/>
+            <rotate axis="x" angle="-90"/>
+        </transformation>
+
+        <transformation id="set_ceiling_lamp_base">
+            <translate x="0" y="1" z="0"/>
+            <scale x="0.25" y="0.1" z="0.25"/>
+            <rotate axis="x" angle="-90"/>
+        </transformation>
+
+        <transformation id="set_cube_face0">
+            <translate x="0" y="0" z="0.5"/>
+        </transformation>
+
+        <transformation id="set_cube_face1">
+            <translate x="0" y="-0.5" z="0"/>
+            <rotate axis="x" angle="90"/>
+        </transformation>
+
+        <transformation id="set_cube_face2">
+            <translate x="0" y="0" z="-0.5"/>
+            <rotate axis="x" angle="180"/>
+        </transformation>
+
+        <transformation id="set_cube_face3">
+            <translate x="0" y="0.5" z="0"/>
+            <rotate axis="x" angle="-90"/>
+        </transformation>
+
+        <transformation id="set_cube_face4">
+            <translate x="0.5" y="0" z="0"/>
+            <rotate axis="y" angle="90"/>
+        </transformation>
+
+        <transformation id="set_cube_face5">
+            <translate x="-0.5" y="0" z="0"/>
+            <rotate axis="y" angle="-90"/>
+        </transformation>
+
+        <transformation id="set_side_wall">
+            <translate x="3.5" y="3.5" z="0"/>
+            <scale x="7" y="7" z="1"/>
+        </transformation>
+
+        <transformation id="set_back_wall">
+            <translate x="0" y="3.5" z="3.5"/>
+            <rotate axis="y" angle="90"/>
+            <scale x="7" y="7" z="1"/>
+        </transformation>
+        
+        <transformation id="set_ground">
+            <translate x="3.5" y="0" z="3.5"/>
+            <rotate axis="x" angle="-90"/>
+            <scale x="7" y="7" z="1"/>
+        </transformation>
+
+    </transformations>
+
+    <primitives>
+        <primitive id="rectangle">
+            <rectangle x1="-0.5" y1="0.5" x2="0.5" y2="-0.5"/>
+        </primitive>
+        <primitive id="triangle">
+            <triangle x1="0" y1="0" z1="0"
+                      x2="1" y2="0" z2="0"
+                      x3="0" y3="0" z3="1" />
+        </primitive>
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="1" slices="20" stacks="4" />
+        </primitive>
+        <primitive id="sphere">
+            <sphere radius="0.5" slices="20" stacks="20" />
+        </primitive>
+        <primitive id="torus">
+            <torus inner="0.6" outer="0.8" slices="20" loops="20" />
+        </primitive>
+    </primitives>
+
+    <components>
+
+        <component id="root">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="red"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="side_wall"/>
+                <componentref id="back_wall"/>
+                <componentref id="ground"/>
+                <componentref id="tv"/>
+                <componentref id="table"/>
+                <componentref id="saturn"/>
+                <componentref id="ceiling_lamp"/>
+            </children>
+        </component>
+
+        <component id="saturn">
+            <transformation>
+                <transformationref id="set_saturn"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="planet"/>
+                <componentref id="hoop"/>
+            </children>
+        </component>
+
+        <component id="planet">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="sphere"/>
+            </children>
+        </component>
+
+        <component id="hoop">
+            <transformation>
+                <transformationref id="set_hoop"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+
+        <component id="table">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="table_top"/>
+                <componentref id="legs"/>
+            </children>
+        </component>
+
+        <component id="table_top">
+            <transformation>
+                <transformationref id="set_table_top"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="legs">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="leg0"/>
+                <componentref id="leg1"/>
+                <componentref id="leg2"/>
+                <componentref id="leg3"/>
+            </children>
+        </component>
+
+        <component id="leg0">
+            <transformation>
+                <transformationref id="set_leg0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="leg1">
+            <transformation>
+                <transformationref id="set_leg1"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="leg2">
+            <transformation>
+                <transformationref id="set_leg2"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="leg3">
+            <transformation>
+                <transformationref id="set_leg3"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="tv">
+            <transformation>
+                <transformationref id="set_tv"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="tv_screen"/>
+                <componentref id="tv_stand_arm"/>
+                <componentref id="tv_stand_base"/>
+            </children>
+        </component>
+
+        <component id="ceiling_lamp">
+            <transformation>
+                <transformationref id="set_ceiling_lamp"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="ceiling_lamp_base"/>
+                <componentref id="ceiling_lamp_wire"/>
+                <componentref id="ceiling_lamp_shade"/>
+            </children>
+        </component>
+
+        <component id="ceiling_lamp_base">
+            <transformation>
+                <transformationref id="set_ceiling_lamp_base"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+
+        <component id="ceiling_lamp_wire">
+            <transformation>
+                <transformationref id="set_ceiling_lamp_wire"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+
+        <component id="ceiling_lamp_shade">
+            <transformation>
+                <transformationref id="set_ceiling_lamp_shade"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+
+        <component id="tv_screen">
+            <transformation>
+                <transformationref id="set_tv_screen"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="tv_stand_arm">
+            <transformation>
+                <transformationref id="set_tv_stand_arm"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="tv_stand_base">
+            <transformation>
+                <transformationref id="set_tv_stand_base"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
+        <component id="cube">
+            <transformation>
+                <transformationref id="identity"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube_face0"/>
+                <componentref id="cube_face1"/>
+                <componentref id="cube_face2"/>
+                <componentref id="cube_face3"/>
+                <componentref id="cube_face4"/>
+                <componentref id="cube_face5"/>
+            </children>
+        </component>
+
+        <component id="cube_face0">
+            <transformation>
+                <transformationref id="set_cube_face0"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="cube_face1">
+            <transformation>
+                <transformationref id="set_cube_face1"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="cube_face2">
+            <transformation>
+                <transformationref id="set_cube_face2"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="cube_face3">
+            <transformation>
+                <transformationref id="set_cube_face3"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="cube_face4">
+            <transformation>
+                <transformationref id="set_cube_face4"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="cube_face5">
+            <transformation>
+                <transformationref id="set_cube_face5"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="side_wall">
+            <transformation>
+                <transformationref id="set_side_wall"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="back_wall">
+            <transformation>
+                <transformationref id="set_back_wall"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>    
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="ground">
+            <transformation>
+                <transformationref id="set_ground"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+
+
+    </components>
+
+</yas>
