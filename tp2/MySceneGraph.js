@@ -6,6 +6,7 @@ const XML_NODES = [
     'textures',
     'materials',
     'transformations',
+    'animations',
     'primitives',
     'components'
 ]
@@ -36,6 +37,7 @@ class MySceneGraph {
         this.textures = new Map();
         this.materials = new Map();
         this.transformations = new Map();
+        this.animations = new Map();
         this.primitives = new Map();
         this.components = new Map();
 
@@ -56,6 +58,7 @@ class MySceneGraph {
             'textures': this.parseTextures,
             'materials': this.parseMaterials,
             'transformations': this.parseTransformations,
+            'animations': this.parseAnimations,
             'primitives': this.parsePrimitives,
             'components': this.parseComponents
         }
@@ -591,6 +594,90 @@ class MySceneGraph {
         return scale;
     }
 
+
+    parseAnimations(animationsNode) {
+        const animations = animationsNode.children;
+
+        for(let i = 0; i < animations.length; ++i) {
+            this.parseAnimation(animations[i]);
+        }
+    }
+
+    parseAnimation(animationNode) {
+        const id = this.parseStringAttr(animationNode, "id");
+
+        this.verifyUniqueId("animation", this.animations, id);
+
+        let animation;
+        if (animationNode.nodeName === "linear") {
+            animation = this.createLinearAnimation(animationNode, id);
+        } else if (animationNode.nodeName === "circular") {
+            animation = this.createCircularAnimation(animationNode, id);
+        } else {
+            throw `animation '${id}': invalid animation type. Animations may only be 'linear' or 'circular'`;
+        }
+
+        animation.id = id;
+
+        this.animations.set(animation.id, animation);
+    }
+
+    createLinearAnimation(animationNode, id) {
+        const span = this.parseFloatAttr(animationNode, "span");
+
+        const animationChildren = animationNode.children;
+
+        let controlPoints = [];
+
+        for (let controlPointNode of animationChildren) {
+            if (controlPointNode.nodeName === "controlpoint") {
+                const xx = this.parseFloatAttr(controlPointNode, "xx");
+                const yy = this.parseFloatAttr(controlPointNode, "yy");
+                const zz = this.parseFloatAttr(controlPointNode, "zz");
+                controlPoints.push({xx, yy, zz});
+            } else {
+                this.onXMLError(`animation '${id}': invalid control point named '${controlPointNode.nodeName}'`);
+            }
+        }
+
+        if (controlPoints.length < 2) {
+            throw `animation '${id}': a linear animation must have, at least, 2 control points'`;
+        }
+
+        return {
+            type: "linear",
+            span,
+            controlPoints
+        }
+    }
+
+    createCircularAnimation(animationNode, id) {
+        const span = this.parseFloatAttr(animationNode, "span");
+        const radius = this.parseFloatAttr(animationNode, "radius");
+        const startang = this.parseFloatAttr(animationNode, "startang");
+        const rotang = this.parseFloatAttr(animationNode, "rotang");
+        const center = this.parseCircularAnimationCenter(this.reader.getString(animationNode, 'center'), id);
+
+        return {
+            type: "circular",
+            span,
+            radius,
+            startang,
+            rotang
+        }
+    }
+
+    parseCircularAnimationCenter(centerString, id) {
+        const values = centerString.split(' ');
+
+        if (values.length !== 3 || 
+            isNaN(values[0]) || values[0] === '' || 
+            isNaN(values[1]) || values[1] === '' ||
+            isNaN(values[2]) || values[2] === '' ) {
+            throw `animation '${id}': a circular animation center must have 3 spacial coordinates, in the format 'xx yy zz'`;
+        }
+    }
+
     parsePrimitives(primitivesNode) {
         const primitives = primitivesNode.children;
 
@@ -605,6 +692,8 @@ class MySceneGraph {
 
     parsePrimitive(primitiveNode) {
         const id = this.parseStringAttr(primitiveNode, "id");
+
+        this.verifyUniqueId("primitive", this.primitives, id);
 
         const childNodes = primitiveNode.children;
 
@@ -623,17 +712,52 @@ class MySceneGraph {
             primitive = this.createTriangle(primitiveChild);
         } else if (primitiveChild.nodeName === "cylinder") {
             primitive = this.createCylinder(primitiveChild, id);
+        } else if (primitiveChild.nodeName === "cylinder2") {
+            // TODO
+            primitive = this.createCylinder(primitiveChild, id);
+            primitive.type = "cylinder2";
+            console.log("cylinder2");
+            console.log(primitive);
+            return;
         } else if (primitiveChild.nodeName === "sphere") {
             primitive = this.createSphere(primitiveChild, id);
         } else if (primitiveChild.nodeName === "torus") {
             primitive = this.createTorus(primitiveChild, id);
+        } else if (primitiveChild.nodeName === "plane") {
+            // TODO
+            primitive = this.createPlane(primitiveChild, id);
+            console.log("plane");
+            console.log(primitive);
+            return;
+        } else if (primitiveChild.nodeName === "patch") {
+            // TODO
+            primitive = this.createPatch(primitiveChild, id);
+            console.log("patch");
+            console.log(primitive);
+            return;
+        } else if (primitiveChild.nodeName === "vehicle") {
+            // TODO
+            primitive = this.createVehicle();
+            console.log("vehicle");
+            console.log(primitive);
+            return;
+        } else if (primitiveChild.nodeName === "terrain") {
+            // TODO
+            primitive = this.createTerrain(primitiveChild, id);
+            console.log("terrain");
+            console.log(primitive);
+            return;
+        } else if (primitiveChild.nodeName === "water") {
+            // TODO
+            primitive = this.createWater(primitiveChild, id);
+            console.log("water");
+            console.log(primitive);
+            return;
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
 
         primitive.id = id;
-
-        this.verifyUniqueId("primitive", this.primitives, id);
 
         this.primitives.set(primitive.id, primitive);
     }
@@ -751,6 +875,94 @@ class MySceneGraph {
         }
     }
 
+    createPlane(primitiveNode, id) {
+        const npartsU = this.parseIntAttr(primitiveNode, "npartsU");
+        const npartsV = this.parseIntAttr(primitiveNode, "npartsV");
+
+        if (npartsU < 1) {
+            throw `plane primitive with id '${id}' must have npartsU greater or equal to 1`;
+        } else if (npartsV < 1) {
+            throw `plane primitive with id '${id}' must have npartsV greater or equal to 1`;
+        }
+
+        return {
+            type: "plane",
+            npartsU,
+            npartsV
+        }
+    }
+
+    createPatch(primitiveNode, id) {
+        const npointsU = this.parseIntAttr(primitiveNode, "npointsU");
+        const npointsV = this.parseIntAttr(primitiveNode, "npointsV");
+        const npartsU = this.parseIntAttr(primitiveNode, "npartsU");
+        const npartsV = this.parseIntAttr(primitiveNode, "npartsV");
+
+        if (npointsU < 1) {
+            throw `patch primitive with id '${id}' must have 'npointsU' greater or equal to 1`;
+        } else if (npointsV < 1) {
+            throw `patch primitive with id '${id}' must have 'npointsV' greater or equal to 1`;
+        } else if (npartsU < 1) {
+            throw `patch primitive with id '${id}' must have 'npartsU' greater or equal to 1`;
+        } else if (npartsV < 1) {
+            throw `patch primitive with id '${id}' must have 'npartsV' greater or equal to 1`;
+        }
+
+        return {
+            type: "patch",
+            npointsU,
+            npointsV,
+            npartsU,
+            npartsV
+        }
+    }
+
+    createVehicle() {
+        return {
+            type: "vehicle"
+        }
+    }
+
+    createTerrain(primitiveNode, id) {
+        const idtexture = this.parseStringAttr(primitiveNode, "idtexture"); // TODO
+        const idheightmap = this.parseStringAttr(primitiveNode, "idheightmap"); // TODO
+        const parts = this.parseIntAttr(primitiveNode, "parts");
+        const heightscale = this.parseFloatAttr(primitiveNode, "heightscale");
+
+        if (parts < 1) {
+            throw `terrain primitive with id '${id}' must have 'parts' greater or equal to 1`;
+        }
+
+        return {
+            type: "terrain",
+            idtexture,
+            idheightmap,
+            parts,
+            heightscale
+        }
+    }
+
+    createWater(primitiveNode, id) {
+        const idtexture = this.parseStringAttr(primitiveNode, "idtexture"); // TODO
+        const idwavemap = this.parseStringAttr(primitiveNode, "idwavemap"); // TODO
+        const parts = this.parseIntAttr(primitiveNode, "parts");
+        const heightscale = this.parseFloatAttr(primitiveNode, "heightscale");
+        const texscale = this.parseFloatAttr(primitiveNode, "texscale");
+
+        if (parts < 1) {
+            throw `water primitive with id '${id}' must have 'parts' greater or equal to 1`;
+        }
+
+        return {
+            type: "water",
+            idtexture,
+            idwavemap,
+            parts,
+            heightscale,
+            texscale
+        }
+    }
+
     parseComponents(componentsNode) {
         const components = componentsNode.children;
 
@@ -777,21 +989,25 @@ class MySceneGraph {
     createComponent(componentNode) {
         const id = this.parseStringAttr(componentNode, "id");
 
+        this.verifyUniqueId("component", this.components, id);
+
         const componentProperties = componentNode.children;
 
-        if (componentProperties.length !== 4) {
+        if (componentProperties.length !== 5) {
             throw "component '" + id + "' invalid number of component properties";
         } else if (componentProperties[0].nodeName !== "transformation") {
             throw this.missingNodeMessage("component", "transformation");
-        } else if (componentProperties[1].nodeName !== "materials") {
+        } else if (componentProperties[1].nodeName !== "animations") {
+            throw this.missingNodeMessage("component", "animations");
+        } else if (componentProperties[2].nodeName !== "materials") {
             throw this.missingNodeMessage("component", "materials");
-        } else if (componentProperties[2].nodeName !== "texture") {
+        } else if (componentProperties[3].nodeName !== "texture") {
             throw this.missingNodeMessage("component", "texture");
-        } else if (componentProperties[3].nodeName !== "children") {
+        } else if (componentProperties[4].nodeName !== "children") {
             throw this.missingNodeMessage("component", "children");
         }
 
-        if (componentProperties[3].children.length === 0) {
+        if (componentProperties[4].children.length === 0) {
             throw `component with id '${id}' has no children`;
         }
 
@@ -838,8 +1054,21 @@ class MySceneGraph {
             }
         }
 
+        //animations
+        const animations = componentProperties[1].children;
+        let animationIds = [];     
+        for (let animation of animations) {
+            if (animation.nodeName !== "animationref") {
+                this.onXMLMinorError(`Invalid '${animation.nodeName}' animation tag in component animations.`);
+            } else {
+                const animationId = this.parseStringAttr(animation, "id");
+                this.verifyInheritableId("animations", animationId, this.animations);
+                animationIds.push(animationId);
+            }
+        } 
+
         //materials
-        const materials = componentProperties[1].children;
+        const materials = componentProperties[2].children;
         let materialIds = [];        
         for (let material of materials) {
             if (material.nodeName !== "material") {
@@ -852,7 +1081,7 @@ class MySceneGraph {
         } 
 
         //texture
-        const textureNode = componentProperties[2];
+        const textureNode = componentProperties[3];
         const texId = this.parseStringAttr(textureNode, "id");
         this.verifyInheritableNoneId("texture", texId, this.textures);
         let length_s, length_t;
@@ -863,7 +1092,7 @@ class MySceneGraph {
         }
 
         //children
-        const children = componentProperties[3].children;
+        const children = componentProperties[4].children;
         let primitiveIds = new Set();
         let componentIds = new Set();
 
@@ -898,6 +1127,7 @@ class MySceneGraph {
         
         const component = {
             id,
+            animationIds,
             texture: {
                 id: texId,
                 length_s,
@@ -911,8 +1141,6 @@ class MySceneGraph {
             transformationref,
             explicitTransformations
         };
-
-        this.verifyUniqueId("component", this.components, id);
 
         this.components.set(component.id, component);
     }
