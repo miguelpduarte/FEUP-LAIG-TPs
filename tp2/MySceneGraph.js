@@ -908,8 +908,28 @@ class MySceneGraph {
             throw `patch primitive with id '${id}' must have 'npartsV' greater or equal to 1`;
         }
 
+        const controlPointsNodes = primitiveNode.children;
+        let controlPoints = [];
+
+        for (let controlPointNode of controlPointsNodes) {
+            if (controlPointNode.nodeName === "controlpoint") {
+                const xx = this.parseFloatAttr(controlPointNode, "xx");
+                const yy = this.parseFloatAttr(controlPointNode, "yy");
+                const zz = this.parseFloatAttr(controlPointNode, "zz");
+                controlPoints.push({xx, yy, zz});
+            } else {
+                this.onXMLMinorError(`Invalid '${controlPointNode.nodeName}' controlpoint tag in patch with id '${id}'.`);
+            }
+        }
+
+        let numPoints = npointsU * npointsV;
+        if (controlPoints.length !== numPoints) {
+            throw `patch primitive with id '${id}' must have exactly ${numPoints} control points`;
+        }
+
         return {
             type: "patch",
+            controlPoints,
             npointsU,
             npointsV,
             npartsU,

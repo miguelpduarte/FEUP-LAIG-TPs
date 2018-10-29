@@ -1,5 +1,4 @@
 - cylinder2 não tem tampa
 - bloco animations é opcional : neste momento está obrigatório -> envolve trocar ordem de algumas cenas do component se lá não estiver
-- olhar para children da primitiva "patch"
 - primitives terrains ids n tao checked
 - primitives water ids n tao checked

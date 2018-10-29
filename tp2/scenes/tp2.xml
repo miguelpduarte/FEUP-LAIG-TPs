@@ -250,7 +250,14 @@
             <plane npartsU="6" npartsV="4" />
         </primitive>
         <primitive id="tp2p3">
-            <patch npointsU="3" npointsV="5" npartsU="6" npartsV="4" /> <!-- TODO: Olhar para children -->
+            <patch npointsU="2" npointsV="3" npartsU="6" npartsV="4">
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="0" zz="1" />
+                <controlpoint xx="0" yy="0" zz="2" />
+                <controlpoint xx="1" yy="0" zz="0" />
+                <controlpoint xx="1" yy="0" zz="1" />
+                <controlpoint xx="1" yy="0" zz="2" />
+            </patch>
         </primitive>
         <primitive id="tp2p4">
             <vehicle />
