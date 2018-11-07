@@ -15,6 +15,6 @@ class Animation {
 	}
 
 	isFinished() {
-		return this.current_time > this.span;
+		return this.current_time >= this.span;
 	}
 };

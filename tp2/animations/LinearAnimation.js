@@ -33,7 +33,7 @@ class LinearAnimation extends Animation {
 	update(delta_time) {
 		let remaining_time = super.update(delta_time);
 
-		if (this.current_time > this.span) {
+		if (this.isFinished()) {
 			this.translation = this.control_points[this.control_points.length - 1];
 			return remaining_time;
 		}
