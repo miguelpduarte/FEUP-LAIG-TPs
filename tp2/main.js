@@ -27,6 +27,10 @@ serialInclude([
     'PrimitiveFactory.js',
     'TransformationFactory.js',
     'Component.js',
+    'animations/Animation.js',
+    'animations/LinearAnimation.js',
+    'animations/CircularAnimation.js',
+    
 
     main=function() {
         // Standard application, scene and interface setup

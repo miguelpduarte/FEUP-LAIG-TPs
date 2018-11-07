@@ -9,8 +9,10 @@ class Component extends CGFobject {
         this.precomputeTransformationMatrix(component_model, transformation_factory);
         this.getMaterials(component_model);
         this.getTexture(component_model);
+        this.getAnimations(component_model);
 
         this.currentMaterialIndex = 0;
+        this.currentAnimationIndex = 0;
     };
     
     precomputeTransformationMatrix(component_model, transformation_factory) {
@@ -25,7 +27,7 @@ class Component extends CGFobject {
 
     getMaterials(component_model) {
         this.materials = [];
-        for(let materialId of component_model.materialIds) {
+        for(const materialId of component_model.materialIds) {
             if(materialId === "inherit") {
                 this.materials.push("inherit");
             } else {
@@ -39,6 +41,13 @@ class Component extends CGFobject {
             this.texture = component_model.texture.id;
         } else {
             this.texture = this.scene.textures.get(component_model.texture.id);
+        }
+    }
+
+    getAnimations(component_model) {
+        this.animations = [];
+        for (const animationId of component_model.animationIds) {
+            this.animations.push(this.scene.animations.get(animationId));
         }
     }
 
@@ -56,6 +65,16 @@ class Component extends CGFobject {
                 child.rotateMaterial();
             }
         }
+    }
+
+    updateAnimations(delta_time) {
+        let remaining_time;
+        do {
+            remaining_time = this.animations[this.currentAnimationIndex].update(delta_time);
+            if(remaining_time > 0 ) {
+                this.currentAnimationIndex = (this.currentAnimationIndex + 1) % this.animations.length;
+            }
+        } while(remaining_time > 0);
     }
 
 	display() {

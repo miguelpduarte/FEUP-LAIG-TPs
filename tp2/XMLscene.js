@@ -1,5 +1,6 @@
 const DEGREE_TO_RAD = Math.PI / 180;
 const MAX_LIGHTS = 8;
+const NUM_UPDATES_BY_SECOND = 100;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -40,6 +41,43 @@ class XMLscene extends CGFscene {
         this.axisIsActive = true;
 
         this.createDefaultMaterial();
+
+        this.setUpdatePeriod(1000 / NUM_UPDATES_BY_SECOND);
+    }
+
+    update(currTime) {
+        // First update
+        if (!this.time) {
+            this.time = currTime;
+            return;
+        }
+
+        // update animations
+		const delta_time = currTime - this.time;
+        this.time = currTime;
+        
+        
+        if (this.sceneInited) {
+            updateComponentAnimations(delta_time);
+        }
+        
+        /*
+		this.checkKeys(deltaTime);
+
+		if (this.isVehicleInCatchingBounds() && this.crane.animationState == 'notMoving' && this.droppedVehicles.length < this.CRANE_VEHICLE_CAPACITY) {
+			this.vehicle.activateHandbrake();
+			this.canMoveVehicle = false;
+			this.crane.startAnimation();
+			this.crane.setVehicle(this.vehicle);
+		}
+
+		this.crane.animate(deltaTime); */
+    }
+    
+    updateComponentAnimations(delta_time) {
+        for(const [id, component] of this.cgf_components) {
+            component.updateAnimations(delta_time);
+        }
     }
 
     createDefaultMaterial() {
@@ -162,6 +200,19 @@ class XMLscene extends CGFscene {
         }
     }
 
+    initAnimations() {
+        this.animations = new Map();
+        for (let [id, animation_model] of this.graph.animations) {
+            if(animation_model.type === "linear") {
+                const animation = new LinearAnimation(animation_model.controlPoints, animation_model.span);
+                this.animations.set(id, animation);
+            } else if (animation_model.type === "circular") {
+                const animation = new CircularAnimation(animation_model.center, animation_model.radius, animation_model.startang, animation_model.rotang, animation_model.span);
+                this.animations.set(id, animation);
+            }
+        }
+    }
+
     initMaterials() {
         this.materials = new Map();
         for (let [id, material] of this.graph.materials) {
@@ -223,9 +274,9 @@ class XMLscene extends CGFscene {
         this.initLights();
         this.initCameras();
         this.initTransformations();
+        this.initAnimations();
         this.initMaterials();
         this.initTextures();
-
         this.createSceneGraph();
 
         this.interface.createInterface();

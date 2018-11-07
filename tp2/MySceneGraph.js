@@ -486,7 +486,7 @@ class MySceneGraph {
         const materialProperties = materialNode.children;
 
         if (materialProperties.length !== 4) {
-            throw "material '" + id + "' invalid number of material propreties ";
+            throw "material '" + id + "' invalid number of material propreties";
         } else if (materialProperties[0].nodeName !== "emission") {
             throw this.missingNodeMessage("material", "emission");
         } else if (materialProperties[1].nodeName !== "ambient") {
@@ -656,18 +656,25 @@ class MySceneGraph {
         const radius = this.parseFloatAttr(animationNode, "radius");
         const startang = this.parseFloatAttr(animationNode, "startang");
         const rotang = this.parseFloatAttr(animationNode, "rotang");
-        const center = this.parseCircularAnimationCenter(this.reader.getString(animationNode, 'center'), id);
+        //const center = this.parseCircularAnimationCenter(this.reader.getString(animationNode, 'center'), id);
+        const center = this.parseCenter(animationNode, id);
 
         return {
             type: "circular",
             span,
             radius,
+            center,
             startang,
             rotang
         }
     }
 
-    parseCircularAnimationCenter(centerString, id) {
+    parseCenter(node, id) {
+        if(!this.reader.hasAttribute(node, "center")) {
+            throw `The circular animation with id '${id}' does not have a center defined`;
+        }
+
+        const centerString = this.reader.getString(node, "center");
         const values = centerString.split(' ');
 
         if (values.length !== 3 || 
@@ -676,6 +683,12 @@ class MySceneGraph {
             isNaN(values[2]) || values[2] === '' ) {
             throw `animation '${id}': a circular animation center must have 3 spacial coordinates, in the format 'xx yy zz'`;
         }
+
+        return {
+            xx: parseFloat(values[0]),
+            yy: parseFloat(values[1]),
+            zz: parseFloat(values[2])
+        };
     }
 
     parsePrimitives(primitivesNode) {
