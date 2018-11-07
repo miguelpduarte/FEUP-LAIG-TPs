@@ -124,9 +124,52 @@
     </transformations>
     <animations>
         <circular id="circ_anim" span="10" center="2 3 4" radius="3.4" startang="45" rotang="20" />
-        <linear id="lin_anim" span="5">
+        <linear id="lin_anim1" span="5">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="2" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="2" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="2" yy="2" zz="2" />
+            <controlpoint xx="-5" yy="1" zz="0" />
+            <controlpoint xx="0" yy="2" zz="-4" />
+            <controlpoint xx="0" yy="0" zz="0" />
+        </linear>
+        <linear id="lin_anim2" span="8">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="2" />
+            <controlpoint xx="1.41" yy="0.25" zz="1.41" />
+            <controlpoint xx="2" yy="0.5" zz="0" />
+            <controlpoint xx="1.41" yy="0.75" zz="-1.41" />
+            <controlpoint xx="0" yy="1" zz="-2" />
+            <controlpoint xx="-1.41" yy="1.25" zz="-1.41" />
+            <controlpoint xx="-2" yy="1.5" zz="0" />
+            <controlpoint xx="-1.41" yy="1.75" zz="1.41" />
+            <controlpoint xx="0" yy="2" zz="2" />
+            <controlpoint xx="1.41" yy="2.25" zz="1.41" />
+            <controlpoint xx="2" yy="2.5" zz="0" />
+            <controlpoint xx="1.41" yy="2.75" zz="-1.41" />
+            <controlpoint xx="0" yy="3" zz="-2" />
+            <controlpoint xx="-1.41" yy="3.25" zz="-1.41" />
+            <controlpoint xx="-2" yy="3.5" zz="0" />
+            <controlpoint xx="-1.41" yy="3.75" zz="1.41" />
+            <controlpoint xx="0" yy="4" zz="2" />
+            <controlpoint xx="1.41" yy="3.75" zz="1.41" />
+            <controlpoint xx="2" yy="3.5" zz="0" />
+            <controlpoint xx="1.41" yy="3.25" zz="-1.41" />
+            <controlpoint xx="0" yy="3" zz="-2" />
+            <controlpoint xx="-1.41" yy="2.75" zz="-1.41" />
+            <controlpoint xx="-2" yy="2.5" zz="0" />
+            <controlpoint xx="-1.41" yy="2.25" zz="1.41" />
+            <controlpoint xx="0" yy="2" zz="2" />
+            <controlpoint xx="1.41" yy="1.75" zz="1.41" />
+            <controlpoint xx="2" yy="1.5" zz="0" />
+            <controlpoint xx="1.41" yy="1.25" zz="-1.41" />
+            <controlpoint xx="0" yy="1" zz="-2" />
+            <controlpoint xx="-1.41" yy="0.75" zz="-1.41" />
+            <controlpoint xx="-2" yy="0.5" zz="0" />
+            <controlpoint xx="-1.41" yy="0.25" zz="1.41" />
+            <controlpoint xx="0" yy="0" zz="2" />
+            <controlpoint xx="0" yy="0" zz="0" />
         </linear>
     </animations>
     <primitives>
@@ -151,7 +194,8 @@
             <transformation>
             </transformation>
             <animations>
-                <animationref id="lin_anim" />
+                <animationref id="lin_anim1" />
+                <animationref id="lin_anim2" />
             </animations>
             <materials>
                 <material id="mat_orange" />

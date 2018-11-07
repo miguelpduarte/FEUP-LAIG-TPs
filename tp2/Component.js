@@ -47,8 +47,16 @@ class Component extends CGFobject {
     getAnimations(component_model) {
         this.animations = [];
         for (const animationId of component_model.animationIds) {
-            this.animations.push(this.scene.animations.get(animationId));
-        }
+            let animation_model = this.scene.graph.animations.get(animationId);
+
+            if(animation_model.type === "linear") {
+                const animation = new LinearAnimation(animation_model.controlPoints, animation_model.span);
+                this.animations.push(animation);
+            } else if (animation_model.type === "circular") {
+                const animation = new CircularAnimation(animation_model.center, animation_model.radius, animation_model.startang, animation_model.rotang, animation_model.span);
+                this.animations.push(animation);
+            }
+        }       
     }
 
     setChildren(children_arr) {
@@ -68,11 +76,19 @@ class Component extends CGFobject {
     }
 
     updateAnimations(delta_time) {
+        if (this.animations.length === 0) {
+            return;
+        }
+
         let remaining_time;
         do {
             remaining_time = this.animations[this.currentAnimationIndex].update(delta_time);
             if(remaining_time > 0 ) {
-                this.currentAnimationIndex = (this.currentAnimationIndex + 1) % this.animations.length;
+                this.animations.shift();
+
+                if (this.animations.length === 0) {
+                    return;
+                }
             }
         } while(remaining_time > 0);
     }
@@ -80,6 +96,7 @@ class Component extends CGFobject {
 	display() {
         this.scene.pushMatrix();
         this.applyTransformations();
+        this.applyAnimation();
         this.pushMaterials();
         this.pushTextures();
         this.applyAppearance();
@@ -106,6 +123,12 @@ class Component extends CGFobject {
     applyTransformations() {
         //Apply precomputed transformations to the scene using this.scene.multMatrix
         this.scene.multMatrix(this.transformation_matrix);
+    }
+
+    applyAnimation() {
+        if (this.animations.length > 0) {
+            this.animations[this.currentAnimationIndex].apply(this.scene);
+        }
     }
 
     applyAppearance() {

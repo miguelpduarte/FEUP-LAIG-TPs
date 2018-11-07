@@ -1,6 +1,6 @@
 const DEGREE_TO_RAD = Math.PI / 180;
 const MAX_LIGHTS = 8;
-const NUM_UPDATES_BY_SECOND = 100;
+const NUM_UPDATES_BY_SECOND = 50;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -58,7 +58,7 @@ class XMLscene extends CGFscene {
         
         
         if (this.sceneInited) {
-            updateComponentAnimations(delta_time);
+            this.updateComponentAnimations(delta_time);
         }
         
         /*
@@ -200,7 +200,7 @@ class XMLscene extends CGFscene {
         }
     }
 
-    initAnimations() {
+    /* initAnimations() {
         this.animations = new Map();
         for (let [id, animation_model] of this.graph.animations) {
             if(animation_model.type === "linear") {
@@ -211,7 +211,7 @@ class XMLscene extends CGFscene {
                 this.animations.set(id, animation);
             }
         }
-    }
+    } */
 
     initMaterials() {
         this.materials = new Map();
@@ -274,7 +274,7 @@ class XMLscene extends CGFscene {
         this.initLights();
         this.initCameras();
         this.initTransformations();
-        this.initAnimations();
+        //this.initAnimations();
         this.initMaterials();
         this.initTextures();
         this.createSceneGraph();
