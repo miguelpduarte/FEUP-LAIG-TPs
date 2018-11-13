@@ -153,6 +153,9 @@
         <primtive id="my_cyl">
             <cylinder base="0.4" top="0.1" height="0.8" slices="10" stacks="6" />
         </primtive>
+        <primitive id="my_plane">
+            <plane npartsU="7" npartsV="4" />
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
@@ -171,6 +174,21 @@
             <transformation>
             </transformation>
             <animations>
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
                 <animationref id="lin_anim2" />
                 <animationref id="circ_anim1" />
                 <animationref id="lin_anim3" />

@@ -1,6 +1,6 @@
 const DEGREE_TO_RAD = Math.PI / 180;
 const MAX_LIGHTS = 8;
-const NUM_UPDATES_BY_SECOND = 50;
+const UPDATE_RATE = 50; // times/s
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -42,7 +42,7 @@ class XMLscene extends CGFscene {
 
         this.createDefaultMaterial();
 
-        this.setUpdatePeriod(1000 / NUM_UPDATES_BY_SECOND);
+        this.setUpdatePeriod(1000 / UPDATE_RATE);
     }
 
     update(currTime) {

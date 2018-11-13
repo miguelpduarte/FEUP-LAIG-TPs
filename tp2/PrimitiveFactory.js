@@ -5,8 +5,14 @@ class PrimitiveFactory {
             "rectangle": this.createRectangle,
             "triangle": this.createTriangle,
             "cylinder": this.createCylinder,
+            "cylinder2": this.createCylinder2,
             "sphere": this.createSphere,
-            "torus": this.createTorus
+            "torus": this.createTorus,
+            "plane": this.createPlane,
+            "patch": this.createPatch,
+            "vehicle": this.createVehicle,
+            "terrain": this.createTerrain,
+            "water": this.createWater
         };
 
         //Binding this
@@ -53,6 +59,10 @@ class PrimitiveFactory {
         );
     }
 
+    createCylinder2(cylinder2_model) {
+        console.log(cylinder2_model);
+    }
+
     createTorus(torus_model) {
         return new Torus(this.scene, 
             torus_model.inner, 
@@ -60,5 +70,25 @@ class PrimitiveFactory {
             torus_model.slices, 
             torus_model.loops
         );
+    }
+
+    createPlane(plane_model) {
+        console.log(plane_model);
+    }
+
+    createPatch(patch_model) {
+        console.log(patch_model);
+    }
+
+    createVehicle(vehicle_model) {
+        console.log(vehicle_model);
+    }
+
+    createTerrain(terrain_model) {
+        console.log(terrain_model);
+    }
+
+    createWater(water_model) {
+        console.log(water_model);
     }
 };
