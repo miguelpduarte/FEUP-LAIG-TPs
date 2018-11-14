@@ -156,13 +156,29 @@
         <primitive id="my_plane">
             <plane npartsU="7" npartsV="4" />
         </primitive>
-        <primitive id="my_patch">
-            <patch npointsU="3" npointsV="2" npartsU="6" npartsV="4">
+        <primitive id="my_patch1">
+            <patch npointsU="3" npointsV="2" npartsU="20" npartsV="20">
                 <controlpoint xx="-1.5" yy="-1.5" zz="0" />
                 <controlpoint xx="-1.5" yy="1.5" zz="0" />
                 <controlpoint xx="0" yy="-1.5" zz="3" />
                 <controlpoint xx="0" yy="1.5" zz="3" />
                 <controlpoint xx="1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="1.5" yy="1.5" zz="0" />
+            </patch>
+        </primitive>
+        <primitive id="my_patch2">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
+                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="-2.0" yy="-2.0" zz="2.0" />
+                <controlpoint xx="-2.0" yy="2.0" zz="2.0" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0" />
+                <controlpoint xx="0" yy="0" zz="3.0" />
+                <controlpoint xx="0" yy="-2.0" zz="3.0" />
+                <controlpoint xx="0" yy="2.0" zz="3.0" />
+                <controlpoint xx="0" yy="0" zz="3.0" />
+                <controlpoint xx="1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="2.0" yy="-2.0" zz="2.0" />
+                <controlpoint xx="2.0" yy="2.0" zz="2.0" />
                 <controlpoint xx="1.5" yy="1.5" zz="0" />
             </patch>
         </primitive>
@@ -178,7 +194,8 @@
             <texture id="none" />
             <children>
                 <componentref id="test_cyl" />
-                <componentref id="test_plane" />
+                <componentref id="test_patch1" />
+                <componentref id="test_patch2" />
             </children>
         </component>
         <component id="test_cyl">
@@ -215,9 +232,9 @@
                 <primitiveref id="my_cyl" />
             </children>
         </component>
-        <component id="test_plane">
+        <component id="test_patch1">
             <transformation>
-                <scale x="10" z="10" y="1" />
+                <translate x="-5" y="0" z="0" />
             </transformation>
             <animations>
             </animations>
@@ -226,7 +243,20 @@
             </materials>
             <texture id="tex_wood" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="my_plane" />
+                <primitiveref id="my_patch1" />
+            </children>
+        </component>
+        <component id="test_patch2">
+            <transformation>
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="my_patch2" />
             </children>
         </component>
 

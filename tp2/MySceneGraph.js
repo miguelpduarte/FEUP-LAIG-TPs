@@ -735,11 +735,7 @@ class MySceneGraph {
         } else if (primitiveChild.nodeName === "plane") {
             primitive = this.createPlane(primitiveChild, id);
         } else if (primitiveChild.nodeName === "patch") {
-            // TODO
             primitive = this.createPatch(primitiveChild, id);
-            console.log("patch");
-            console.log(primitive);
-            return;
         } else if (primitiveChild.nodeName === "vehicle") {
             // TODO
             primitive = this.createVehicle();

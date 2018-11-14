@@ -61,7 +61,6 @@ class PrimitiveFactory {
     }
 
     createCylinder2(cylinder2_model) {
-        console.log("HEREEE");
         return new Cylinder2(this.scene, cylinder2_model, this.createNurbsObject);
     }
 

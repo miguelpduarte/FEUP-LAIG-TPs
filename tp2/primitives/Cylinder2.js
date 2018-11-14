@@ -13,8 +13,8 @@ class Cylinder2 extends PrimitiveObject {
 		const control_vertexes_upper = 
 		[	// U0
             [				 
-                [ base, 0.0, 0.0, 1.0 ],   // V0
-                [ top, 0.0, height, 1.0 ]    // V1
+                [ base, 0.0, 0.0, 1.0 ],        // V0
+                [ top, 0.0, height, 1.0 ]       // V1
                 
             ],
             // U1
@@ -25,36 +25,36 @@ class Cylinder2 extends PrimitiveObject {
             // U2
             [			
                 [-base, 4/3*base, 0.0, 1.0 ],   // V0
-				[-top, 4/3*top, height, 1.0 ]    // V1
+				[-top, 4/3*top, height, 1.0 ]   // V1
             ],
             // U3
             [			
-                [-base, 0.0, 0.0, 1.0 ],   // V0
-                [-top, 0.0, height, 1.0 ]    // V1
+                [-base, 0.0, 0.0, 1.0 ],        // V0
+                [-top, 0.0, height, 1.0 ]       // V1
             ]
 		];
 		
 		const control_vertexes_lower = 
 		[	// U0
             [				 
-                [-base, 0.0, 0.0, 1.0 ],   // V0
-                [-top, 0.0, height, 1.0 ]    // V1
+                [-base, 0.0, 0.0, 1.0 ],        // V0
+                [-top, 0.0, height, 1.0 ]       // V1
                 
             ],
             // U1
             [
-                [-base, -4/3*base, 0.0, 1.0 ],   // V0
-                [-top, -4/3*top, height, 1.0 ]	// V1					 
+                [-base, -4/3*base, 0.0, 1.0 ],  // V0
+                [-top, -4/3*top, height, 1.0 ]  // V1					 
             ],
             // U2
             [			
-                [ base, -4/3*base, 0.0, 1.0 ],   // V0
-				[ top, -4/3*top, height, 1.0 ]    // V1
+                [ base, -4/3*base, 0.0, 1.0 ],  // V0
+				[ top, -4/3*top, height, 1.0 ]  // V1
             ],
             // U3
             [			
-                [ base, 0.0, 0.0, 1.0 ],   // V0
-                [ top, 0.0, height, 1.0 ]    // V1
+                [ base, 0.0, 0.0, 1.0 ],        // V0
+                [ top, 0.0, height, 1.0 ]       // V1
             ]
 		];
         
