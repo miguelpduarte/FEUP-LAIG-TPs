@@ -79,7 +79,7 @@ class PrimitiveFactory {
     }
 
     createPatch(patch_model) {
-        console.log(patch_model);
+        return new Patch(this.scene, patch_model, this.createNurbsObject);
     }
 
     createVehicle(vehicle_model) {

@@ -156,6 +156,16 @@
         <primitive id="my_plane">
             <plane npartsU="7" npartsV="4" />
         </primitive>
+        <primitive id="my_patch">
+            <patch npointsU="3" npointsV="2" npartsU="6" npartsV="4">
+                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0" />
+                <controlpoint xx="0" yy="-1.5" zz="3" />
+                <controlpoint xx="0" yy="1.5" zz="3" />
+                <controlpoint xx="1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="1.5" yy="1.5" zz="0" />
+            </patch>
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
