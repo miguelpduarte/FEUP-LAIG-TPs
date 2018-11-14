@@ -19,6 +19,7 @@ class PrimitiveFactory {
         Object.keys(this.PRIMITIVE_CREATION_FUNCS)
             .forEach(key => this.PRIMITIVE_CREATION_FUNCS[key] = this.PRIMITIVE_CREATION_FUNCS[key].bind(this));
 
+        this.createNurbsObject = this.createNurbsObject.bind(this);
         this.scene = scene;
     }
 
@@ -60,7 +61,8 @@ class PrimitiveFactory {
     }
 
     createCylinder2(cylinder2_model) {
-        console.log(cylinder2_model);
+        console.log("HEREEE");
+        return new Cylinder2(this.scene, cylinder2_model, this.createNurbsObject);
     }
 
     createTorus(torus_model) {
@@ -73,7 +75,7 @@ class PrimitiveFactory {
     }
 
     createPlane(plane_model) {
-        console.log(plane_model);
+        return new Plane(this.scene, plane_model, this.createNurbsObject);
     }
 
     createPatch(patch_model) {
@@ -90,5 +92,11 @@ class PrimitiveFactory {
 
     createWater(water_model) {
         console.log(water_model);
+    }
+
+    createNurbsObject(degree_u, degree_v, control_vertexes, divs_u, divs_v) {
+        let nurbs_surface = new CGFnurbsSurface(degree_u, degree_v, control_vertexes);
+
+        return new CGFnurbsObject(this.scene, divs_u, divs_v, nurbs_surface);
     }
 };

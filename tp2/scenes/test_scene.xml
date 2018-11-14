@@ -151,7 +151,7 @@
     </animations>
     <primitives>
         <primtive id="my_cyl">
-            <cylinder base="0.4" top="0.1" height="0.8" slices="10" stacks="6" />
+            <cylinder2 base="0.4" top="0.1" height="0.8" slices="40" stacks="10" />
         </primtive>
         <primitive id="my_plane">
             <plane npartsU="7" npartsV="4" />
@@ -168,10 +168,12 @@
             <texture id="none" />
             <children>
                 <componentref id="test_cyl" />
+                <componentref id="test_plane" />
             </children>
         </component>
         <component id="test_cyl">
             <transformation>
+                <translate x="0" y="1" z="0" />
             </transformation>
             <animations>
                 <animationref id="lin_anim2" />
@@ -201,6 +203,20 @@
             <texture id="tex_donut" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="my_cyl" />
+            </children>
+        </component>
+        <component id="test_plane">
+            <transformation>
+                <scale x="10" z="10" y="1" />
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="my_plane" />
             </children>
         </component>
 

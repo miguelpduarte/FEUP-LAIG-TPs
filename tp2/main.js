@@ -30,6 +30,8 @@ serialInclude([
     'animations/Animation.js',
     'animations/LinearAnimation.js',
     'animations/CircularAnimation.js',
+    'primitives/Plane.js',
+    'primitives/Cylinder2.js',
     
 
     main=function() {

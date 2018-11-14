@@ -726,22 +726,14 @@ class MySceneGraph {
         } else if (primitiveChild.nodeName === "cylinder") {
             primitive = this.createCylinder(primitiveChild, id);
         } else if (primitiveChild.nodeName === "cylinder2") {
-            // TODO
             primitive = this.createCylinder(primitiveChild, id);
             primitive.type = "cylinder2";
-            console.log("cylinder2");
-            console.log(primitive);
-            return;
         } else if (primitiveChild.nodeName === "sphere") {
             primitive = this.createSphere(primitiveChild, id);
         } else if (primitiveChild.nodeName === "torus") {
             primitive = this.createTorus(primitiveChild, id);
         } else if (primitiveChild.nodeName === "plane") {
-            // TODO
             primitive = this.createPlane(primitiveChild, id);
-            console.log("plane");
-            console.log(primitive);
-            return;
         } else if (primitiveChild.nodeName === "patch") {
             // TODO
             primitive = this.createPatch(primitiveChild, id);
