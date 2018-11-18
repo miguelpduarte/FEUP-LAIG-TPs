@@ -153,6 +153,12 @@
         <primtive id="my_cyl">
             <cylinder2 base="0.4" top="0.1" height="0.8" slices="40" stacks="10" />
         </primtive>
+        <primtive id="my_cyl2">
+            <cylinder2 base="1" top="1" height="2" slices="200" stacks="200" />
+        </primtive>
+        <primtive id="my_cyl3">
+            <cylinder base="1" top="1" height="2" slices="10" stacks="10" />
+        </primtive>
         <primitive id="my_plane">
             <plane npartsU="7" npartsV="4" />
         </primitive>
@@ -193,9 +199,11 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="test_cyl" />
+                <componentref id="test_cyl2" />
+                <componentref id="test_cyl3" />
+                <!-- <componentref id="test_cyl" />
                 <componentref id="test_patch1" />
-                <componentref id="test_patch2" />
+                <componentref id="test_patch2" /> -->
             </children>
         </component>
         <component id="test_cyl">
@@ -257,6 +265,33 @@
             <texture id="tex_wood" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="my_patch2" />
+            </children>
+        </component>
+        <component id="test_cyl2">
+            <transformation>
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_donut" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="my_cyl2" />
+            </children>
+        </component>
+        <component id="test_cyl3">
+            <transformation>
+                <translate x="0" y="0" z="2" />
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_donut" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="my_cyl3" />
             </children>
         </component>
 
