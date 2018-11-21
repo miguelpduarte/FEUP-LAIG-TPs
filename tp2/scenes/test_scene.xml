@@ -150,6 +150,9 @@
 
     </animations>
     <primitives>
+        <primitive id="rectt">
+            <rectangle x1="0" y1="0" x2="1" y2="1" />
+        </primitive>
         <primtive id="my_cyl">
             <cylinder2 base="0.4" top="0.1" height="0.8" slices="40" stacks="10" />
         </primtive>
@@ -230,6 +233,7 @@
             <texture id="tex_donut" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="my_cyl" />
+                <componentref id="recttt" />
             </children>
         </component>
         <component id="test_patch1">
@@ -259,6 +263,19 @@
                 <primitiveref id="my_patch2" />
             </children>
         </component>
-
+        <component id="recttt">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="0" />
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="rectt" />
+            </children>
+        </component>
     </components>
 </yas>

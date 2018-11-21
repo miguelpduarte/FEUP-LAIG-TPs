@@ -306,11 +306,11 @@ class XMLscene extends CGFscene {
         for(let [id, component] of this.cgf_components) {
             let child_arr = [];
             const component_model = this.graph.components.get(id);
-            for(let child_component_id of component_model.children.componentIds) {
-                child_arr.push(this.cgf_components.get(child_component_id));
-            }
             for(let child_primitive_id of component_model.children.primitiveIds) {
                 child_arr.push(this.cgf_primitives.get(child_primitive_id));
+            }
+            for(let child_component_id of component_model.children.componentIds) {
+                child_arr.push(this.cgf_components.get(child_component_id));
             }
             component.setChildren(child_arr);
         }
