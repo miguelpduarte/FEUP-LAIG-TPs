@@ -16,6 +16,8 @@ class XMLscene extends CGFscene {
         this.interface = myinterface;
         this.lightValues = {};
         this.transformation_factory = new TransformationFactory();
+        //Creates a primitive factory for this scene
+        this.primitive_factory = new PrimitiveFactory(this);
     }
 
     /**
@@ -43,6 +45,8 @@ class XMLscene extends CGFscene {
         this.createDefaultMaterial();
 
         this.setUpdatePeriod(1000 / UPDATE_RATE);
+
+        this.terrain = this.primitive_factory.createTerrain(18, 7, 199, 109);
     }
 
     update(currTime) {
@@ -200,19 +204,6 @@ class XMLscene extends CGFscene {
         }
     }
 
-    /* initAnimations() {
-        this.animations = new Map();
-        for (let [id, animation_model] of this.graph.animations) {
-            if(animation_model.type === "linear") {
-                const animation = new LinearAnimation(animation_model.controlPoints, animation_model.span);
-                this.animations.set(id, animation);
-            } else if (animation_model.type === "circular") {
-                const animation = new CircularAnimation(animation_model.center, animation_model.radius, animation_model.startang, animation_model.rotang, animation_model.span);
-                this.animations.set(id, animation);
-            }
-        }
-    } */
-
     initMaterials() {
         this.materials = new Map();
         for (let [id, material] of this.graph.materials) {
@@ -287,8 +278,8 @@ class XMLscene extends CGFscene {
     createSceneGraph() {
         this.cgf_components = new Map();
         this.cgf_primitives = new Map();
-        //Creates a primitive factory for this scene
-        const primitive_factory = new PrimitiveFactory(this);
+
+        const primitive_factory = this.primitive_factory;
 
         //Create primitives
         for(let [id, primitive_model] of this.graph.primitives) {
@@ -350,14 +341,9 @@ class XMLscene extends CGFscene {
         this.axisIsActive && this.axis.display();
 
         if (this.sceneInited) {
+            this.terrain.display();
             
             this.rootComponent.display();
-
-            // TODO
-            // Object.values(this.textures)[0].apply();
-            // for (let item of Object.values(this.primitives)) {
-            //     item.display();
-            // } 
         }
 
         this.popMatrix();

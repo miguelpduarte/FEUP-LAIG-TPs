@@ -86,7 +86,7 @@ class PrimitiveFactory {
     }
 
     createTerrain(terrain_model) {
-        console.log(terrain_model);
+        return new Terrain(this.scene, size, height, divs_u, divs_v, this.createNurbsObject);
     }
 
     createWater(water_model) {

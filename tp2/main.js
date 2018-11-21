@@ -33,6 +33,7 @@ serialInclude([
     'primitives/Plane.js',
     'primitives/Cylinder2.js',
     'primitives/Patch.js',
+    'primitives/Terrain.js',
     
 
     main=function() {

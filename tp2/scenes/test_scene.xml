@@ -197,8 +197,8 @@
             <texture id="none" />
             <children>
                 <componentref id="test_cyl" />
-                <componentref id="test_patch1" />
-                <componentref id="test_patch2" />
+                <!-- <componentref id="test_patch1" /> -->
+                <!-- <componentref id="test_patch2" /> -->
             </children>
         </component>
         <component id="test_cyl">
