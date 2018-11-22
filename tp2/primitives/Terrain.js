@@ -3,16 +3,28 @@
  * @constructor
  */
 class Terrain extends PrimitiveObject {
-	constructor(scene, heightScale, divs, createNurbsObject) {
-        super(scene);
+	constructor(scene, terrain_model, createNurbsObject) {
+		super(scene);
+		
+		const {
+			heightscale, idheightmap, idtexture, parts
+		} = terrain_model;
+
+		console.log(terrain_model);
+		console.log(heightscale);
+		console.log(idheightmap);
+		console.log(idtexture);
+		console.log(parts);
         
-        this.shader = new CGFshader(this.scene.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+		this.shader = new CGFshader(this.scene.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+		
         // Will be bound to 0
-        this.height_map = new CGFtexture(this.scene, "shaders/heightmap_128.jpg");
+		this.height_map = this.scene.textures.get(idheightmap);
+		
         // Will be bound to 1
-        this.terrain_tex = new CGFtexture(this.scene, "shaders/terrain.jpg");
+		this.terrain_tex = this.scene.textures.get(idtexture);
         
-        this.shader.setUniformsValues({heightSampler: 0, terrainSampler: 1, heightScale: heightScale});
+        this.shader.setUniformsValues({heightSampler: 0, terrainSampler: 1, height: heightscale});
 
 		const control_vertexes = 
 		[	// U0
@@ -28,7 +40,7 @@ class Terrain extends PrimitiveObject {
 			]
 		];
 
-		this.nurbs_object = createNurbsObject(1, 1, control_vertexes, divs, divs);
+		this.nurbs_object = createNurbsObject(1, 1, control_vertexes, parts, parts);
 	};
 
 	display() {

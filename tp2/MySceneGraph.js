@@ -743,11 +743,8 @@ class MySceneGraph {
             console.log(primitive);
             return;
         } else if (primitiveChild.nodeName === "terrain") {
-            // TODO
+            console.log("HERE");
             primitive = this.createTerrain(primitiveChild, id);
-            console.log("terrain");
-            console.log(primitive);
-            return;
         } else if (primitiveChild.nodeName === "water") {
             // TODO
             primitive = this.createWater(primitiveChild, id);
@@ -949,6 +946,9 @@ class MySceneGraph {
         const idheightmap = this.parseStringAttr(primitiveNode, "idheightmap"); // TODO
         const parts = this.parseIntAttr(primitiveNode, "parts");
         const heightscale = this.parseFloatAttr(primitiveNode, "heightscale");
+
+        this.verifyInheritableId("texture", idtexture, this.textures);
+        this.verifyInheritableId("texture", idheightmap, this.textures);
 
         if (parts < 1) {
             throw `terrain primitive with id '${id}' must have 'parts' greater or equal to 1`;

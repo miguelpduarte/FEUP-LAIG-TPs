@@ -45,8 +45,6 @@ class XMLscene extends CGFscene {
         this.createDefaultMaterial();
 
         this.setUpdatePeriod(1000 / UPDATE_RATE);
-
-        this.terrain = this.primitive_factory.createTerrain(18, 7, 199, 109);
     }
 
     update(currTime) {
@@ -64,18 +62,6 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             this.updateComponentAnimations(delta_time);
         }
-        
-        /*
-		this.checkKeys(deltaTime);
-
-		if (this.isVehicleInCatchingBounds() && this.crane.animationState == 'notMoving' && this.droppedVehicles.length < this.CRANE_VEHICLE_CAPACITY) {
-			this.vehicle.activateHandbrake();
-			this.canMoveVehicle = false;
-			this.crane.startAnimation();
-			this.crane.setVehicle(this.vehicle);
-		}
-
-		this.crane.animate(deltaTime); */
     }
     
     updateComponentAnimations(delta_time) {
@@ -340,9 +326,7 @@ class XMLscene extends CGFscene {
         
         this.axisIsActive && this.axis.display();
 
-        if (this.sceneInited) {
-            this.terrain.display();
-            
+        if (this.sceneInited) {            
             this.rootComponent.display();
         }
 

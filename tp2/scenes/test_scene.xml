@@ -34,6 +34,8 @@
         <texture id="tex_donut" file="scenes/images/donut.png" />
         <texture id="tex_floor" file="scenes/images/floor.png" />
         <texture id="tex_homer" file="scenes/images/homer.png" />
+        <texture id="tex_terrain_heightmap" file="shaders/terrain_heightmap.jpg" />
+        <texture id="tex_terrain" file="shaders/terrain.jpg" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -185,6 +187,9 @@
                 <controlpoint xx="1.5" yy="1.5" zz="0" />
             </patch>
         </primitive>
+        <primitive id="my_terrain">
+            <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="30" heightscale="0.3" />
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
@@ -196,6 +201,7 @@
             </materials>
             <texture id="none" />
             <children>
+                <componentref id="my_terrain" />
                 <componentref id="test_cyl" />
                 <!-- <componentref id="test_patch1" /> -->
                 <!-- <componentref id="test_patch2" /> -->
@@ -275,6 +281,21 @@
             <texture id="tex_wood" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="rectt" />
+            </children>
+        </component>
+        <component id="my_terrain">
+            <transformation>
+                <scale x="10" y="10" z="10" />
+                <translate x="0.5" y="0" z="0.5" />
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="my_terrain" />
             </children>
         </component>
     </components>
