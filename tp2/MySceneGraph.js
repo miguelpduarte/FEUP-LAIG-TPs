@@ -741,11 +741,7 @@ class MySceneGraph {
         } else if (primitiveChild.nodeName === "terrain") {
             primitive = this.createTerrain(primitiveChild, id);
         } else if (primitiveChild.nodeName === "water") {
-            // TODO
             primitive = this.createWater(primitiveChild, id);
-            console.log("water");
-            console.log(primitive);
-            return;
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
@@ -959,8 +955,8 @@ class MySceneGraph {
     }
 
     createWater(primitiveNode, id) {
-        const idtexture = this.parseStringAttr(primitiveNode, "idtexture"); // TODO
-        const idwavemap = this.parseStringAttr(primitiveNode, "idwavemap"); // TODO
+        const idtexture = this.parseStringAttr(primitiveNode, "idtexture");
+        const idwavemap = this.parseStringAttr(primitiveNode, "idwavemap");
         const parts = this.parseIntAttr(primitiveNode, "parts");
         const heightscale = this.parseFloatAttr(primitiveNode, "heightscale");
         const texscale = this.parseFloatAttr(primitiveNode, "texscale");

@@ -35,6 +35,7 @@ serialInclude([
     'primitives/Patch.js',
     'primitives/Terrain.js',
     'primitives/Vehicle.js',
+    'primitives/Water.js',
     
 
     main=function() {

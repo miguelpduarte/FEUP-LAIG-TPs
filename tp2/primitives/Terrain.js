@@ -9,12 +9,6 @@ class Terrain extends PrimitiveObject {
 		const {
 			heightscale, idheightmap, idtexture, parts
 		} = terrain_model;
-
-		console.log(terrain_model);
-		console.log(heightscale);
-		console.log(idheightmap);
-		console.log(idtexture);
-		console.log(parts);
         
 		this.shader = new CGFshader(this.scene.gl, "shaders/terrain.vert", "shaders/terrain.frag");
 		
@@ -24,7 +18,7 @@ class Terrain extends PrimitiveObject {
         // Will be bound to 1
 		this.terrain_tex = this.scene.textures.get(idtexture);
         
-        this.shader.setUniformsValues({heightSampler: 0, terrainSampler: 1, height: heightscale});
+        this.shader.setUniformsValues({heightSampler: 0, terrainSampler: 1, heightscale: heightscale});
 
 		const control_vertexes = 
 		[	// U0

@@ -90,7 +90,7 @@ class PrimitiveFactory {
     }
 
     createWater(water_model) {
-        console.log(water_model);
+        return new Water(this.scene, water_model, this.createNurbsObject);
     }
 
     createNurbsObject(degree_u, degree_v, control_vertexes, divs_u, divs_v) {

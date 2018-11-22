@@ -7,11 +7,11 @@ uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
 
 varying vec2 vTextureCoord;
-uniform sampler2D heightSampler;
+uniform sampler2D waveSampler;
 uniform float heightscale;
 
 void main() {
-    vec4 color = texture2D(heightSampler, aTextureCoord);
+    vec4 color = texture2D(waveSampler, aTextureCoord);
 
     // Assuming the height map is greyscale
     // Any single color channel could be used
