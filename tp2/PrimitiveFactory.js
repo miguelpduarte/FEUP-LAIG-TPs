@@ -81,8 +81,8 @@ class PrimitiveFactory {
         return new Patch(this.scene, patch_model, this.createNurbsObject);
     }
 
-    createVehicle(vehicle_model) {
-        console.log(vehicle_model);
+    createVehicle() {
+        return new Vehicle(this.scene, this.createNurbsObject);
     }
 
     createTerrain(terrain_model) {
