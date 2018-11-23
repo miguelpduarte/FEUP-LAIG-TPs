@@ -127,6 +127,7 @@
     <animations>
         <circular id="circ_anim1" span="4" center="2.5 2 3" radius="2.5" startang="180" rotang="360" />
         <circular id="circ_anim2" span="1" center="0 2 6" radius="0" startang="0" rotang="-180" />
+        <circular id="circ_anim3" span="1" center="0 0 0" radius="0" startang="180" rotang="-180" />
         <linear id="lin_anim1" span="5">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="2" yy="0" zz="0" />
@@ -190,6 +191,9 @@
         <primitive id="my_terrain">
             <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="30" heightscale="0.3" />
         </primitive>
+        <primitive id="my_vehicle">
+            <vehicle />
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
@@ -201,8 +205,9 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="my_terrain" />
-                <componentref id="test_cyl" />
+                <!-- <componentref id="my_terrain" /> -->
+                <!-- <componentref id="test_cyl" /> -->
+                <componentref id="my_vehicle" />
                 <!-- <componentref id="test_patch1" /> -->
                 <!-- <componentref id="test_patch2" /> -->
             </children>
@@ -217,16 +222,19 @@
                 <animationref id="lin_anim3" />
                 <animationref id="circ_anim2" />
                 <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
                 <animationref id="lin_anim2" />
                 <animationref id="circ_anim1" />
                 <animationref id="lin_anim3" />
                 <animationref id="circ_anim2" />
                 <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
                 <animationref id="lin_anim2" />
                 <animationref id="circ_anim1" />
                 <animationref id="lin_anim3" />
                 <animationref id="circ_anim2" />
                 <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
                 <animationref id="lin_anim2" />
                 <animationref id="circ_anim1" />
                 <animationref id="lin_anim3" />
@@ -296,6 +304,42 @@
             <texture id="tex_wood" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="my_terrain" />
+            </children>
+        </component>
+        <component id="my_vehicle">
+            <transformation>
+            </transformation>
+            <animations>
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+            </animations>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="my_vehicle" />
             </children>
         </component>
     </components>
