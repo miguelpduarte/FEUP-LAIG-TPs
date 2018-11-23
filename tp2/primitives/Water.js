@@ -1,5 +1,5 @@
 const SPEED_FACTOR_SCALE = 1e-6;
-const SPEED_FACTOR_INITIAL = 15;
+const SPEED_FACTOR_INITIAL = 5;
 // Mainly defines for the Interface to constrain input
 const SPEED_FACTOR_MIN = 0;
 const SPEED_FACTOR_MAX = 60;

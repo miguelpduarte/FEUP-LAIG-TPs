@@ -12,13 +12,49 @@
     </ambient>
     <lights>
         <omni id="room_top1" enabled="t" >
-            <location x="2" y="5" z="3.5" w="1" />
+            <location x="4" y="3.5" z="4" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
         </omni>
         <omni id="room_top2" enabled="t" >
-            <location x="5" y="5" z="3.5" w="1" />
+            <location x="4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top3" enabled="t" >
+            <location x="-4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top4" enabled="t" >
+            <location x="-4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom1" enabled="t" >
+            <location x="7" y="0.5" z="7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom2" enabled="t" >
+            <location x="7" y="0.5" z="-7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom3" enabled="t" >
+            <location x="-7" y="0.5" z="7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom4" enabled="t" >
+            <location x="-7" y="0.5" z="-7" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
@@ -36,6 +72,8 @@
         <texture id="tex_homer" file="scenes/images/homer.png" />
         <texture id="tex_terrain_heightmap" file="shaders/terrain_heightmap.jpg" />
         <texture id="tex_terrain" file="shaders/terrain.jpg" />
+        <texture id="tex_water" file="shaders/water_pretty.jpg" />
+        <texture id="tex_waterwavemap" file="shaders/water-displacement-texture.jpg" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -125,29 +163,29 @@
         </transformation>
     </transformations>
     <animations>
-        <circular id="circ_anim1" span="4" center="2.5 2 3" radius="2.5" startang="180" rotang="360" />
-        <circular id="circ_anim2" span="1" center="0 2 6" radius="0" startang="0" rotang="-180" />
+        <circular id="circ_anim1" span="4" center="2.5 0 3" radius="2.5" startang="180" rotang="360" />
+        <circular id="circ_anim2" span="1" center="0 0 6" radius="0" startang="0" rotang="-180" />
         <circular id="circ_anim3" span="1" center="0 0 0" radius="0" startang="180" rotang="-180" />
         <linear id="lin_anim1" span="5">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="2" yy="0" zz="0" />
             <controlpoint xx="0" yy="0" zz="2" />
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="2" yy="2" zz="2" />
-            <controlpoint xx="-5" yy="1" zz="0" />
-            <controlpoint xx="0" yy="2" zz="-4" />
+            <controlpoint xx="2" yy="0" zz="2" />
+            <controlpoint xx="-5" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="-4" />
             <controlpoint xx="0" yy="0" zz="0" />
         </linear>
         <linear id="lin_anim2" span="1">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="2" zz="3" />
+            <controlpoint xx="0" yy="0" zz="3" />
         </linear>
         <linear id="lin_anim3" span="0.8">
-            <controlpoint xx="0" yy="2" zz="3" />
-            <controlpoint xx="0" yy="2" zz="6" />
+            <controlpoint xx="0" yy="0" zz="3" />
+            <controlpoint xx="0" yy="0" zz="6" />
         </linear>
         <linear id="lin_anim4" span="1.4">
-            <controlpoint xx="0" yy="2" zz="6" />
+            <controlpoint xx="0" yy="0" zz="6" />
             <controlpoint xx="0" yy="0" zz="0" />
         </linear>
 
@@ -194,6 +232,9 @@
         <primitive id="my_vehicle">
             <vehicle />
         </primitive>
+        <primitive id="my_water">
+            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="199" heightscale="0.01" texscale="6" />
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
@@ -208,6 +249,7 @@
                 <!-- <componentref id="my_terrain" /> -->
                 <!-- <componentref id="test_cyl" /> -->
                 <componentref id="my_vehicle" />
+                <componentref id="my_water" />
                 <!-- <componentref id="test_patch1" /> -->
                 <!-- <componentref id="test_patch2" /> -->
             </children>
@@ -340,6 +382,20 @@
             <texture id="none" />
             <children>
                 <primitiveref id="my_vehicle" />
+            </children>
+        </component>
+        <component id="my_water">
+            <transformation>
+                <scale x="20" y="20" z="20" />
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="my_water" />
             </children>
         </component>
     </components>

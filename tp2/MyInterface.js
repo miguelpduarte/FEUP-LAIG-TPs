@@ -74,7 +74,7 @@ class MyInterface extends CGFinterface {
     }
 
     createAxisCheckbox() {
-        this.model['Axis'] = true;
+        this.model['Axis'] = this.scene.axisIsActive;
         this.gui.add(this.model, 'Axis').onChange(val => {
             this.scene.toggleAxis();
         });

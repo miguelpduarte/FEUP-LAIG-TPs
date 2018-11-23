@@ -33,7 +33,7 @@ class Vehicle extends PrimitiveObject {
     };
 
     display() {
-        this.scene.translate(0, this.height/4, -this.length/2);
+        this.scene.translate(0, this.height*2/5, -this.length/2);
 
         // Ship's Body
         this.scene.pushMatrix();
