@@ -5,7 +5,9 @@ precision highp float;
 varying vec2 vTextureCoord;
 
 uniform sampler2D waterSampler;
+uniform float texscale;
+uniform float timefactor;
 
 void main() {
-	gl_FragColor = texture2D(waterSampler, vTextureCoord);
+	gl_FragColor = texture2D(waterSampler, vTextureCoord * texscale);
 }

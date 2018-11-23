@@ -1,3 +1,5 @@
+const SPEED_FACTOR = 5e-5;
+
 /**
  * Water
  * @constructor
@@ -7,15 +9,9 @@ class Water extends PrimitiveObject {
 		super(scene);
 		
 		const {
-			heightscale, idwavemap, idtexture, parts
+			heightscale, idwavemap, idtexture, parts, texscale
 		} = water_model;
 
-		console.log(water_model);
-		console.log(heightscale);
-		console.log(idwavemap);
-		console.log(idtexture);
-		console.log(parts);
-        
 		this.shader = new CGFshader(this.scene.gl, "shaders/water.vert", "shaders/water.frag");
 		
         // Will be bound to 0
@@ -24,7 +20,7 @@ class Water extends PrimitiveObject {
         // Will be bound to 1
 		this.water_tex = this.scene.textures.get(idtexture);
 
-		this.shader.setUniformsValues({waveSampler: 0, waterSampler: 1, heightscale: heightscale});
+		this.shader.setUniformsValues({waveSampler: 0, waterSampler: 1, heightscale: heightscale, texscale: texscale, timefactor: 0});
 
 		const control_vertexes = 
 		[	// U0
@@ -41,10 +37,17 @@ class Water extends PrimitiveObject {
 		];
 
 		this.nurbs_object = createNurbsObject(1, 1, control_vertexes, parts, parts);
-	};
+	}
 
+	static updateTimeFactor(currTime) {
+		this.factor = (currTime % 100000) * SPEED_FACTOR;
+
+		// this.factor = (Math.sin((currTime *  3.0) % 3141 * 0.002) + 1.0) * 0.005;
+	}
+	
 	display() {
-        this.scene.setActiveShader(this.shader);
+		this.scene.setActiveShader(this.shader);
+		this.scene.activeShader.setUniformsValues({timefactor: Water.factor});
         this.wave_map.bind(0);
         this.water_tex.bind(1);
 		this.nurbs_object.display();

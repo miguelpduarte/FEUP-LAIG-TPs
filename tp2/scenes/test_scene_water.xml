@@ -36,8 +36,8 @@
         <texture id="tex_homer" file="scenes/images/homer.png" />
         <texture id="tex_terrain_heightmap" file="shaders/terrain_heightmap.jpg" />
         <texture id="tex_terrain" file="shaders/terrain.jpg" />
-        <texture id="tex_water" file="shaders/water-0342.jpg" />
-        <texture id="tex_waterwavemap" file="shaders/water-0342normal.jpg" />
+        <texture id="tex_water" file="shaders/water_pretty.jpg" />
+        <texture id="tex_waterwavemap" file="shaders/water-displacement-texture.jpg" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -154,46 +154,11 @@
 
     </animations>
     <primitives>
-        <primitive id="rectt">
-            <rectangle x1="0" y1="0" x2="1" y2="1" />
-        </primitive>
-        <primtive id="my_cyl">
-            <cylinder2 base="0.4" top="0.1" height="0.8" slices="40" stacks="10" />
-        </primtive>
-        <primitive id="my_plane">
-            <plane npartsU="7" npartsV="4" />
-        </primitive>
-        <primitive id="my_patch1">
-            <patch npointsU="3" npointsV="2" npartsU="20" npartsV="20">
-                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="-1.5" yy="1.5" zz="0" />
-                <controlpoint xx="0" yy="-1.5" zz="3" />
-                <controlpoint xx="0" yy="1.5" zz="3" />
-                <controlpoint xx="1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="1.5" yy="1.5" zz="0" />
-            </patch>
-        </primitive>
-        <primitive id="my_patch2">
-            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
-                <controlpoint xx="-1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="-2.0" yy="-2.0" zz="2.0" />
-                <controlpoint xx="-2.0" yy="2.0" zz="2.0" />
-                <controlpoint xx="-1.5" yy="1.5" zz="0" />
-                <controlpoint xx="0" yy="0" zz="3.0" />
-                <controlpoint xx="0" yy="-2.0" zz="3.0" />
-                <controlpoint xx="0" yy="2.0" zz="3.0" />
-                <controlpoint xx="0" yy="0" zz="3.0" />
-                <controlpoint xx="1.5" yy="-1.5" zz="0" />
-                <controlpoint xx="2.0" yy="-2.0" zz="2.0" />
-                <controlpoint xx="2.0" yy="2.0" zz="2.0" />
-                <controlpoint xx="1.5" yy="1.5" zz="0" />
-            </patch>
-        </primitive>
         <primitive id="my_terrain">
             <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="30" heightscale="0.3" />
         </primitive>
         <primitive id="my_water">
-            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="29" heightscale="0.7" texscale="1" />
+            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="199" heightscale="0.05" texscale="1" />
         </primitive>
     </primitives>
     <components>
@@ -206,89 +171,10 @@
             </materials>
             <texture id="none" />
             <children>
-                <!-- <componentref id="my_terrain" /> -->
-                <!-- <componentref id="test_cyl" /> -->
-                <!-- <componentref id="test_patch1" /> -->
-                <!-- <componentref id="test_patch2" /> -->
                 <componentref id="my_water" />
             </children>
         </component>
-        <component id="test_cyl">
-            <transformation>
-                <translate x="0" y="1" z="0" />
-            </transformation>
-            <animations>
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_donut" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="my_cyl" />
-                <componentref id="recttt" />
-            </children>
-        </component>
-        <component id="test_patch1">
-            <transformation>
-                <translate x="-5" y="0" z="0" />
-            </transformation>
-            <animations>
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_wood" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="my_patch1" />
-            </children>
-        </component>
-        <component id="test_patch2">
-            <transformation>
-            </transformation>
-            <animations>
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_wood" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="my_patch2" />
-            </children>
-        </component>
-        <component id="recttt">
-            <transformation>
-                <translate x="-0.5" y="-0.5" z="0" />
-            </transformation>
-            <animations>
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_wood" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="rectt" />
-            </children>
-        </component>
+
         <component id="my_terrain">
             <transformation>
                 <scale x="10" y="10" z="10" />
@@ -307,8 +193,6 @@
 
         <component id="my_water">
             <transformation>
-                <!-- <scale x="10" y="10" z="10" />
-                <translate x="0.5" y="0" z="0.5" /> -->
             </transformation>
             <animations>
             </animations>
