@@ -158,7 +158,7 @@
             <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="30" heightscale="0.3" />
         </primitive>
         <primitive id="my_water">
-            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="199" heightscale="0.05" texscale="1" />
+            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="199" heightscale="0.04" texscale="1" />
         </primitive>
     </primitives>
     <components>
@@ -193,6 +193,7 @@
 
         <component id="my_water">
             <transformation>
+                <scale x="3" y="3" z="3" />
             </transformation>
             <animations>
             </animations>

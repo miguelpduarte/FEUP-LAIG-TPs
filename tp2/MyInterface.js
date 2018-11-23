@@ -33,6 +33,7 @@ class MyInterface extends CGFinterface {
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
+        this.createWaterSpeedSlider();
         this.initKeys();
     }
 
@@ -58,15 +59,15 @@ class MyInterface extends CGFinterface {
     createLightsCheckboxes() {
         const lights = this.scene.graph.lights;
 
-        var group = this.gui.addFolder("Lights");
+        const group = this.gui.addFolder("Lights");
 
         for (let [id, light] of lights) {
             if (light.id) {
-                this.model[`light_${light.id}`] = light.enabled;
-                group.add(this.model, `light_${light.id}`)
-                    .name(`Light ${light.id}`)
+                this.model[`light_${id}`] = light.enabled;
+                group.add(this.model, `light_${id}`)
+                    .name(`Light ${id}`)
                     .onChange(val => {
-                        this.scene.setLightState(light.id, val);
+                        this.scene.setLightState(id, val);
                     });
             }
         }
@@ -96,7 +97,15 @@ class MyInterface extends CGFinterface {
         this.model.cameraIndex = this.scene.graph.defaultViewId;
 
         this.gui.add(this.model, "cameraIndex", cameraDropdownModel)
-            .name("Current camera")
+            .name("Current Camera")
             .onChange(val => this.scene.setCurrentCamera(val));
+    }
+
+    createWaterSpeedSlider() {
+        this.model.water_speed = SPEED_FACTOR_INITIAL;
+
+        this.gui.add(this.model, "water_speed", SPEED_FACTOR_MIN, SPEED_FACTOR_MAX)
+            .name("Water Speed")
+            .onFinishChange(val => Water.setSpeedFactor(val));
     }
 }

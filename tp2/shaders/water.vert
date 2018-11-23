@@ -16,10 +16,14 @@ uniform sampler2D waveSampler;
 
 uniform float heightscale;
 uniform float texscale;
-uniform float timefactor;
+
+uniform float timefactor1;
+uniform float timefactor2;
 
 void main() {
-    vec4 color = texture2D(waveSampler, (aTextureCoord + timefactor) * texscale);
+    vec2 calc_text_coords = vec2(aTextureCoord.s + timefactor1, aTextureCoord.t + timefactor2);
+
+    vec4 color = texture2D(waveSampler, calc_text_coords * texscale);
 
     // Assuming the height map is greyscale
     // Any single color channel could be used

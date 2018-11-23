@@ -1,4 +1,8 @@
-const SPEED_FACTOR = 5e-5;
+const SPEED_FACTOR_SCALE = 1e-6;
+const SPEED_FACTOR_INITIAL = 15;
+// Mainly defines for the Interface to constrain input
+const SPEED_FACTOR_MIN = 0;
+const SPEED_FACTOR_MAX = 60;
 
 /**
  * Water
@@ -20,7 +24,7 @@ class Water extends PrimitiveObject {
         // Will be bound to 1
 		this.water_tex = this.scene.textures.get(idtexture);
 
-		this.shader.setUniformsValues({waveSampler: 0, waterSampler: 1, heightscale: heightscale, texscale: texscale, timefactor: 0});
+		this.shader.setUniformsValues({waveSampler: 0, waterSampler: 1, heightscale: heightscale, texscale: texscale, timefactor1: 0, timefactor2: 0});
 
 		const control_vertexes = 
 		[	// U0
@@ -39,18 +43,24 @@ class Water extends PrimitiveObject {
 		this.nurbs_object = createNurbsObject(1, 1, control_vertexes, parts, parts);
 	}
 
-	static updateTimeFactor(currTime) {
-		this.factor = (currTime % 100000) * SPEED_FACTOR;
+	static setSpeedFactor(speed_factor) {
+		this.curr_speed_factor = speed_factor * SPEED_FACTOR_SCALE;
+	}
 
-		// this.factor = (Math.sin((currTime *  3.0) % 3141 * 0.002) + 1.0) * 0.005;
+	static updateTimeFactor(currTime) {
+		// factor1 is for the S axis and factor2 for the T axis
+		this.factor1 = (currTime % 100000) * this.curr_speed_factor;
+		this.factor2 = this.factor1 * 5;
 	}
 	
 	display() {
 		this.scene.setActiveShader(this.shader);
-		this.scene.activeShader.setUniformsValues({timefactor: Water.factor});
+		this.scene.activeShader.setUniformsValues({timefactor1: Water.factor1, timefactor2: Water.factor2});
         this.wave_map.bind(0);
         this.water_tex.bind(1);
 		this.nurbs_object.display();
         this.scene.setActiveShader(this.scene.defaultShader);
 	}
 };
+
+Water.curr_speed_factor = SPEED_FACTOR_INITIAL * SPEED_FACTOR_SCALE;
