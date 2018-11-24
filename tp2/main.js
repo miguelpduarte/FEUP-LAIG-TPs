@@ -36,6 +36,7 @@ serialInclude([
     'primitives/Terrain.js',
     'primitives/Vehicle.js',
     'primitives/Water.js',
+    'primitives/Flag.js',
     
 
     main=function() {

@@ -1,8 +1,8 @@
-const SPEED_FACTOR_SCALE = 1e-6;
-const SPEED_FACTOR_INITIAL = 8;
+const WATER_SPEED_FACTOR_SCALE = 1e-6;
+const WATER_SPEED_FACTOR_INITIAL = 8;
 // Mainly defines for the Interface to constrain input
-const SPEED_FACTOR_MIN = 0;
-const SPEED_FACTOR_MAX = 60;
+const WATER_SPEED_FACTOR_MIN = 0;
+const WATER_SPEED_FACTOR_MAX = 60;
 
 /**
  * Water
@@ -44,7 +44,7 @@ class Water extends PrimitiveObject {
 	}
 
 	static setSpeedFactor(speed_factor) {
-		this.curr_speed_factor = speed_factor * SPEED_FACTOR_SCALE;
+		this.curr_speed_factor = speed_factor * WATER_SPEED_FACTOR_SCALE;
 	}
 
 	static updateTimeFactor(currTime) {
@@ -63,4 +63,4 @@ class Water extends PrimitiveObject {
 	}
 };
 
-Water.curr_speed_factor = SPEED_FACTOR_INITIAL * SPEED_FACTOR_SCALE;
+Water.curr_speed_factor = WATER_SPEED_FACTOR_INITIAL * WATER_SPEED_FACTOR_SCALE;

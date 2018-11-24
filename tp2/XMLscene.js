@@ -62,6 +62,7 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             this.updateComponentAnimations(delta_time);
             Water.updateTimeFactor(currTime);
+            Flag.updateTimeFactor(currTime);
         }
     }
     

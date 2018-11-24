@@ -34,6 +34,7 @@ class MyInterface extends CGFinterface {
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
         this.createWaterSpeedSlider();
+        this.createFlagSpeedSlider();
         this.initKeys();
     }
 
@@ -102,10 +103,18 @@ class MyInterface extends CGFinterface {
     }
 
     createWaterSpeedSlider() {
-        this.model.water_speed = SPEED_FACTOR_INITIAL;
+        this.model.water_speed = WATER_SPEED_FACTOR_INITIAL;
 
-        this.gui.add(this.model, "water_speed", SPEED_FACTOR_MIN, SPEED_FACTOR_MAX)
+        this.gui.add(this.model, "water_speed", WATER_SPEED_FACTOR_MIN, WATER_SPEED_FACTOR_MAX)
             .name("Water Speed")
             .onFinishChange(val => Water.setSpeedFactor(val));
+    }
+
+    createFlagSpeedSlider() {
+        this.model.flag_speed = FLAG_SPEED_FACTOR_INITIAL;
+
+        this.gui.add(this.model, "flag_speed", FLAG_SPEED_FACTOR_MIN, FLAG_SPEED_FACTOR_MAX)
+            .name("Flag Wave Speed")
+            .onFinishChange(val => Flag.setSpeedFactor(val));
     }
 }

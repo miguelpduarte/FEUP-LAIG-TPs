@@ -119,14 +119,6 @@ class Vehicle extends PrimitiveObject {
             this.scene.scale(this.flag_width, 1, this.flag_height);
             this.flag.display();
         this.scene.popMatrix();
-        this.scene.pushMatrix();
-            this.flag_material.apply();
-            this.scene.translate(this.flag_width/2, this.mast_height - 2*this.flag_height, this.length * 45 / 100);
-            this.scene.rotate(Math.PI, 0, 1, 0);
-            this.scene.rotate(Math.PI/2, 1, 0, 0);
-            this.scene.scale(this.flag_width, 1, this.flag_height);
-            this.flag.display();
-        this.scene.popMatrix();
     }
 
     initMaterials() {
@@ -379,12 +371,6 @@ class Vehicle extends PrimitiveObject {
     }
 
     createFlag() {
-        this.flag = new Plane(this.scene,
-            {
-                npartsU: 8,
-                npartsV: 8
-            },
-            this.createNurbsObject
-        );
+        this.flag = new Flag(this.scene, this.flag_texture, this.createNurbsObject);
     }
 }

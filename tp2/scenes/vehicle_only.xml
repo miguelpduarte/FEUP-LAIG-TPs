@@ -205,7 +205,6 @@
         <component id="root_comp">
             <transformation>
             </transformation>
-            <animations></animations>
             <materials>
                 <material id="mat_regular" />
             </materials>
@@ -271,8 +270,6 @@
             <transformation>
                 <scale x="10" y="10" z="10" />
             </transformation>
-            <animations>
-            </animations>
             <materials>
                 <material id="inherit" />
             </materials>
