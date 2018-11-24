@@ -1005,21 +1005,40 @@ class MySceneGraph {
 
         const componentProperties = componentNode.children;
 
-        if (componentProperties.length !== 5) {
+        let index_shift = 0;
+
+        // Animations existance checking and parsing (if they exist)
+        const animations = componentNode.querySelector('animations');
+        let animationIds = [];
+        if (animations) {
+            // Has animation block, changing index shift
+            ++index_shift;
+            // Parsing animations
+            const animations_children = animations.children;
+            for (let animation of animations_children) {
+                if (animation.nodeName !== "animationref") {
+                    this.onXMLMinorError(`Invalid '${animation.nodeName}' animation tag in component animations.`);
+                } else {
+                    const animationId = this.parseStringAttr(animation, "id");
+                    this.verifyInheritableId("animations", animationId, this.animations);
+                    animationIds.push(animationId);
+                }
+            }
+        }
+         
+        if (componentProperties.length !== 4 + index_shift) {
             throw "component '" + id + "' invalid number of component properties";
         } else if (componentProperties[0].nodeName !== "transformation") {
             throw this.missingNodeMessage("component", "transformation");
-        } else if (componentProperties[1].nodeName !== "animations") {
-            throw this.missingNodeMessage("component", "animations");
-        } else if (componentProperties[2].nodeName !== "materials") {
+        } else if (componentProperties[1 + index_shift].nodeName !== "materials") {
             throw this.missingNodeMessage("component", "materials");
-        } else if (componentProperties[3].nodeName !== "texture") {
+        } else if (componentProperties[2 + index_shift].nodeName !== "texture") {
             throw this.missingNodeMessage("component", "texture");
-        } else if (componentProperties[4].nodeName !== "children") {
+        } else if (componentProperties[3 + index_shift].nodeName !== "children") {
             throw this.missingNodeMessage("component", "children");
         }
 
-        if (componentProperties[4].children.length === 0) {
+        if (componentProperties[3 + index_shift].children.length === 0) {
             throw `component with id '${id}' has no children`;
         }
 
@@ -1066,21 +1085,8 @@ class MySceneGraph {
             }
         }
 
-        //animations
-        const animations = componentProperties[1].children;
-        let animationIds = [];     
-        for (let animation of animations) {
-            if (animation.nodeName !== "animationref") {
-                this.onXMLMinorError(`Invalid '${animation.nodeName}' animation tag in component animations.`);
-            } else {
-                const animationId = this.parseStringAttr(animation, "id");
-                this.verifyInheritableId("animations", animationId, this.animations);
-                animationIds.push(animationId);
-            }
-        } 
-
         //materials
-        const materials = componentProperties[2].children;
+        const materials = componentProperties[1 + index_shift].children;
         let materialIds = [];        
         for (let material of materials) {
             if (material.nodeName !== "material") {
@@ -1093,7 +1099,7 @@ class MySceneGraph {
         } 
 
         //texture
-        const textureNode = componentProperties[3];
+        const textureNode = componentProperties[2 + index_shift];
         const texId = this.parseStringAttr(textureNode, "id");
         this.verifyInheritableNoneId("texture", texId, this.textures);
         let length_s, length_t;
@@ -1104,7 +1110,7 @@ class MySceneGraph {
         }
 
         //children
-        const children = componentProperties[4].children;
+        const children = componentProperties[3 + index_shift].children;
         let primitiveIds = new Set();
         let componentIds = new Set();
 
