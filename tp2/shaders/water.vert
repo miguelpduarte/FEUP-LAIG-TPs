@@ -21,7 +21,9 @@ uniform float timefactor1;
 uniform float timefactor2;
 
 void main() {
-    vec2 calc_text_coords = vec2(aTextureCoord.s + timefactor1, aTextureCoord.t + timefactor2);
+    vec2 tex_coords_shift = vec2(timefactor1, timefactor2);
+
+    vec2 calc_text_coords = aTextureCoord + tex_coords_shift;
 
     vec4 color = texture2D(waveSampler, calc_text_coords * texscale);
 
