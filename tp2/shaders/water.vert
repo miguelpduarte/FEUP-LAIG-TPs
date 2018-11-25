@@ -23,9 +23,9 @@ uniform float timefactor2;
 void main() {
     vec2 tex_coords_shift = vec2(timefactor1, timefactor2);
 
-    vec2 calc_text_coords = aTextureCoord + tex_coords_shift;
+    vec2 calc_tex_coords = aTextureCoord + tex_coords_shift;
 
-    vec4 color = texture2D(waveSampler, calc_text_coords * texscale);
+    vec4 color = texture2D(waveSampler, calc_tex_coords * texscale);
 
     // Assuming the height map is greyscale
     // Any single color channel could be used

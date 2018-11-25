@@ -3,6 +3,8 @@ const WATER_SPEED_FACTOR_INITIAL = 8;
 // Mainly defines for the Interface to constrain input
 const WATER_SPEED_FACTOR_MIN = 0;
 const WATER_SPEED_FACTOR_MAX = 60;
+// Initial state for the interface
+const MOVE_WATER_TEXTURE_INITIAL = true;
 
 /**
  * Water
@@ -43,6 +45,10 @@ class Water extends PrimitiveObject {
 		this.nurbs_object = createNurbsObject(1, 1, control_vertexes, parts, parts);
 	}
 
+	static setTextureMovement(is_water_tex_moving) {
+		this.is_water_tex_moving = is_water_tex_moving;
+	}
+
 	static setSpeedFactor(speed_factor) {
 		this.curr_speed_factor = speed_factor * WATER_SPEED_FACTOR_SCALE;
 	}
@@ -55,7 +61,12 @@ class Water extends PrimitiveObject {
 	
 	display() {
 		this.scene.setActiveShader(this.shader);
-		this.scene.activeShader.setUniformsValues({timefactor1: Water.factor1, timefactor2: Water.factor2});
+		// Updating current shader with values from the static variables of the class (can only be done here because of that)
+		this.scene.activeShader.setUniformsValues({
+			timefactor1: Water.factor1,
+			timefactor2: Water.factor2,
+			is_water_tex_moving: Water.is_water_tex_moving,
+		});
         this.wave_map.bind(0);
         this.water_tex.bind(1);
 		this.nurbs_object.display();
@@ -64,3 +75,4 @@ class Water extends PrimitiveObject {
 };
 
 Water.curr_speed_factor = WATER_SPEED_FACTOR_INITIAL * WATER_SPEED_FACTOR_SCALE;
+Water.is_water_tex_moving = MOVE_WATER_TEXTURE_INITIAL;

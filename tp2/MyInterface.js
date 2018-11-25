@@ -18,7 +18,7 @@ class MyInterface extends CGFinterface {
         // init GUI. For more information on the methods, check:
         //  http://workshop.chromeexperiments.com/examples/gui
 
-        this.gui = new dat.GUI();
+        this.gui = new dat.GUI({width: 300});
 
         //Internal data model
         this.model = {};
@@ -35,6 +35,7 @@ class MyInterface extends CGFinterface {
         this.createCamerasDropdown();
         this.createWaterSpeedSlider();
         this.createFlagSpeedSlider();
+        this.createMoveWaterTextureCheckbox();
         this.initKeys();
     }
 
@@ -82,8 +83,8 @@ class MyInterface extends CGFinterface {
     }
 
     createToggleLightsCheckbox() {
-        this.model['Show Lights'] = true;
-        this.gui.add(this.model, 'Show Lights').onChange(val => {
+        this.model["Show Lights"] = true;
+        this.gui.add(this.model, "Show Lights").onChange(val => {
             this.scene.toggleViewLights();
         });
     }
@@ -116,5 +117,13 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.model, "flag_speed", FLAG_SPEED_FACTOR_MIN, FLAG_SPEED_FACTOR_MAX)
             .name("Flag Wave Speed")
             .onFinishChange(val => Flag.setSpeedFactor(val));
+    }
+
+    createMoveWaterTextureCheckbox() {
+        this.model.move_water_texture = MOVE_WATER_TEXTURE_INITIAL;
+
+        this.gui.add(this.model, "move_water_texture")
+            .name("Move Water Texture")
+            .onChange(val => Water.setTextureMovement(val));
     }
 }
