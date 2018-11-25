@@ -1,0 +1,409 @@
+<yas>
+    <scene root="root_comp" axis_length="8" />
+    <views default="camera" >
+        <perspective id="camera" near="0.1" far="90" angle="60">
+            <from x="10" y="5" z="12" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+    </views>
+    <ambient>
+        <ambient r="0.6" g="0.6" b="0.6" a="1" />
+        <background r="0.05" g="0.05" b="0.05" a="1" />
+    </ambient>
+    <lights>
+        <omni id="room_top1" enabled="t" >
+            <location x="4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top2" enabled="t" >
+            <location x="4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top3" enabled="t" >
+            <location x="-4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top4" enabled="t" >
+            <location x="-4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <spot id="stark_banner1" enabled="t" angle="1" exponent="1">
+            <location x="0.5" y="2.2" z="4.4" w="1" />
+            <target x="0" y="2" z="4" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </spot>
+        <spot id="stark_banner2" enabled="t" angle="1" exponent="1">
+            <location x="0.5" y="2.2" z="3.6" w="1" />
+            <target x="0" y="2" z="4" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </spot>
+    </lights>
+    <textures>
+        <texture id="tex_light_wood" file="scenes/images/light_wood.jpg" />
+        <texture id="tex_dark_wood" file="scenes/images/dark_wood.png" />
+        <texture id="tex_stark" file="scenes/images/stark.jpg" />
+        <texture id="tex_terrain_heightmap" file="shaders/island_heightmap.png" />
+        <texture id="tex_terrain" file="shaders/snow.jpg" />
+        <texture id="tex_water" file="shaders/water_pretty.jpg" />
+        <texture id="tex_waterwavemap" file="shaders/water-displacement-texture.jpg" />
+    </textures>
+    <materials>
+        <material id="mat_metal" shininess="80" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.15" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.5" a="1" />
+            <specular r="0.4" g="0.4" b="0.5" a="1" />
+        </material>
+        <material id="mat_regular" shininess="40" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </material>
+        <material id="mat_banner" shininess="80" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.7" g="0.7" b="0.7" a="1" />
+        </material>
+        <material id="mat_wood" shininess="20" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.0545" g="0.0271" b="0.0075" a="1" />
+            <diffuse r="0.300" g="0.15" b="0.045" a="1" />
+            <specular r="0.1" g="0.042" b="0.015" a="1" />
+        </material>
+        <material id="mat_lighter_wood" shininess="30" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.43" g="0.2" b="0.17" a="1" />
+            <diffuse r="0.53" g="0.2" b="0.16" a="1" />
+            <specular r="0.34" g="0.12" b="0.15" a="1" />
+        </material>
+        <material id="mat_grey" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+            <specular r="0.4" g="0.4" b="0.4" a="1" />
+        </material>
+        <material id="mat_blue" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0.1" a="1" />
+            <diffuse r="0.2" g="0.2" b="0.3" a="1" />
+            <specular r="0.2" g="0.2" b="0.3" a="1" />
+        </material>
+        <material id="mat_orange" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0" b="0" a="1" />
+            <diffuse r="0.4" g="0.3" b="0.2" a="1" />
+            <specular r="0.4" g="0.3" b="0.2" a="1" />
+        </material>
+        <material id="mat_turquoise" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.13" g="0.28" b="0.25" a="1" />
+            <specular r="0.13" g="0.28" b="0.25" a="1" />
+        </material>
+        <material id="mat_red" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.2" g="0.05" b="0.05" a="1" />
+            <specular r="0.2" g="0.05" b="0.05" a="1" />
+        </material>
+        <material id="mat_glass" shininess="90">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </material>
+        <material id="mat_dark" shininess="10">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+            <specular r="0.08" g="0.08" b="0.08" a="1" />
+        </material>
+    </materials>
+    <transformations>
+        <transformation id="trf_standup_y">
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_lift_y">
+            <translate x="0" y="1.2" z="0" />
+        </transformation>
+        <transformation id="trf_shift_to_room_middle">
+            <translate x="3.5" y="0" z="3.5" />
+        </transformation>
+        <transformation id="trf_donut_plate_to_table">
+            <translate x="2.1" y="2.4" z="4.1" />
+            <scale x="1.5" y="1.5" z="1.5" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_donut_to_plate">
+            <translate x="0" y="0" z="0.075" />
+        </transformation>
+    </transformations>
+    <animations>
+        <circular id="circ_anim1" span="2.2" center="-2 0 2" radius="2" startang="0" rotang="-90" />
+        <circular id="circ_anim2" span="2.2" center="-6 0 2" radius="2" startang="-90" rotang="-90" />
+        <circular id="circ_anim3" span="2.8" center="-8 0 0" radius="0" startang="0" rotang="270" />
+        <circular id="circ_anim4" span="0.9" center="0 0 0" radius="0" startang="90" rotang="-90" />
+        <linear id="lin_anim1" span="1.5">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="2" />
+        </linear>
+        <linear id="lin_anim2" span="3">
+            <controlpoint xx="-2" yy="0" zz="4" />
+            <controlpoint xx="-6" yy="0" zz="4" />
+        </linear>
+        <linear id="lin_anim3" span="1.5">
+            <controlpoint xx="-8" yy="0" zz="2" />
+            <controlpoint xx="-8" yy="0" zz="0" />
+        </linear>
+        <linear id="banner_anim" span="10">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="-1" zz="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="-1" zz="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+        </linear>
+        <linear id="lin_anim4" span="4">
+            <controlpoint xx="-8" yy="0" zz="0" />
+            <controlpoint xx="-7" yy="0" zz="0" />
+            <controlpoint xx="-6" yy="0.9" zz="0" />
+            <controlpoint xx="-5" yy="1.5" zz="0" />
+            <controlpoint xx="-4" yy="1.9" zz="0" />
+            <controlpoint xx="-3.8" yy="2.0" zz="0" />
+            <controlpoint xx="-3.2" yy="2.0" zz="0" />
+            <controlpoint xx="-3" yy="1.9" zz="0" />
+            <controlpoint xx="-2" yy="1.5" zz="0" />
+            <controlpoint xx="-1" yy="0.9" zz="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+        </linear>
+    </animations>
+    <primitives>
+        <primitive id="terrain">
+            <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="50" heightscale="0.4" />
+        </primitive>
+        <primitive id="vehicle">
+            <vehicle />
+        </primitive>
+        <primitive id="water">
+            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="50" heightscale="0.01" texscale="5" />
+        </primitive>
+        <primitive id="pole">
+            <cylinder2 base="0.02" top="0.02" height="2.5" slices="10" stacks="4" />
+        </primitive>
+        <primitive id="banner_holder">
+            <patch npointsU="3" npointsV="2" npartsU="15" npartsV="2">
+                <controlpoint xx="-1" yy="1.75" zz="0" />
+                <controlpoint xx="-1" yy="2.25" zz="0" />
+                <controlpoint xx="0" yy="1.25" zz="0" />
+                <controlpoint xx="0" yy="2.75" zz="0" />
+                <controlpoint xx="1" yy="1.75" zz="0" />
+                <controlpoint xx="1" yy="2.25" zz="0" />
+            </patch>
+        </primitive>
+        <primitive id="banner">
+            <plane npartsU="15" npartsV="15" />
+        </primitive>
+        <primitive id="pole_top">
+            <sphere radius="0.045" slices="20" stacks="20" />
+        </primitive>
+    </primitives>
+    <components>
+        <component id="root_comp">
+            <transformation>
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="terrain" />
+                <componentref id="vehicle" />
+                <componentref id="water" />
+                <componentref id="banner" />
+            </children>
+        </component>
+        
+        <component id="terrain">
+            <transformation>
+                <scale x="6" y="6" z="6" />
+            </transformation>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="terrain" />
+            </children>
+        </component>
+        <component id="vehicle">
+            <transformation>
+                <translate x="4" y="0" z="0" />
+            </transformation>
+            <animations>
+                <animationref id="lin_anim1" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim4" />
+            </animations>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="vehicle" />
+            </children>
+        </component>
+        <component id="water">
+            <transformation>
+                <scale x="11" y="11" z="11" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="water" />
+            </children>
+        </component>
+        <component id="banner">
+            <transformation>
+                <translate x="0" y="0" z="4" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="mat_dark" />
+            </materials>
+            <texture id="tex_light_wood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="banner_pole1" />
+                <componentref id="banner_pole2" />
+                <componentref id="banner_holder" />
+                <componentref id="banner_pole1_top" />
+                <componentref id="banner_pole2_top" />
+            </children>
+        </component>
+        <component id="banner_pole1">
+            <transformation>
+                <translate x="-1" y="0" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="pole" />
+            </children>
+        </component>
+        <component id="banner_pole2">
+            <transformation>
+                <translate x="1" y="0" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="pole" />
+            </children>
+        </component>
+        <component id="banner_holder_front">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="tex_dark_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="banner_holder" />
+            </children>
+        </component>
+        <component id="banner_holder_back">
+            <transformation>
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="tex_dark_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="banner_holder" />
+            </children>
+        </component>
+        <component id="banner_body">
+            <transformation>
+                <translate x="0" y="2" z="0.01" />
+                <rotate axis="x" angle="90" />
+                <scale x="1.2" y="1" z="0.6" />
+            </transformation>
+            <materials>
+                <material id="mat_banner" />
+            </materials>
+            <texture id="tex_stark" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="banner" />
+            </children>
+        </component>
+        <component id="banner_pole1_top">
+            <transformation>
+                <translate x="1" y="2.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="pole_top" />
+            </children>
+        </component>
+        <component id="banner_pole2_top">
+            <transformation>
+                <translate x="-1" y="2.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="pole_top" />
+            </children>
+        </component>
+        <component id="banner_holder">
+            <transformation>
+            </transformation>
+            <animations>
+                <animationref id="banner_anim" />
+            </animations>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="banner_holder_front" />
+                <componentref id="banner_holder_back" />
+                <componentref id="banner_body" />
+            </children>
+        </component>
+
+
+    </components>
+</yas>
