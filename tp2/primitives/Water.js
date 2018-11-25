@@ -1,5 +1,5 @@
 const WATER_SPEED_FACTOR_SCALE = 1e-6;
-const WATER_SPEED_FACTOR_INITIAL = 8;
+const WATER_SPEED_FACTOR_INITIAL = 3;
 // Mainly defines for the Interface to constrain input
 const WATER_SPEED_FACTOR_MIN = 0;
 const WATER_SPEED_FACTOR_MAX = 60;
