@@ -169,6 +169,13 @@
             <controlpoint xx="-8" yy="0" zz="2" />
             <controlpoint xx="-8" yy="0" zz="0" />
         </linear>
+        <linear id="banner_anim" span="10">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="-1" zz="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="-1" zz="0" />
+            <controlpoint xx="0" yy="0" zz="0" />
+        </linear>
         <linear id="lin_anim4" span="4">
             <controlpoint xx="-8" yy="0" zz="0" />
             <controlpoint xx="-7" yy="0" zz="0" />
@@ -288,11 +295,9 @@
             <children>
                 <componentref id="banner_pole1" />
                 <componentref id="banner_pole2" />
-                <componentref id="banner_holder_front" />
-                <componentref id="banner_holder_back" />
+                <componentref id="banner_holder" />
                 <componentref id="banner_pole1_top" />
                 <componentref id="banner_pole2_top" />
-                <componentref id="banner_body" />
             </children>
         </component>
         <component id="banner_pole1">
@@ -382,5 +387,23 @@
                 <primitiveref id="pole_top" />
             </children>
         </component>
+        <component id="banner_holder">
+            <transformation>
+            </transformation>
+            <animations>
+                <animationref id="banner_anim" />
+            </animations>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="banner_holder_front" />
+                <componentref id="banner_holder_back" />
+                <componentref id="banner_body" />
+            </children>
+        </component>
+
+
     </components>
 </yas>

@@ -76,6 +76,14 @@ class LinearAnimation extends Animation {
 			target_control_point.yy = 0;
 
 			let orientation_versor = this.calculateVersor(origin_control_point, target_control_point);
+			
+			// When movement happens along the y direction, assume standard orientation
+			if (origin_control_point.xx === 0 && origin_control_point.zz === 0 &&
+				target_control_point.xx === 0 && target_control_point.zz === 0) {
+				
+				orientation_versor = {xx:0, yy:0, zz:1};
+			}
+
 			this.orientation_angle = 
 				Math.acos(this.initial_orientation.xx*orientation_versor.xx + this.initial_orientation.zz*orientation_versor.zz) * 
 				(orientation_versor.xx < 0 ? -1 : 1);
