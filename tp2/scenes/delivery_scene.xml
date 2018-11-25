@@ -178,12 +178,12 @@
         </linear>
         <linear id="lin_anim4" span="4">
             <controlpoint xx="-8" yy="0" zz="0" />
-            <controlpoint xx="-7" yy="0" zz="0" />
-            <controlpoint xx="-6" yy="0.9" zz="0" />
-            <controlpoint xx="-5" yy="1.5" zz="0" />
-            <controlpoint xx="-4" yy="1.9" zz="0" />
-            <controlpoint xx="-3.8" yy="2.0" zz="0" />
-            <controlpoint xx="-3.2" yy="2.0" zz="0" />
+            <controlpoint xx="-7" yy="0.9" zz="0" />
+            <controlpoint xx="-6" yy="1.5" zz="0" />
+            <controlpoint xx="-5" yy="1.9" zz="0" />
+            <controlpoint xx="-4" yy="2.0" zz="0" />
+            <controlpoint xx="-3.75" yy="2.05" zz="0" />
+            <controlpoint xx="-3.25" yy="2.0" zz="0" />
             <controlpoint xx="-3" yy="1.9" zz="0" />
             <controlpoint xx="-2" yy="1.5" zz="0" />
             <controlpoint xx="-1" yy="0.9" zz="0" />
