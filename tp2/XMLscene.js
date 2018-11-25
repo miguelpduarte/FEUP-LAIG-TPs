@@ -250,7 +250,6 @@ class XMLscene extends CGFscene {
 
     resetSceneAnimations() {
         for (let [id, component] of this.cgf_components) {
-            console.log(component);
             component.resetAnimations();
         }
     }
