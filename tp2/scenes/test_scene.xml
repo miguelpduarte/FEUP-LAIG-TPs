@@ -70,8 +70,10 @@
         <texture id="tex_donut" file="scenes/images/donut.png" />
         <texture id="tex_floor" file="scenes/images/floor.png" />
         <texture id="tex_homer" file="scenes/images/homer.png" />
-        <texture id="tex_terrain_heightmap" file="shaders/island_heightmap.png" />
-        <texture id="tex_terrain" file="shaders/island_biomes.png" />
+        <texture id="tex_terrain_heightmap" file="shaders/ireland_heightmap.png" />
+        <texture id="tex_terrain" file="shaders/ireland_tex.png" />
+        <!-- <texture id="tex_terrain_heightmap" file="shaders/island_heightmap.png" /> -->
+        <!-- <texture id="tex_terrain" file="shaders/island_biomes.png" /> -->
         <texture id="tex_water" file="shaders/water_pretty.jpg" />
         <texture id="tex_waterwavemap" file="shaders/water-displacement-texture.jpg" />
     </textures>
@@ -227,7 +229,9 @@
             </patch>
         </primitive>
         <primitive id="my_terrain">
-            <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="50" heightscale="0.4" />
+            <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="199" heightscale="0.1" />
+            <!-- Old stuff: -->
+            <!-- <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="50" heightscale="0.4" /> -->
         </primitive>
         <primitive id="my_vehicle">
             <vehicle />
@@ -332,7 +336,7 @@
         </component>
         <component id="my_terrain">
             <transformation>
-                <translate x="0" y="-0.2" z="0" />
+                <!-- <translate x="0" y="-0.2" z="0" /> -->
                 <scale x="6" y="6" z="6" />
             </transformation>
             <animations>
@@ -383,7 +387,7 @@
         </component>
         <component id="my_water">
             <transformation>
-                <translate x="0" y="0.15" z="0" />
+                <!-- <translate x="0" y="0.15" z="0" /> -->
                 <scale x="10" y="10" z="10" />
             </transformation>
             <animations>
