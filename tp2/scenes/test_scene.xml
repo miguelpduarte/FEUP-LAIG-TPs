@@ -165,35 +165,38 @@
         </transformation>
     </transformations>
     <animations>
-        <circular id="circ_anim1" span="4" center="2.5 0 3" radius="2.5" startang="180" rotang="360" />
-        <circular id="circ_anim2" span="1" center="0 0 6" radius="0" startang="0" rotang="-180" />
-        <circular id="circ_anim3" span="1" center="0 0 0" radius="0" startang="180" rotang="-180" />
-        <linear id="lin_anim1" span="5">
+        <circular id="circ_anim1" span="2.2" center="-2 0 2" radius="2" startang="0" rotang="-90" />
+        <circular id="circ_anim2" span="2.2" center="-6 0 2" radius="2" startang="-90" rotang="-90" />
+        <circular id="circ_anim3" span="2.8" center="-8 0 0" radius="0" startang="0" rotang="270" />
+        <circular id="circ_anim4" span="0.9" center="0 0 0" radius="0" startang="90" rotang="-90" />
+        <linear id="lin_anim1" span="1.5">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="2" yy="0" zz="0" />
             <controlpoint xx="0" yy="0" zz="2" />
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="2" yy="0" zz="2" />
-            <controlpoint xx="-5" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0" zz="-4" />
+        </linear>
+        <linear id="lin_anim2" span="3">
+            <controlpoint xx="-2" yy="0" zz="4" />
+            <controlpoint xx="-6" yy="0" zz="4" />
+        </linear>
+        <linear id="lin_anim3" span="1.5">
+            <controlpoint xx="-8" yy="0" zz="2" />
+            <controlpoint xx="-8" yy="0" zz="0" />
+        </linear>
+        <linear id="lin_anim4" span="4">
+            <controlpoint xx="-8" yy="0" zz="0" />
+            <controlpoint xx="-7" yy="0" zz="0" />
+            <controlpoint xx="-6" yy="0.9" zz="0" />
+            <controlpoint xx="-5" yy="1.5" zz="0" />
+            <controlpoint xx="-4" yy="1.9" zz="0" />
+            <controlpoint xx="-3.8" yy="2.0" zz="0" />
+            <controlpoint xx="-3.2" yy="2.0" zz="0" />
+            <controlpoint xx="-3" yy="1.9" zz="0" />
+            <controlpoint xx="-2" yy="1.5" zz="0" />
+            <controlpoint xx="-1" yy="0.9" zz="0" />
             <controlpoint xx="0" yy="0" zz="0" />
         </linear>
-        <linear id="lin_anim2" span="1">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0" zz="3" />
-        </linear>
-        <linear id="lin_anim3" span="0.8">
-            <controlpoint xx="0" yy="0" zz="3" />
-            <controlpoint xx="0" yy="0" zz="6" />
-        </linear>
-        <linear id="lin_anim4" span="1.4">
-            <controlpoint xx="0" yy="0" zz="6" />
-            <controlpoint xx="0" yy="0" zz="0" />
-        </linear>
-
     </animations>
     <primitives>
-        <primitive id="rectt">
+        <!-- <primitive id="rectt">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
         <primtive id="my_cyl">
@@ -227,7 +230,7 @@
                 <controlpoint xx="2.0" yy="2.0" zz="2.0" />
                 <controlpoint xx="1.5" yy="1.5" zz="0" />
             </patch>
-        </primitive>
+        </primitive> -->
         <primitive id="my_terrain">
             <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="199" heightscale="0.1" />
             <!-- Old stuff: -->
@@ -237,7 +240,7 @@
             <vehicle />
         </primitive>
         <primitive id="my_water">
-            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="100" heightscale="0.01" texscale="4" />
+            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="50" heightscale="0.01" texscale="5" />
         </primitive>
     </primitives>
     <components>
@@ -255,92 +258,12 @@
                 <componentref id="my_water" />
             </children>
         </component>
-        <component id="test_cyl">
-            <transformation>
-                <translate x="0" y="1" z="0" />
-            </transformation>
-            <animations>
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="circ_anim3" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="circ_anim3" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="circ_anim3" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_donut" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="my_cyl" />
-                <componentref id="recttt" />
-            </children>
-        </component>
-        <component id="test_patch1">
-            <transformation>
-                <translate x="-5" y="0" z="0" />
-            </transformation>
-            <animations>
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_wood" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="my_patch1" />
-            </children>
-        </component>
-        <component id="test_patch2">
-            <transformation>
-            </transformation>
-            <animations>
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_wood" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="my_patch2" />
-            </children>
-        </component>
-        <component id="recttt">
-            <transformation>
-                <translate x="-0.5" y="-0.5" z="0" />
-            </transformation>
-            <animations>
-            </animations>
-            <materials>
-                <material id="mat_orange" />
-            </materials>
-            <texture id="tex_wood" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="rectt" />
-            </children>
-        </component>
+        
         <component id="my_terrain">
             <transformation>
                 <!-- <translate x="0" y="-0.2" z="0" /> -->
                 <scale x="6" y="6" z="6" />
             </transformation>
-            <animations>
-            </animations>
             <materials>
                 <material id="mat_orange" />
             </materials>
@@ -351,31 +274,17 @@
         </component>
         <component id="my_vehicle">
             <transformation>
+                <translate x="4" y="0" z="0" />
             </transformation>
             <animations>
-                <animationref id="lin_anim2" />
+                <animationref id="lin_anim1" />
                 <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
+                <animationref id="lin_anim2" />
                 <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
+                <animationref id="lin_anim3" />
                 <animationref id="circ_anim3" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
                 <animationref id="lin_anim4" />
-                <animationref id="circ_anim3" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
-                <animationref id="circ_anim3" />
-                <animationref id="lin_anim2" />
-                <animationref id="circ_anim1" />
-                <animationref id="lin_anim3" />
-                <animationref id="circ_anim2" />
-                <animationref id="lin_anim4" />
+                <animationref id="circ_anim4" />
             </animations>
             <materials>
                 <material id="inherit" />
@@ -387,11 +296,8 @@
         </component>
         <component id="my_water">
             <transformation>
-                <!-- <translate x="0" y="0.15" z="0" /> -->
                 <scale x="10" y="10" z="10" />
             </transformation>
-            <animations>
-            </animations>
             <materials>
                 <material id="inherit" />
             </materials>

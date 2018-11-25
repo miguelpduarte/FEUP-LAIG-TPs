@@ -63,6 +63,7 @@ class LinearAnimation extends Animation {
 			}
 		}
 
+		// progress is 100%, animation is over
 		return 1;
 	}
 
@@ -124,5 +125,10 @@ class LinearAnimation extends Animation {
 			yy: vector.yy / vector_modulus,
 			zz: vector.zz / vector_modulus
 		}
+	}
+
+	reset() {
+		super.reset();
+		this.current_point = 0;
 	}
 };

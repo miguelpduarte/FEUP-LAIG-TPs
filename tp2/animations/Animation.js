@@ -17,4 +17,8 @@ class Animation {
 	isFinished() {
 		return this.current_time >= this.span;
 	}
+
+	reset() {
+		this.current_time = 0;
+	}
 };

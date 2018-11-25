@@ -7,6 +7,8 @@ class CircularAnimation extends Animation {
 		super(span);
 		this.center = center;
 		this.radius = radius;
+		// Saving for resetting animations later on		
+		this.initial_angle = initial_angle;
 		this.current_angle = initial_angle * Math.PI / 180;
 		this.angular_speed = (rotation_angle * Math.PI / 180)/this.span;
 		this.orientation = rotation_angle >= 0 ? Math.PI : 0;
@@ -25,5 +27,10 @@ class CircularAnimation extends Animation {
 		this.current_angle += this.angular_speed * delta_time;
 
 		return remaining_time;
+	}
+
+	reset() {
+		super.reset();
+		this.current_angle = this.initial_angle * Math.PI / 180;
 	}
 };

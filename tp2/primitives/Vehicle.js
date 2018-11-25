@@ -276,9 +276,9 @@ class Vehicle extends PrimitiveObject {
             ];
 
 
-        this.ship_body_outer = this.createNurbsObject(3, 3, ship_body_outer_control_vertexes, 30, 30);
-        this.ship_body_inner = this.createNurbsObject(3, 3, ship_body_inner_control_vertexes, 30, 30);
-        this.ship_floor = this.createNurbsObject(3, 3, ship_floor_control_vertexes, 30, 30);
+        this.ship_body_outer = this.createNurbsObject(3, 3, ship_body_outer_control_vertexes, 20, 20);
+        this.ship_body_inner = this.createNurbsObject(3, 3, ship_body_inner_control_vertexes, 20, 20);
+        this.ship_floor = this.createNurbsObject(3, 3, ship_floor_control_vertexes, 20, 20);
     }
 
     createMast() {
@@ -288,7 +288,7 @@ class Vehicle extends PrimitiveObject {
                 top: this.mast_diameter,
                 height: this.mast_height,
                 slices: 10,
-                stacks: 4
+                stacks: 3
             },
             this.createNurbsObject
         );
@@ -299,7 +299,7 @@ class Vehicle extends PrimitiveObject {
                 top: this.mast_diameter,
                 height: this.mast_height*3/5,
                 slices: 10,
-                stacks: 4
+                stacks: 3
             },
             this.createNurbsObject
         );
@@ -357,8 +357,8 @@ class Vehicle extends PrimitiveObject {
                 ]
             ];
 
-        this.ship_sail_front = this.createNurbsObject(2, 3, sail_front_control_vertexes, 30, 30);
-        this.ship_sail_back = this.createNurbsObject(2, 3, sail_back_control_vertexes, 30, 30);
+        this.ship_sail_front = this.createNurbsObject(2, 3, sail_front_control_vertexes, 20, 20);
+        this.ship_sail_back = this.createNurbsObject(2, 3, sail_back_control_vertexes, 20, 20);
     }
 
     createPerryBuoy() {

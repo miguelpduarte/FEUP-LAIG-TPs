@@ -76,7 +76,7 @@ class Component extends CGFobject {
     }
 
     updateAnimations(delta_time) {
-        if (this.animations.length === 0) {
+        if (this.currentAnimationIndex >= this.animations.length) {
             return;
         }
 
@@ -84,13 +84,21 @@ class Component extends CGFobject {
         do {
             remaining_time = this.animations[this.currentAnimationIndex].update(delta_time);
             if(remaining_time > 0 ) {
-                this.animations.shift();
+                this.currentAnimationIndex++;
 
-                if (this.animations.length === 0) {
+                if (this.currentAnimationIndex >= this.animations.length) {
                     return;
                 }
             }
         } while(remaining_time > 0);
+    }
+
+    resetAnimations() {
+        this.currentAnimationIndex = 0;
+
+        for (let animation of this.animations) {
+            animation.reset();
+        }
     }
 
 	display() {
@@ -126,7 +134,7 @@ class Component extends CGFobject {
     }
 
     applyAnimation() {
-        if (this.animations.length > 0) {
+        if (this.currentAnimationIndex < this.animations.length) {
             this.animations[this.currentAnimationIndex].apply(this.scene);
         }
     }

@@ -2,6 +2,10 @@ const DEGREE_TO_RAD = Math.PI / 180;
 const MAX_LIGHTS = 8;
 const UPDATE_RATE = 50; // times/s
 
+const ANIMATION_SPEED_MIN = 0.5;
+const ANIMATION_SPEED_INITIAL = 1;
+const ANIMATION_SPEED_MAX = 3;
+
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -41,6 +45,7 @@ class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.axisIsActive = false;
+        this.animation_speed = ANIMATION_SPEED_INITIAL;
 
         this.createDefaultMaterial();
 
@@ -60,7 +65,7 @@ class XMLscene extends CGFscene {
         
         
         if (this.sceneInited) {
-            this.updateComponentAnimations(delta_time);
+            this.updateComponentAnimations(delta_time * this.animation_speed);
             Water.updateTimeFactor(currTime);
             Flag.updateTimeFactor(currTime);
         }
@@ -224,7 +229,7 @@ class XMLscene extends CGFscene {
     }
 
 	toggleAxis() {
-		this.axisIsActive = !this.axisIsActive;
+        this.axisIsActive = !this.axisIsActive;
 	}
 
 	toggleViewLights() {
@@ -237,7 +242,18 @@ class XMLscene extends CGFscene {
         for (let light of this.lights) {
             light.update();
         }
-	}
+    }
+    
+    setAnimationSpeed(speed) {
+        this.animation_speed = speed;
+    }
+
+    resetSceneAnimations() {
+        for (let [id, component] of this.cgf_components) {
+            console.log(component);
+            component.resetAnimations();
+        }
+    }
 
     /*
      * Handler called when the graph is finally loaded. 

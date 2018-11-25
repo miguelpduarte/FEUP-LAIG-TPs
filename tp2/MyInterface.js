@@ -33,9 +33,11 @@ class MyInterface extends CGFinterface {
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
+        this.createSceneAnimationSpeedSlider();
         this.createWaterSpeedSlider();
         this.createFlagSpeedSlider();
         this.createMoveWaterTextureCheckbox();
+        this.createResetAnimationsButton();
         this.initKeys();
     }
 
@@ -103,6 +105,14 @@ class MyInterface extends CGFinterface {
             .onChange(val => this.scene.setCurrentCamera(val));
     }
 
+    createSceneAnimationSpeedSlider() {
+        this.model.animation_speed = ANIMATION_SPEED_INITIAL;
+
+        this.gui.add(this.model, "animation_speed", ANIMATION_SPEED_MIN, ANIMATION_SPEED_MAX)
+            .name("Animation Speed")
+            .onChange(val => this.scene.setAnimationSpeed(val));
+    }
+
     createWaterSpeedSlider() {
         this.model.water_speed = WATER_SPEED_FACTOR_INITIAL;
 
@@ -125,5 +135,14 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.model, "move_water_texture")
             .name("Move Water Texture")
             .onChange(val => Water.setTextureMovement(val));
+    }
+
+    createResetAnimationsButton() {
+        this.model.reset_animations = () => {
+            this.scene.resetSceneAnimations();
+        };
+
+        this.gui.add(this.model, "reset_animations")
+            .name("Reset Animations");
     }
 }
