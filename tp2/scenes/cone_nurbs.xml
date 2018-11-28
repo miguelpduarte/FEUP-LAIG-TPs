@@ -1,0 +1,96 @@
+<yas>
+    <scene root="root_comp" axis_length="8" />
+    <views default="camera" >
+        <perspective id="camera" near="0.1" far="90" angle="60">
+            <from x="10" y="5" z="12" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+    </views>
+    <ambient>
+        <ambient r="0.6" g="0.6" b="0.6" a="1" />
+        <background r="0.05" g="0.05" b="0.05" a="1" />
+    </ambient>
+    <lights>
+        <omni id="room_top1" enabled="t" >
+            <location x="4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top2" enabled="t" >
+            <location x="4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top3" enabled="t" >
+            <location x="-4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top4" enabled="t" >
+            <location x="-4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+    </lights>
+    <textures>
+        <texture id="tex_stark" file="scenes/images/stark.jpg" />
+        <texture id="tex_wood" file="scenes/images/light_wood.jpg" />
+    </textures>
+    <materials>
+        <material id="mat_regular" shininess="40" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </material>
+    </materials>
+    <transformations>
+        <transformation id="trf_standup_y">
+            <rotate axis="x" angle="-90" />
+        </transformation>
+    </transformations>
+    <animations>
+        <circular id="circ_anim1" span="2.2" center="-2 0 2" radius="2" startang="0" rotang="-90" />
+        <linear id="lin_anim1" span="1.5">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="2" />
+        </linear>
+    </animations>
+    <primitives>
+        <primitive id="cone">
+            <cylinder2 base="0.5" top="0" height="1" slices="10" stacks="6" />
+        </primitive>
+    </primitives>
+    <components>
+        <component id="root_comp">
+            <transformation>
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cone_comp" />
+            </children>
+        </component>
+
+        <component id="cone_comp">
+            <transformation>
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="tex_stark" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cone" />
+            </children>
+        </component>
+
+    </components>
+</yas>
