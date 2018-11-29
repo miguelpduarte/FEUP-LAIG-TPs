@@ -12,7 +12,8 @@ class PrimitiveFactory {
             "patch": this.createPatch,
             "vehicle": this.createVehicle,
             "terrain": this.createTerrain,
-            "water": this.createWater
+            "water": this.createWater,
+            "board": this.createBoard
         };
 
         //Binding this
@@ -25,6 +26,10 @@ class PrimitiveFactory {
 
     create(primitive_model) {
         return this.PRIMITIVE_CREATION_FUNCS[primitive_model.type](primitive_model);
+    }
+
+    createBoard() {
+        return new Board(this.scene, this.createNurbsObject);
     }
 
     createRectangle(rectangle_model) {
