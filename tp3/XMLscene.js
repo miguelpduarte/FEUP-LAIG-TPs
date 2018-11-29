@@ -2,10 +2,6 @@ const DEGREE_TO_RAD = Math.PI / 180;
 const MAX_LIGHTS = 8;
 const UPDATE_RATE = 50; // times/s
 
-const ANIMATION_SPEED_MIN = 0.5;
-const ANIMATION_SPEED_INITIAL = 1;
-const ANIMATION_SPEED_MAX = 3;
-
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -45,7 +41,6 @@ class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.axisIsActive = true;
-        this.animation_speed = ANIMATION_SPEED_INITIAL;
 
         this.createDefaultMaterial();
 
@@ -65,7 +60,7 @@ class XMLscene extends CGFscene {
         
         
         if (this.sceneInited) {
-            this.updateComponentAnimations(delta_time * this.animation_speed);
+            this.updateComponentAnimations(delta_time);
             Water.updateTimeFactor(currTime);
             Flag.updateTimeFactor(currTime);
         }
@@ -241,16 +236,6 @@ class XMLscene extends CGFscene {
     updateLights() {
         for (let light of this.lights) {
             light.update();
-        }
-    }
-    
-    setAnimationSpeed(speed) {
-        this.animation_speed = speed;
-    }
-
-    resetSceneAnimations() {
-        for (let [id, component] of this.cgf_components) {
-            component.resetAnimations();
         }
     }
 
