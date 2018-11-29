@@ -7,15 +7,40 @@ class Board extends PrimitiveObject {
         super(scene);
 
         this.createNurbsObject = createNurbsObject;
-        this.board_size = 10;
-        this.board_height = 0.25;
+        this.board_size = 20;
+        this.board_height = 0.3;
+        this.board_margin = 0.625;
+        this.square_size = 1.875;
+        this.piece_offset = this.board_margin + this.square_size/2;
 
         this.createBoard();
+        this.createPieces();
         this.initMaterials();
     };
     
     display() {
-        this.scene.translate(0, 0, 0);
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + this.square_size, this.board_height, this.piece_offset);
+            this.dark_bishop_material.apply();
+            this.piece.display();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + 3*this.square_size, this.board_height, this.piece_offset);
+            this.light_bishop_material.apply();
+            this.piece.display();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset, this.board_height, this.piece_offset + this.square_size);
+            this.light_bishop_material.apply();
+            this.piece.display();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + 2*this.square_size, this.board_height, this.piece_offset + this.square_size);
+            this.dark_bishop_material.apply();
+            this.piece.display();
+        this.scene.popMatrix();
+
+        this.scene.translate(this.board_size/2, 0, this.board_size/2);
         // Board Cover
         this.scene.pushMatrix();
             this.scene.translate(0, this.board_height, 0);
@@ -86,10 +111,16 @@ class Board extends PrimitiveObject {
         );
     }
 
+    createPieces() {
+        this.piece = new Piece(this.scene, this.createNurbsObject);
+    }
+
     initMaterials() {
         this.board_cover_texture = new CGFtexture(this.scene, "primitives/resources/board.jpg");
         this.board_edge_texture = new CGFtexture(this.scene, "primitives/resources/board_edge.jpg");
         this.board_bottom_texture = new CGFtexture(this.scene, "primitives/resources/board_bottom.jpg");
+        this.dark_bishop_texture = new CGFtexture(this.scene, "primitives/resources/dark_bishop.jpg");
+        this.light_bishop_texture = new CGFtexture(this.scene, "primitives/resources/light_bishop.jpg");
 
         this.board_cover_material = new CGFappearance(this.scene);
         this.board_cover_material.setAmbient(0.15, 0.15, 0.15, 1);
@@ -114,5 +145,21 @@ class Board extends PrimitiveObject {
         this.board_bottom_material.setEmission(0, 0, 0, 1);
         this.board_bottom_material.setShininess(25);
         this.board_bottom_material.setTexture(this.board_bottom_texture);
+
+        this.dark_bishop_material = new CGFappearance(this.scene);
+        this.dark_bishop_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.dark_bishop_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.dark_bishop_material.setSpecular(0.3, 0.3, 0.3, 1);
+        this.dark_bishop_material.setEmission(0, 0, 0, 1);
+        this.dark_bishop_material.setShininess(25);
+        this.dark_bishop_material.setTexture(this.dark_bishop_texture);
+
+        this.light_bishop_material = new CGFappearance(this.scene);
+        this.light_bishop_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.light_bishop_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.light_bishop_material.setSpecular(0.3, 0.3, 0.3, 1);
+        this.light_bishop_material.setEmission(0, 0, 0, 1);
+        this.light_bishop_material.setShininess(25);
+        this.light_bishop_material.setTexture(this.light_bishop_texture);
     }
 };
