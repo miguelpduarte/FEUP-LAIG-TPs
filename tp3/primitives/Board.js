@@ -27,7 +27,7 @@ class Board extends PrimitiveObject {
         this.scene.pushMatrix();
             this.scene.translate(this.piece_offset + 3*this.square_size, this.board_height, this.piece_offset);
             this.dark_bishop_material.apply();
-            this.piece2.display();
+            this.piece3.display();
         this.scene.popMatrix();
         this.scene.pushMatrix();
             this.scene.translate(this.piece_offset, this.board_height, this.piece_offset + this.square_size);
@@ -38,6 +38,16 @@ class Board extends PrimitiveObject {
             this.scene.translate(this.piece_offset + 2*this.square_size, this.board_height, this.piece_offset + this.square_size);
             this.light_bishop_material.apply();
             this.piece.display();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + this.square_size, this.board_height, this.piece_offset + 2*this.square_size);
+            this.dark_bishop_material.apply();
+            this.piece2.display();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + 3*this.square_size, this.board_height, this.piece_offset + 2*this.square_size);
+            this.light_bishop_material.apply();
+            this.piece3.display();
         this.scene.popMatrix();
 
         this.scene.translate(this.board_size/2, 0, this.board_size/2);
@@ -114,6 +124,7 @@ class Board extends PrimitiveObject {
     createPieces() {
         this.piece = new Pawn(this.scene, this.createNurbsObject);
         this.piece2 = new Bishop(this.scene, this.createNurbsObject);
+        this.piece3 = new King(this.scene, this.createNurbsObject);
     }
 
     initMaterials() {

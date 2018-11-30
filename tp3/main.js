@@ -40,7 +40,8 @@ serialInclude([
     'primitives/Board.js',
     'primitives/Bishop.js',
     'primitives/Pawn.js',
-    
+    'primitives/King.js',
+    'primitives/Cube.js',
 
     main=function() {
         // Standard application, scene and interface setup
