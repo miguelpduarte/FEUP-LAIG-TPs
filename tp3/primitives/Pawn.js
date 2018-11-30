@@ -1,8 +1,8 @@
 /**
- * Piece
+ * Pawn
  * @constructor
  */
-class Piece extends PrimitiveObject {
+class Pawn extends PrimitiveObject {
 	constructor(scene, createNurbsObject) {
         super(scene);
 
@@ -36,36 +36,30 @@ class Piece extends PrimitiveObject {
             this.body.display();
         this.scene.popMatrix(); 
         this.scene.pushMatrix();
-            this.scene.translate(0, 1.78, 0);
+            this.scene.translate(0, 0.88, 0);
             this.piece_wave2.display();
             this.scene.rotate(Math.PI, 0, 1, 0);
             this.piece_wave2.display();
         this.scene.popMatrix();  
         this.scene.pushMatrix();
-            this.scene.translate(0, 1.86, 0);
+            this.scene.translate(0, 0.96, 0);
             this.piece_wave3.display();
             this.scene.rotate(Math.PI, 0, 1, 0);
             this.piece_wave3.display();
         this.scene.popMatrix();
         this.scene.pushMatrix();
-            this.scene.translate(0, 1.92, 0);
+            this.scene.translate(0, 1.24, 0);
             this.head.display();
-            this.scene.rotate(Math.PI, 0, 1, 0);
-            this.head.display();
-        this.scene.popMatrix();  
-        this.scene.pushMatrix();
-            this.scene.translate(0, 2.52, 0);
-            this.head_top.display();
         this.scene.popMatrix();  
         this.scene.pushMatrix();
             this.scene.rotate(Math.PI/2, 1, 0, 0);
-            this.scene.scale(0.6, 0.6, 1);
+            this.scene.scale(0.35*4/3, 0.35*4/3, 1);
             this.bottom.display();
         this.scene.popMatrix();  
     }
     
     createPieceBase() {
-        let base_radius = 0.6;
+        let base_radius = 0.35 * 4/3;
         let base_height = 0.2;
 
 		const control_vertexes = 
@@ -100,7 +94,7 @@ class Piece extends PrimitiveObject {
 
     createPieceWave1() {
         let height = 0.08;
-        let width = 0.45;
+        let width = 0.35;
 		const control_vertexes = 
 		[	// U0
             [				 
@@ -132,8 +126,8 @@ class Piece extends PrimitiveObject {
     }
     
     createBody() {
-        let base_radius = 0.45;
-        let base_height = 1.5;
+        let base_radius = 0.35;
+        let base_height = 0.6;
 
 		const control_vertexes = 
 		[	// U0
@@ -171,25 +165,25 @@ class Piece extends PrimitiveObject {
 		const control_vertexes = 
 		[	// U0
             [				 
-                [-width, 0.0, 0.0, 1.0 ],        // V0
+                [-width*78/100, 0.0, 0.0, 1.0 ],        // V0
                 [-width*7/4, height/2, 0.0, 1.0 ],        // V0
                 [-width, height, 0.0, 1.0 ]       // V1
             ],
             // U1
             [
-                [-width, 0.0, width*4/3, 1.0 ],   // V0
+                [-width*78/100, 0.0, width*78/100*4/3, 1.0 ],   // V0
                 [-width*7/4, height/2, width*7/4*4/3, 1.0 ],   // V0
                 [-width, height, width*4/3, 1.0 ]	// V1					 
             ],
             // U2
             [			
-                [ width, 0.0, width*4/3, 1.0 ],   // V0
+                [ width*78/100, 0.0, width*78/100*4/3, 1.0 ],   // V0
                 [ width*7/4, height/2, width*7/4*4/3, 1.0 ],   // V0
 				[ width, height, width*4/3, 1.0 ]   // V1
             ],
             // U3
             [			
-                [ width, 0.0, 0.0, 1.0 ],        // V0
+                [ width*78/100, 0.0, 0.0, 1.0 ],        // V0
                 [ width*7/4, height/2, 0.0, 1.0 ],        // V0
                 [ width, height, 0.0, 1.0 ]       // V1
             ]
@@ -232,42 +226,7 @@ class Piece extends PrimitiveObject {
     }
 
     createHead() {
-        let height = 0.55;
-        let width_base = 0.15;
-        let width = width_base * 1.7;
-		const control_vertexes = 
-		[	// U0
-            [				 
-                [-width_base, 0.0, 0.0, 1.0 ],        // V0
-                [-width*3/2, height*1/5, 0.0, 1.0 ],        // V0
-                [-width, height*2/5, 0.0, 4.0 ],       // V1
-                [-width*1/5, height, 0.0, 1.0 ]       // V1
-            ],
-            // U1
-            [
-                [-width_base, 0.0, width_base*4/3, 1.0 ],   // V0
-                [-width*3/2, height*1/5, width*3/2*4/3, 1.0 ],   // V0
-                [-width, height*2/5, width*4/3, 4.0 ],	// V1			
-                [-width*1/5, height, width*1/5*4/3, 1.0 ]	// V1					 
-            ],
-            // U2
-            [			
-                [ width_base, 0.0, width_base*4/3, 1.0 ],   // V0
-                [ width*3/2, height*1/5, width*3/2*4/3, 1.0 ],   // V0
-				[ width, height*2/5, width*4/3, 4.0 ],   // V1
-				[ width*1/5, height, width*1/5*4/3, 1.0 ]   // V1
-            ],
-            // U3
-            [			
-                [ width_base, 0.0, 0.0, 1.0 ],        // V0
-                [ width*3/2, height*1/5, 0.0, 1.0 ],        // V0
-                [ width, height*2/5, 0.0, 4.0 ],       // V1
-                [ width*1/5, height, 0.0, 1.0 ]       // V1
-            ]
-		];
-        
-		this.head = this.createNurbsObject(3, 3, control_vertexes, 20, 20);
-		this.head_top = new Sphere(this.scene, 20, 20, 0.075);
+		this.head = new Sphere(this.scene, 40, 40, 0.275);
     }
 
     createBottom() {

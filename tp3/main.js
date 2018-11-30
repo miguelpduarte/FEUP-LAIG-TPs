@@ -38,7 +38,8 @@ serialInclude([
     'primitives/Water.js',
     'primitives/Flag.js',
     'primitives/Board.js',
-    'primitives/Piece.js',
+    'primitives/Bishop.js',
+    'primitives/Pawn.js',
     
 
     main=function() {
