@@ -40,7 +40,7 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        this.axisIsActive = true;
+        this.axisIsActive = false;
 
         this.createDefaultMaterial();
 

@@ -19,36 +19,25 @@ class Board extends PrimitiveObject {
     };
     
     display() {
-        this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + this.square_size, this.board_height, this.piece_offset);
-            this.light_bishop_material.apply();
-            this.piece2.display();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + 3*this.square_size, this.board_height, this.piece_offset);
-            this.dark_bishop_material.apply();
-            this.piece3.display();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset, this.board_height, this.piece_offset + this.square_size);
-            this.dark_bishop_material.apply();
-            this.piece.display();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + 2*this.square_size, this.board_height, this.piece_offset + this.square_size);
-            this.light_bishop_material.apply();
-            this.piece.display();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + this.square_size, this.board_height, this.piece_offset + 2*this.square_size);
-            this.dark_bishop_material.apply();
-            this.piece2.display();
-        this.scene.popMatrix();
-        this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + 3*this.square_size, this.board_height, this.piece_offset + 2*this.square_size);
-            this.light_bishop_material.apply();
-            this.piece3.display();
-        this.scene.popMatrix();
+        this.drawPiece(0, 1, "light");
+        this.drawPiece(0, 3, "dark");
+        this.drawPiece(0, 5, "dark");
+        this.drawPiece(0, 5, "dark");
+        this.drawPiece(1, 0, "light");
+        this.drawPiece(1, 2, "dark");
+        this.drawPiece(1, 4, "dark");
+        this.drawPiece(2, 1, "light");
+        this.drawPiece(2, 3, "light");
+        this.drawPiece(2, 5, "dark");
+        this.drawPiece(3, 0, "dark");
+        this.drawPiece(3, 2, "light");
+        this.drawPiece(3, 4, "light");
+        this.drawPiece(4, 1, "dark");
+        this.drawPiece(4, 3, "dark");
+        this.drawPiece(4, 5, "light");
+        this.drawPiece(5, 0, "light");
+        this.drawPiece(5, 2, "dark");
+        this.drawPiece(5, 4, "dark");
 
         this.scene.translate(this.board_size/2, 0, this.board_size/2);
         // Board Cover
@@ -122,17 +111,16 @@ class Board extends PrimitiveObject {
     }
 
     createPieces() {
-        this.piece = new Pawn(this.scene, this.createNurbsObject);
-        this.piece2 = new Bishop(this.scene, this.createNurbsObject);
-        this.piece3 = new King(this.scene, this.createNurbsObject);
+        this.piece = new Bishop(this.scene, this.createNurbsObject);
     }
 
     initMaterials() {
         this.board_cover_texture = new CGFtexture(this.scene, "primitives/resources/board.jpg");
         this.board_edge_texture = new CGFtexture(this.scene, "primitives/resources/board_edge.jpg");
         this.board_bottom_texture = new CGFtexture(this.scene, "primitives/resources/board_bottom.jpg");
-        this.dark_bishop_texture = new CGFtexture(this.scene, "primitives/resources/dark_bishop.jpg");
-        this.light_bishop_texture = new CGFtexture(this.scene, "primitives/resources/light_bishop.jpg");
+        this.dark_piece_texture = new CGFtexture(this.scene, "primitives/resources/dark_piece.jpg");
+        this.light_piece_texture = new CGFtexture(this.scene, "primitives/resources/light_piece.jpg");
+        this.piece_material = {};
 
         this.board_cover_material = new CGFappearance(this.scene);
         this.board_cover_material.setAmbient(0.15, 0.15, 0.15, 1);
@@ -158,20 +146,28 @@ class Board extends PrimitiveObject {
         this.board_bottom_material.setShininess(25);
         this.board_bottom_material.setTexture(this.board_bottom_texture);
 
-        this.dark_bishop_material = new CGFappearance(this.scene);
-        this.dark_bishop_material.setAmbient(0.15, 0.15, 0.15, 1);
-        this.dark_bishop_material.setDiffuse(0.5, 0.5, 0.5, 1);
-        this.dark_bishop_material.setSpecular(0.3, 0.3, 0.3, 1);
-        this.dark_bishop_material.setEmission(0, 0, 0, 1);
-        this.dark_bishop_material.setShininess(25);
-        this.dark_bishop_material.setTexture(this.dark_bishop_texture);
+        this.piece_material["dark"] = new CGFappearance(this.scene);
+        this.piece_material["dark"].setAmbient(0.15, 0.15, 0.15, 1);
+        this.piece_material["dark"].setDiffuse(0.5, 0.5, 0.5, 1);
+        this.piece_material["dark"].setSpecular(0.3, 0.3, 0.3, 1);
+        this.piece_material["dark"].setEmission(0, 0, 0, 1);
+        this.piece_material["dark"].setShininess(25);
+        this.piece_material["dark"].setTexture(this.dark_piece_texture);
 
-        this.light_bishop_material = new CGFappearance(this.scene);
-        this.light_bishop_material.setAmbient(0.15, 0.15, 0.15, 1);
-        this.light_bishop_material.setDiffuse(0.5, 0.5, 0.5, 1);
-        this.light_bishop_material.setSpecular(0.3, 0.3, 0.3, 1);
-        this.light_bishop_material.setEmission(0, 0, 0, 1);
-        this.light_bishop_material.setShininess(25);
-        this.light_bishop_material.setTexture(this.light_bishop_texture);
+        this.piece_material["light"] = new CGFappearance(this.scene);
+        this.piece_material["light"].setAmbient(0.15, 0.15, 0.15, 1);
+        this.piece_material["light"].setDiffuse(0.5, 0.5, 0.5, 1);
+        this.piece_material["light"].setSpecular(0.3, 0.3, 0.3, 1);
+        this.piece_material["light"].setEmission(0, 0, 0, 1);
+        this.piece_material["light"].setShininess(25);
+        this.piece_material["light"].setTexture(this.light_piece_texture);
+    }
+
+    drawPiece(row, column, color) {
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + this.square_size*column, this.board_height, this.piece_offset + this.square_size*row);
+            this.piece_material[color].apply();
+            this.piece.display();
+        this.scene.popMatrix();
     }
 };

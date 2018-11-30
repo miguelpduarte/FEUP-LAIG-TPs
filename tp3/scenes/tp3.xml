@@ -2,8 +2,12 @@
     <scene root="root_comp" axis_length="8" />
     <views default="camera" >
         <perspective id="camera" near="0.1" far="90" angle="60">
-            <from x="10" y="5" z="12" />
-            <to x="0" y="0" z="0" />
+            <from x="10" y="13" z="26" />
+            <to x="10" y="0" z="10" />
+        </perspective>
+        <perspective id="close-up" near="0.1" far="90" angle="60">
+            <from x="-1" y="1.5" z="-1" />
+            <to x="10" y="1" z="10" />
         </perspective>
     </views>
     <ambient>
@@ -12,25 +16,31 @@
     </ambient>
     <lights>
         <omni id="room_top1" enabled="t" >
-            <location x="0" y="3.5" z="0" w="1" />
+            <location x="-2" y="2" z="-2" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
         </omni>
         <omni id="room_top2" enabled="t" >
-            <location x="8" y="3.5" z="0" w="1" />
+            <location x="22" y="2" z="-2" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
         </omni>
-        <omni id="room_top3" enabled="t" >
-            <location x="0" y="3.5" z="8" w="1" />
+        <omni id="room_top3" enabled="f" >
+            <location x="-2" y="2" z="22" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
         </omni>
-        <omni id="room_top4" enabled="t" >
-            <location x="8" y="3.5" z="8" w="1" />
+        <omni id="room_top4" enabled="f" >
+            <location x="22" y="2" z="22" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top5" enabled="t" >
+            <location x="10" y="10" z="10" w="1" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
