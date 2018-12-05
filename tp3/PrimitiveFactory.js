@@ -13,7 +13,8 @@ class PrimitiveFactory {
             "vehicle": this.createVehicle,
             "terrain": this.createTerrain,
             "water": this.createWater,
-            "board": this.createBoard
+            "board": this.createBoard,
+            "clock": this.createClock
         };
 
         //Binding this
@@ -30,6 +31,10 @@ class PrimitiveFactory {
 
     createBoard() {
         return new Board(this.scene, this.createNurbsObject);
+    }
+
+    createClock() {
+        return new Clock(this.scene, this.createNurbsObject);
     }
 
     createRectangle(rectangle_model) {

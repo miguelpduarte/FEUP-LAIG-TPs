@@ -42,6 +42,7 @@ serialInclude([
     'primitives/Pawn.js',
     'primitives/King.js',
     'primitives/Cube.js',
+    'primitives/Clock.js',
 
     main=function() {
         // Standard application, scene and interface setup

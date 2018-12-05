@@ -14,7 +14,7 @@
             <to x="0" y="4.8" z="0" />
         </perspective>
         <perspective id="spectator" near="0.1" far="90" angle="60">
-            <from x="3.5" y="8" z="0" />
+            <from x="-3.5" y="8" z="0" />
             <to x="0" y="4.8" z="0" />
         </perspective>
     </views>
@@ -97,6 +97,9 @@
         <primitive id="board">
             <board />
         </primitive>
+        <primitive id="clock">
+            <clock />
+        </primitive>
         <primitive id="table_leg">
             <cylinder base="0.1" top="0.1" height="2.2" slices="10" stacks="3" />
         </primitive>
@@ -116,6 +119,7 @@
             <children>
                 <componentref id="board_comp" />
                 <componentref id="table" />
+                <componentref id="clock_comp" />
             </children>
         </component>
 
@@ -307,9 +311,24 @@
             <materials>
                 <material id="mat_regular" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <primitiveref id="board" />
+            </children>
+        </component>
+
+        <component id="clock_comp">
+            <transformation>
+                <translate x="3" y="4.8" z="0" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="clock" />
             </children>
         </component>
     </components>

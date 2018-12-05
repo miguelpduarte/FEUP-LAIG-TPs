@@ -744,6 +744,8 @@ class MySceneGraph {
             primitive = this.createWater(primitiveChild, id);
         } else if (primitiveChild.nodeName === "board") {
             primitive = this.createBoard();
+        } else if (primitiveChild.nodeName === "clock") {
+            primitive = this.createClock();
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
@@ -980,6 +982,12 @@ class MySceneGraph {
     createBoard() {
         return {
             type: "board"
+        }
+    }
+
+    createClock() {
+        return {
+            type: "clock"
         }
     }
 
