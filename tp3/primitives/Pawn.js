@@ -48,7 +48,7 @@ class Pawn extends PrimitiveObject {
             this.piece_wave3.display();
         this.scene.popMatrix();
         this.scene.pushMatrix();
-            this.scene.translate(0, 1.24, 0);
+            this.scene.translate(0, 1.175, 0);
             this.head.display();
         this.scene.popMatrix();  
         this.scene.pushMatrix();
@@ -226,7 +226,7 @@ class Pawn extends PrimitiveObject {
     }
 
     createHead() {
-		this.head = new Sphere(this.scene, 40, 40, 0.275);
+		this.head = new Sphere(this.scene, 40, 40, 0.22);
     }
 
     createBottom() {
