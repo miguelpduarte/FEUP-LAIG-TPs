@@ -1,8 +1,12 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
-    <views default="camera" >
-        <perspective id="camera" near="0.1" far="90" angle="60">
-            <from x="10" y="13" z="26" />
+    <views default="player-white" >
+        <perspective id="player-white" near="0.1" far="90" angle="60">
+            <from x="10" y="16" z="23" />
+            <to x="10" y="0" z="10" />
+        </perspective>
+        <perspective id="player-black" near="0.1" far="90" angle="60">
+            <from x="10" y="16" z="-3" />
             <to x="10" y="0" z="10" />
         </perspective>
         <perspective id="close-up" near="0.1" far="90" angle="60">
