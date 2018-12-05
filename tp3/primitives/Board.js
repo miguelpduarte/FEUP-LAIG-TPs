@@ -7,8 +7,8 @@ class Board extends PrimitiveObject {
         super(scene);
 
         this.createNurbsObject = createNurbsObject;
-        this.board_size = 10;
-        this.board_height = 0.3;
+        this.board_size = 4;
+        this.board_height = 0.1;
         this.board_margin = this.board_size/32;
         this.square_size = (this.board_size - 2*this.board_margin)/10;
         this.piece_offset = this.board_margin + this.square_size/2;
