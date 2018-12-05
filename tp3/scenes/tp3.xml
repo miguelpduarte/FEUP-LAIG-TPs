@@ -2,16 +2,16 @@
     <scene root="root_comp" axis_length="8" />
     <views default="player-white" >
         <perspective id="player-white" near="0.1" far="90" angle="60">
-            <from x="10" y="16" z="23" />
-            <to x="10" y="0" z="10" />
+            <from x="5" y="9" z="11" />
+            <to x="5" y="0" z="5" />
         </perspective>
         <perspective id="player-black" near="0.1" far="90" angle="60">
-            <from x="10" y="16" z="-3" />
-            <to x="10" y="0" z="10" />
+            <from x="5" y="9" z="-1" />
+            <to x="5" y="0" z="5" />
         </perspective>
         <perspective id="close-up" near="0.1" far="90" angle="60">
             <from x="-1" y="1.5" z="-1" />
-            <to x="10" y="1" z="10" />
+            <to x="5" y="1" z="5" />
         </perspective>
     </views>
     <ambient>
@@ -99,6 +99,32 @@
                 <primitiveref id="board" />
             </children>
         </component>
-
     </components>
+
+    <!-- <pieces>
+        <piece_white>
+            <transformation>
+                ...
+            </transformation>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                ...
+            </children>
+        </piece_white/>
+        <piece_black>
+            <transformation>
+                ...
+            </transformation>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                ...
+            </children>
+        </piece_black/>
+    </pieces> -->
 </yas>

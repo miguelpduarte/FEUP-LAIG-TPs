@@ -7,11 +7,12 @@ class Board extends PrimitiveObject {
         super(scene);
 
         this.createNurbsObject = createNurbsObject;
-        this.board_size = 20;
+        this.board_size = 10;
         this.board_height = 0.3;
-        this.board_margin = 0.625;
-        this.square_size = 1.875;
+        this.board_margin = this.board_size/32;
+        this.square_size = (this.board_size - 2*this.board_margin)/10;
         this.piece_offset = this.board_margin + this.square_size/2;
+        this.piece_size_ratio = this.board_size / 20;
 
         this.createBoard();
         this.createPieces();
@@ -167,6 +168,7 @@ class Board extends PrimitiveObject {
         this.scene.pushMatrix();
             this.scene.translate(this.piece_offset + this.square_size*column, this.board_height, this.piece_offset + this.square_size*row);
             this.piece_material[color].apply();
+            this.scene.scale(this.piece_size_ratio, this.piece_size_ratio, this.piece_size_ratio);
             this.piece.display();
         this.scene.popMatrix();
     }

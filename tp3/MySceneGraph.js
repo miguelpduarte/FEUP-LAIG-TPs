@@ -743,7 +743,7 @@ class MySceneGraph {
         } else if (primitiveChild.nodeName === "water") {
             primitive = this.createWater(primitiveChild, id);
         } else if (primitiveChild.nodeName === "board") {
-            primitive = this.createBoard(primitiveChild, id);
+            primitive = this.createBoard();
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
