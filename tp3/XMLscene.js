@@ -45,6 +45,8 @@ class XMLscene extends CGFscene {
         this.createDefaultMaterial();
 
         this.setUpdatePeriod(1000 / UPDATE_RATE);
+
+        this.setPickEnabled(true);
     }
 
     update(currTime) {
@@ -308,9 +310,8 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        // ---- BEGIN Background, camera and axis setup
-
-        // Clear image and depth buffer everytime we update the scene
+        this.logPicking();
+        
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -323,8 +324,7 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        
-        // Draw axis
+
         
         this.axisIsActive && this.axis.display();
 
@@ -333,6 +333,21 @@ class XMLscene extends CGFscene {
         }
 
         this.popMatrix();
-        // ---- END Background, camera and axis setup
+    }
+
+    logPicking() {
+        if (this.pickMode == false) {
+            if (this.pickResults != null && this.pickResults.length > 0) {
+                for (let i=0; i< this.pickResults.length; i++) {
+                    let obj = this.pickResults[i][0];
+                    if (obj) {
+                        let customId = this.pickResults[i][1];				
+                        console.log("Picked object with pick id " + customId);
+                    }
+                }
+                this.pickResults = [];
+            }		
+        }
+        this.clearPickRegistration();
     }
 }

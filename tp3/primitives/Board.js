@@ -14,6 +14,7 @@ class Board extends PrimitiveObject {
         this.piece_offset = this.board_margin + this.square_size/2;
         this.piece_size_ratio = this.board_size / 20;
 
+        this.createTouchSquare();
         this.createBoard();
         this.createPieces();
         this.initMaterials();
@@ -39,6 +40,8 @@ class Board extends PrimitiveObject {
         this.drawPiece(5, 0, "light");
         this.drawPiece(5, 2, "dark");
         this.drawPiece(5, 4, "dark");
+        
+        this.drawTouchSquares();
 
         this.scene.translate(this.board_size/2, 0, this.board_size/2);
         // Board Cover
@@ -89,6 +92,18 @@ class Board extends PrimitiveObject {
             this.board_edge_material.apply();
             this.board_edge.display();
         this.scene.popMatrix();
+    }
+
+    createTouchSquare() {
+        this.touch_square = new Plane(
+            this.scene, 
+            {
+                npartsU: 1,
+                npartsV: 1
+            },
+            this.createNurbsObject
+        );
+        this.touch_square.pickingEnabled = true;
     }
 
     createBoard() {
@@ -172,4 +187,21 @@ class Board extends PrimitiveObject {
             this.piece.display();
         this.scene.popMatrix();
     }
-};
+
+    drawTouchSquares() {
+        for (let i = 0; i < 10; ++i) {
+            for (let j = 0; j < 10; ++j) {
+                this.drawTouchSquare(i, j);
+            }
+        }
+    }
+
+    drawTouchSquare(row, column) {
+        this.scene.pushMatrix();
+            this.scene.translate(this.piece_offset + this.square_size*column, this.board_height + 0.001, this.piece_offset + this.square_size*row);
+            this.scene.scale(this.square_size-0.025, 1, this.square_size-0.025);
+            this.scene.registerForPick(row*10 + column, this.touch_square);
+            //this.touch_square.display();
+        this.scene.popMatrix();
+    }
+}

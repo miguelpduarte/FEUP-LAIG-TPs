@@ -2,6 +2,9 @@
  * Clock
  * @constructor
  */
+
+const CLOCK_BUTTON_PICK_ID = 1000;
+
 class Clock extends PrimitiveObject {
 	constructor(scene, createNurbsObject) {
         super(scene);
@@ -64,6 +67,7 @@ class Clock extends PrimitiveObject {
             this.scene.translate(0, this.height, 0);
             this.scene.rotate(-Math.PI/2, 1, 0, 0);
             this.metal_material.apply();
+            this.scene.registerForPick(CLOCK_BUTTON_PICK_ID, this.button);
             this.button.display();
         this.scene.popMatrix();
     }
@@ -93,6 +97,7 @@ class Clock extends PrimitiveObject {
 
     createButton() {
         this.button = new Cylinder(this.scene, 30, 4, this.height/15, this.breadth*7/20, this.breadth*7/20);
+        this.button.pickingEnabled = true;
     }
 
     createMaterials() {
