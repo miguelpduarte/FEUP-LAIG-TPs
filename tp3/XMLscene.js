@@ -72,6 +72,10 @@ class XMLscene extends CGFscene {
         for(const [id, component] of this.cgf_components) {
             component.updateAnimations(delta_time);
         }
+
+        for(const [id, primitive] of this.cgf_primitives) {
+            primitive.updateAnimations(delta_time);
+        }
     }
 
     createDefaultMaterial() {

@@ -18,30 +18,22 @@ class Board extends PrimitiveObject {
         this.createBoard();
         this.createPieces();
         this.initMaterials();
+        this.initPieces();
+        
+        // TEMPORARY !
+        let i = 0;
+        for (let piece of this.pieces) {
+            if (i++ % 2 == 0) {
+                piece.setTarget(piece.row+3, piece.column+1);
+            } else {
+                piece.setTarget(piece.row+2, piece.column+4);
+            }
+        }
     };
     
     display() {
         this.drawTouchSquares();
-        
-        this.drawPiece(0, 1, "light");
-        this.drawPiece(0, 3, "dark");
-        this.drawPiece(0, 5, "dark");
-        this.drawPiece(0, 5, "dark");
-        this.drawPiece(1, 0, "light");
-        this.drawPiece(1, 2, "dark");
-        this.drawPiece(1, 4, "dark");
-        this.drawPiece(2, 1, "light");
-        this.drawPiece(2, 3, "light");
-        this.drawPiece(2, 5, "dark");
-        this.drawPiece(3, 0, "dark");
-        this.drawPiece(3, 2, "light");
-        this.drawPiece(3, 4, "light");
-        this.drawPiece(4, 1, "dark");
-        this.drawPiece(4, 3, "dark");
-        this.drawPiece(4, 5, "light");
-        this.drawPiece(5, 0, "light");
-        this.drawPiece(5, 2, "dark");
-        this.drawPiece(5, 4, "dark");
+        this.drawPieces();
 
         this.scene.translate(this.board_size/2, 0, this.board_size/2);
         // Board Cover
@@ -130,6 +122,29 @@ class Board extends PrimitiveObject {
         this.piece = new Bishop(this.scene, this.createNurbsObject);
     }
 
+    initPieces() {
+        this.pieces = [];
+
+        this.pieces.push(new Piece(0, 1, "light"));
+        this.pieces.push(new Piece(0, 3, "light"));
+        this.pieces.push(new Piece(0, 5, "light"));
+        this.pieces.push(new Piece(1, 2, "light"));
+        this.pieces.push(new Piece(1, 4, "light"));
+        this.pieces.push(new Piece(1, 6, "light"));
+        this.pieces.push(new Piece(2, 1, "light"));
+        this.pieces.push(new Piece(2, 3, "light"));
+        this.pieces.push(new Piece(2, 5, "light"));
+        this.pieces.push(new Piece(3, 2, "light"));
+        this.pieces.push(new Piece(3, 4, "light"));
+        this.pieces.push(new Piece(3, 6, "light"));
+    }
+
+    drawPieces() {
+        for (let piece of this.pieces) {
+            this.drawPiece(piece.column, piece.row, piece.color);
+        }
+    }
+
     initMaterials() {
         this.board_cover_texture = new CGFtexture(this.scene, "primitives/resources/board.jpg");
         this.board_edge_texture = new CGFtexture(this.scene, "primitives/resources/board_edge.jpg");
@@ -206,5 +221,11 @@ class Board extends PrimitiveObject {
                 this.touch_square.display();
             }
         this.scene.popMatrix();
+    }
+
+    updateAnimations(delta_time) {
+        for (let piece of this.pieces) {
+            piece.update(delta_time/1e3);
+        }
     }
 }

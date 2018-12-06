@@ -7,7 +7,7 @@ class PrimitiveObject extends CGFobject {
 		super(scene);
 	};
 
-    setTexLengths(length_s, length_t) {
+    setTexLengths(length_s, length_t) { }
 
-    }
+	updateAnimations() { }
 };
