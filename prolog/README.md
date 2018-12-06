@@ -10,11 +10,11 @@ The server will then listen in port 8081 by default.
 
 **Request:**
 
-/init/:player1difficulty/:player2difficulty
+`/init/:player1difficulty/:player2difficulty`
 
 **Response:**
 
-```json
+```
 {
     "currp": [PlayerColor, PlayerDif],
     "nextp": [PlayerColor, PlayerDif],
@@ -29,13 +29,13 @@ The server will then listen in port 8081 by default.
 
 **Request:**
 
-/move/:[Board,NWhite,NBlack,NTurns]/:[CurrColor,CurrDif]/:[NextColor,NextDif]/[X1,Y1,X2,Y2]
+`/move/:[Board,NWhite,NBlack,NTurns]/:[CurrColor,CurrDif]/:[NextColor,NextDif]/[X1,Y1,X2,Y2]`
 
 In which [CurrColor,CurrDif] make up the current player, [NextColor,NextDif] make up the next player and [X1,Y1,X2,Y2] make up the desired move.
 
 **Response:**
 
-```json
+```
 {
     "success": boolean,
     "currp": [Color, Dif],
