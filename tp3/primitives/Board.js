@@ -21,6 +21,8 @@ class Board extends PrimitiveObject {
     };
     
     display() {
+        this.drawTouchSquares();
+        
         this.drawPiece(0, 1, "light");
         this.drawPiece(0, 3, "dark");
         this.drawPiece(0, 5, "dark");
@@ -40,8 +42,6 @@ class Board extends PrimitiveObject {
         this.drawPiece(5, 0, "light");
         this.drawPiece(5, 2, "dark");
         this.drawPiece(5, 4, "dark");
-        
-        this.drawTouchSquares();
 
         this.scene.translate(this.board_size/2, 0, this.board_size/2);
         // Board Cover
@@ -194,14 +194,17 @@ class Board extends PrimitiveObject {
                 this.drawTouchSquare(i, j);
             }
         }
+        this.scene.registerForPick(100, null);
     }
 
     drawTouchSquare(row, column) {
         this.scene.pushMatrix();
             this.scene.translate(this.piece_offset + this.square_size*column, this.board_height + 0.001, this.piece_offset + this.square_size*row);
-            this.scene.scale(this.square_size-0.025, 1, this.square_size-0.025);
+            this.scene.scale(this.square_size, 1, this.square_size);
             this.scene.registerForPick(row*10 + column, this.touch_square);
-            //this.touch_square.display();
+            if (this.scene.pickMode) {
+                this.touch_square.display();
+            }
         this.scene.popMatrix();
     }
 }
