@@ -47,6 +47,9 @@ class GameState {
             this.previous_states.push(this.curr_game_state);
             this.curr_game_state = res;
 
+            // Signaling that the move was valid
+            this.scene.clock.setColor("green");
+
             console.log("Performed move!", res.performed_move);
 
             // Updating the board
@@ -62,6 +65,8 @@ class GameState {
             }
         } catch(err) {
             console.error("Move piece unsuccessful:", err);
+            // Signaling that the move was invalid
+            this.scene.clock.setColor("red");
         }
     }
 
@@ -91,6 +96,4 @@ GameState.state = STATE_ENUM.initial;
 GameState.previous_states = [];
 GameState.curr_game_state = null;
 GameState.winner = null;
-// Only trust backend on this?
-GameState.curr_player = 1;
 GameState.num_pieces_moving = 0;
