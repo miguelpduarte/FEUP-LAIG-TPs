@@ -21,6 +21,7 @@ class GameState {
             this.curr_game_state = res;
             this.previous_states = [];
             this.winner = null;
+            this.num_pieces_moving = 0;
 
             console.log("Started game successfully");
             // Setting board pieces
@@ -35,7 +36,7 @@ class GameState {
     // To be called by ClickHandler
     static async movePiece(x1, y1, x2, y2) {
         // Safety check
-        if (this.state === STATE_ENUM.finished) {
+        if (this.state === STATE_ENUM.finished || this.num_pieces_moving !== 0) {
             return;
         }
 
@@ -76,6 +77,14 @@ class GameState {
     static getWinner() {
         return this.winner;
     }
+
+    static pieceStartedMoving() {
+        this.num_pieces_moving++;
+    }
+
+    static pieceStoppedMoving() {
+        this.num_pieces_moving--;
+    }
 }
 
 GameState.state = STATE_ENUM.initial;
@@ -84,3 +93,4 @@ GameState.curr_game_state = null;
 GameState.winner = null;
 // Only trust backend on this?
 GameState.curr_player = 1;
+GameState.num_pieces_moving = 0;

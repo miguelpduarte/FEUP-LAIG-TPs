@@ -11,10 +11,6 @@ class Piece {
     };
 
     setTarget(target_row, target_column) {
-        if (target_row === this.row && target_column === this.column) {
-            return;
-        }
-
         this.target = {
             row: target_row,
             column: target_column
@@ -31,6 +27,7 @@ class Piece {
         this.column_speed = (target_column - this.column) / this.move_time;
         this.row_speed = (target_row - this.row) / this.move_time;
         
+        GameState.pieceStartedMoving();
     }  
    
     update(delta_time) {
@@ -51,6 +48,7 @@ class Piece {
             this.column = this.target.column;
             this.height = 0;
             this.target = null;
+            GameState.pieceStoppedMoving();
         }
     }
 
