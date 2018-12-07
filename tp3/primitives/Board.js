@@ -18,7 +18,9 @@ class Board extends PrimitiveObject {
         this.num_dark_removed_pieces = 0;
 
         this.pieces = [];
+        this.highlighted_square = null;
 
+        this.createHighlight();
         this.createTouchSquare();
         this.createBoard();
         this.createPieces();
@@ -28,6 +30,7 @@ class Board extends PrimitiveObject {
     display() {
         this.drawTouchSquares();
         this.drawPieces();
+        this.drawHighlightedSquare();
 
         this.scene.translate(this.board_size/2, 0, this.board_size/2);
         // Board Cover
@@ -170,6 +173,13 @@ class Board extends PrimitiveObject {
         this.board_bottom_material.setShininess(25);
         this.board_bottom_material.setTexture(this.board_bottom_texture);
 
+        this.highlighted_material = new CGFappearance(this.scene);
+        this.highlighted_material.setAmbient(0.15, 0.15, 0, 1);
+        this.highlighted_material.setDiffuse(0.5, 0.5, 0, 1);
+        this.highlighted_material.setSpecular(0.3, 0.3, 0, 1);
+        this.highlighted_material.setEmission(0, 0, 0, 1);
+        this.highlighted_material.setShininess(25);
+
         this.piece_material["dark"] = new CGFappearance(this.scene);
         this.piece_material["dark"].setAmbient(0.15, 0.15, 0.15, 1);
         this.piece_material["dark"].setDiffuse(0.5, 0.5, 0.5, 1);
@@ -247,7 +257,6 @@ class Board extends PrimitiveObject {
     }
 
     removePiece(piece) {
-        
         if (piece.color === 'dark') {
             let row = Math.floor(this.num_dark_removed_pieces/13);
             piece.setTarget(
@@ -263,5 +272,31 @@ class Board extends PrimitiveObject {
             );
             this.num_light_removed_pieces++;
         }
+    }
+
+    createHighlight() {
+        this.highlight = new Circle(this.scene, 25);
+    }
+
+    setHighlightedSquare(square) {
+        this.highlighted_square = square;
+    }
+
+    drawHighlightedSquare() {
+        if (!this.highlighted_square) {
+            return;
+        }
+
+        this.scene.pushMatrix();
+            this.scene.translate(
+                this.piece_offset + this.square_size*this.highlighted_square.column, 
+                this.board_height + 0.001, 
+                this.piece_offset + this.square_size*this.highlighted_square.row
+            );
+            this.scene.scale(0.165, 1, 0.165);
+            this.scene.rotate(-Math.PI/2, 1, 0, 0);
+            this.highlighted_material.apply();
+            this.highlight.display();
+        this.scene.popMatrix();
     }
 }

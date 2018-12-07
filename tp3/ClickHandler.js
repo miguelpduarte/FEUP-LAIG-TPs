@@ -32,11 +32,24 @@ class ClickHandler {
         const column = clickId % 10;
         const row = Math.floor(clickId / 10);
 
-        if (this.origin !== null) {
-            GameState.movePiece(this.origin.row, this.origin.column, row, column);
+        const current_player = GameState.getCurrentPlayerColor();
+        const square_piece = this.scene.board.getSquarePiece(row, column);
+
+        if (!square_piece) {
             this.origin = null;
-        } else {
-            this.origin = {row, column}
+            this.scene.board.setHighlightedSquare(null);
+        }
+        else {
+            if (square_piece.color === 'light' && current_player === 1 ||
+                square_piece.color === 'dark' && current_player === 2) {
+                
+                this.origin = {row, column};
+                this.scene.board.setHighlightedSquare(this.origin);
+            } else if (this.origin !== null) {
+                GameState.movePiece(this.origin.row, this.origin.column, row, column);
+                this.origin = null;
+                this.scene.board.setHighlightedSquare(null);
+            }
         }
     }
 };
