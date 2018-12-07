@@ -165,8 +165,11 @@ class Clock extends PrimitiveObject {
             return;
         }
 
+        clearTimeout(this.timeout_id);
+
         this.plastic_material.setTexture(texture);
-        setTimeout(() => {
+        
+        this.timeout_id = setTimeout(() => {
             this.plastic_material.setTexture(this.yellow_plastic_texture);
         }, 2000);
     }
