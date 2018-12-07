@@ -46,6 +46,8 @@ class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(1000 / UPDATE_RATE);
 
+        GameState.setScene(this);
+
         ClickHandler.setScene(this);
         this.setPickEnabled(true);
     }

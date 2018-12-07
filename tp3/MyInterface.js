@@ -33,6 +33,7 @@ class MyInterface extends CGFinterface {
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
+        this.createGameControls();
         this.initKeys();
     }
 
@@ -98,5 +99,42 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.model, "cameraIndex", cameraDropdownModel)
             .name("Current Camera")
             .onChange(val => this.scene.setCurrentCamera(val));
+    }
+
+    createGameControls() {
+        const playerTypeModel = {
+            "Human": 1,
+            "Random AI": 2,
+            "Beginner AI": 3,
+            "Hard AI (SLOW!)": 4
+        };
+
+        const group = this.gui.addFolder("Game Controls");
+
+        // Adding player 1 and player 2 type dropdowns
+        this.model.p1dif = 1;
+        this.model.p2dif = 1;
+        group.add(this.model, "p1dif", playerTypeModel)
+           .name("Player 1 Type");
+        group.add(this.model, "p2dif", playerTypeModel)
+           .name("Player 2 Type");
+
+        // Adding start/reset game button
+        
+        this.model.start_game = () => {
+            GameState.initGame(this.model.p1dif, this.model.p2dif);
+        };
+
+        group.add(this.model, "start_game")
+           .name("Start/Reset Game");
+
+        this.model.undo_move = () => {
+            console.log("I don't do anything yet!");
+        };
+
+        group.add(this.model, "undo_move")
+           .name("Undo Move (WIP)");
+
+        group.open();
     }
 }
