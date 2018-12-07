@@ -14,9 +14,6 @@ class Board extends PrimitiveObject {
         this.piece_offset = this.board_margin + this.square_size/2;
         this.piece_size_ratio = this.board_size / 20;
 
-        this.num_light_removed_pieces = 0;
-        this.num_dark_removed_pieces = 0;
-
         this.pieces = [];
         this.highlighted_square = null;
 
@@ -120,6 +117,8 @@ class Board extends PrimitiveObject {
     }
 
     initPieces(board_pieces = []) {
+        this.num_light_removed_pieces = 0;
+        this.num_dark_removed_pieces = 0;
         // In order to handle inits after the first one
         this.pieces = [];
 
