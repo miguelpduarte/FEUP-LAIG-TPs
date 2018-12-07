@@ -20,14 +20,16 @@ class Piece {
             column: target_column
         }
 
-        this.column_speed = (target_column - this.column) / Piece.move_time;
-        this.row_speed = (target_row - this.row) / Piece.move_time;
         this.target_mid_point = {
             row: this.row + (target_row - this.row)/2,
             column: this.column + (target_column - this.column)/2
         }
         this.total_distance_mid_point = Math.sqrt(Math.pow(this.row - this.target_mid_point.row, 2) + Math.pow(this.column - this.target_mid_point.column, 2));
         this.height_multiplier = Math.max(this.total_distance_mid_point, 2);
+
+        this.move_time = Math.min(2, this.total_distance_mid_point);
+        this.column_speed = (target_column - this.column) / this.move_time;
+        this.row_speed = (target_row - this.row) / this.move_time;
         
     }  
    
@@ -76,5 +78,3 @@ class Piece {
         return false;
     }
 };
-
-Piece.move_time = 2;
