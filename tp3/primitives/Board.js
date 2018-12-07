@@ -127,7 +127,7 @@ class Board extends PrimitiveObject {
 
     drawPieces() {
         for (let piece of this.pieces) {
-            this.drawPiece(piece.column, piece.row, piece.color);
+            this.drawPiece(piece);
         }
     }
 
@@ -180,10 +180,10 @@ class Board extends PrimitiveObject {
         this.piece_material["light"].setTexture(this.light_piece_texture);
     }
 
-    drawPiece(row, column, color) {
+    drawPiece(piece) {
         this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + this.square_size*column, this.board_height, this.piece_offset + this.square_size*row);
-            this.piece_material[color].apply();
+            this.scene.translate(this.piece_offset + this.square_size*piece.column, this.board_height + piece.height, this.piece_offset + this.square_size*piece.row);
+            this.piece_material[piece.color].apply();
             this.scene.scale(this.piece_size_ratio, this.piece_size_ratio, this.piece_size_ratio);
             this.piece.display();
         this.scene.popMatrix();

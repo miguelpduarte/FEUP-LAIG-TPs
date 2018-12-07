@@ -21,6 +21,7 @@ class ClickHandler {
 
     static verifyClick(clickId) {
         if (clickId === Clock.button_pick_id) {
+            console.log("Clock clicked!!!");
             this.origin = null;
         } else if (clickId >= 0 && clickId < 100) {
             this.handler(clickId);
@@ -28,8 +29,8 @@ class ClickHandler {
     }
 
     static handler(clickId) {
-        let row = clickId % 10;
-        let column = Math.floor(clickId / 10);
+        let column = clickId % 10;
+        let row = Math.floor(clickId / 10);
 
         if (this.scene.board.squareHasPiece(row, column)) {
             this.origin = {row, column}
