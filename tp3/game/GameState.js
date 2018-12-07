@@ -28,12 +28,15 @@ class GameState {
             this.scene.board.initPieces(res.board);
             // Possibly also reset clicking state just in case
             //TODO
+
+            // Starting the AI move chain (does nothing if the current player is a human so all is well)
+            this.aiMovePiece();
         } catch(err) {
             console.error("Unable to start game:", err);
         }
     }
 
-    static checkGameOver() {
+    static checkGameOver(res) {
         if (res.game_over) {
             console.log("Game is over! Player ", res.winner, " is the winner!");
             this.state = STATE_ENUM.finished;
@@ -66,7 +69,7 @@ class GameState {
             this.scene.board.performMove(performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2);
 
             // Testing if the game is over
-            this.checkGameOver();
+            this.checkGameOver(res);
         } catch(err) {
             console.error("Move piece unsuccessful:", err);
             // Signaling that the move was invalid
@@ -76,8 +79,8 @@ class GameState {
 
     // For AI moves
     static async aiMovePiece() {
-        // check if current player type is non human (1 means human)
-        if (this.curr_game_state.currp[1] === 1) {
+        // Check if current player type is non human (1 means human)
+        if (this.curr_game_state.currp[1] === 1 || this.state !== STATE_ENUM.playing) {
             return;
         }
 
@@ -96,7 +99,7 @@ class GameState {
             this.scene.board.performMove(performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2);
 
             // Testing if the game is over
-            this.checkGameOver();
+            this.checkGameOver(res);
         } catch(err) {
             console.error("Ai move piece unsuccessful:", err);
         }
