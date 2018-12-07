@@ -141,12 +141,19 @@ parse_input(init/P1Dif/P2Dif, Res) :-
 	initial_game_state(game_state(Board, NWhite, NBlack)),
 
 	Res = {
+		'"success"': true,
 		'"currp"': [1, P1Dif],
 		'"nextp"': [2, P2Dif],
 		'"board"': Board,
 		'"nWhite"': NWhite,
 		'"nBlack"': NBlack,
 		'"nTurns"': 0
+	}.
+
+parse_input(init/P1Dif/P2Dif, Res) :-
+	Res = {
+		'"success"': false,
+		'"reason"': '"Provided player difficulties not valid!"'
 	}.
 
 % Passed game is already over
