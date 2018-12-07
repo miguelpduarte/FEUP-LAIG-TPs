@@ -202,6 +202,7 @@ class Board extends PrimitiveObject {
             this.scene.translate(this.piece_offset + this.square_size*piece.column, this.board_height + piece.height, this.piece_offset + this.square_size*piece.row);
             this.piece_material[piece.color].apply();
             this.scene.scale(this.piece_size_ratio, this.piece_size_ratio, this.piece_size_ratio);
+            this.scene.registerForPick(piece.row*10 + piece.column, this.piece);
             this.piece.display();
         this.scene.popMatrix();
     }
