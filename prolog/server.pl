@@ -115,7 +115,7 @@ print_header_line(_).
 :-use_module('player_chooser.pl').
 :-use_module('board.pl').
 :-use_module('players.pl').
-:-use_module('board.pl').
+:-use_module('game.pl').
 :-use_module('movements.pl').
 % for time/1
 :- use_module(library(system)).
@@ -131,7 +131,7 @@ parse_input(quit, goodbye).
 % 4 - hard
 
 parse_input(init/P1Dif/P2Dif, Res) :-
-	write('hey'), nl, write(P1Dif-P2Dif), nl,
+	% write('hey'), nl, write(P1Dif-P2Dif), nl,
 	valid_difficulty(P1Dif), valid_difficulty(P2Dif), !,
 
 	% Initializing a random seed to ensure new randomness in this game
@@ -149,28 +149,13 @@ parse_input(init/P1Dif/P2Dif, Res) :-
 		'"nTurns"': 0
 	}.
 
-/* parse_input(test/A, Res) :-
-	write('stuff1'), nl,
-	write(A), nl,
-	% write(B), nl,
-	% write(C), nl,
-	% write(D), nl,
-	% write(E), nl,
-	% write(F), nl,
-	% write(G), nl,
-	% write(H), nl,
-	% write(X1-Y1-X2-Y2), nl,
-	write('endstuff1'), nl, nl,
-	Res = 'cenas'. */
-
-
 % Passed game is already over
-parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :-
+parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[_X1, _Y1, _X2, _Y2], Res) :-
 	game_over(game_state(Board, NWhite, NBlack), Winner), !,
 
 	Res = {
 		'"success"': false,
-		'"reason:"' '"Game already over"',
+		'"reason"': '"Game already over"',
 		'"game_over"': true,
 		'"winner"': Winner,
 
@@ -198,23 +183,19 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 		'"nTurns"': NTurns
 	}.
 
-% Check for gameover after moving
+% Check for gameover after moving -> Move results in game over
 parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :-
 	% Only an human player can attempt to move
-	is_human(CurrDif), !,
+	is_human(CurrDif),
 
 	GS = game_state(Board, NWhite, NBlack),
-	CurrP = player(CurrColor, CurrDif),
-	NextP = player(NextColor, NextDif),
 	Mov = move(X1, Y1, X2, Y2),
 	
 	% write(Mov), nl,
 	% display_game(Board, CurrP, NTurns), nl,
 
 	move(GS, Mov, game_state(NewBoard, NewNWhite, NewNBlack), CurrColor, NextColor),
-	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner),
-
-	!,
+	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
 
 	NTurns2 is NTurns + 1,
 
@@ -242,9 +223,10 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 
 % /move/[[[0,1],[2,0]],25,25]/[1,1]/[2,2]/[0,1,1,0]
 
+% Move does not result in game over
 parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :-
 	% Only an human player can attempt to move
-	is_human(CurrDif), !,
+	is_human(CurrDif),
 
 	GS = game_state(Board, NWhite, NBlack),
 	CurrP = player(CurrColor, CurrDif),
@@ -254,9 +236,7 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 	% write(Mov), nl,
 	% display_game(Board, CurrP, NTurns), nl,
 
-	move(GS, Mov, game_state(NewBoard, NewNWhite, NewNBlack), CurrColor, NextColor),
-
-	!,
+	move(GS, Mov, game_state(NewBoard, NewNWhite, NewNBlack), CurrColor, NextColor), !,
 
 	NTurns2 is NTurns + 1,
 
@@ -269,6 +249,9 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 	
 	Res = {
 		'"success"': true,
+
+		'"game_over"': false,
+
 		'"currp"': [NextColor, NextDif],
 		'"nextp"': [CurrColor, CurrDif],
 		'"board"': NewBoard,
@@ -278,10 +261,121 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 		'"performed_move"': Mov
 	}.
 
-parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :- 
+% Probably invalid move only, but test it more thoroughly later
+parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[_X1, _Y1, _X2, _Y2], Res) :- 
 	Res = {
 		'"success"': false,
 		'"reason"': '"Death by indetermination"',
+
+		'"currp"': [CurrColor, CurrDif],
+		'"nextp"': [NextColor, NextDif],
+		'"board"': Board,
+		'"nWhite"': NWhite,
+		'"nBlack"': NBlack,
+		'"nTurns"': NTurns
+	}.
+
+%%%%%%%%%%%%%%%%%%%%% /calcmove
+
+% Game already over
+parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif], Res) :-
+	game_over(game_state(Board, NWhite, NBlack), Winner), !,
+
+	Res = {
+		'"success"': false,
+		'"reason"': '"Game already over"',
+		'"game_over"': true,
+		'"winner"': Winner,
+
+		'"currp"': [CurrColor, CurrDif],
+		'"nextp"': [NextColor, NextDif],
+		'"board"': Board,
+		'"nWhite"': NWhite,
+		'"nBlack"': NBlack,
+		'"nTurns"': NTurns
+	}.
+
+% Not an AI player
+parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif], Res) :-
+	is_human(CurrDif), !,
+
+	Res = {
+		'"success"': false,
+		'"reason"': '"Current player is not an AI"',
+
+		'"currp"': [CurrColor, CurrDif],
+		'"nextp"': [NextColor, NextDif],
+		'"board"': Board,
+		'"nWhite"': NWhite,
+		'"nBlack"': NBlack,
+		'"nTurns"': NTurns
+	}.
+
+% Check for gameover after moving -> Move results in game over
+parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :-
+	% Sanity check
+	\+ is_human(CurrDif),
+
+	GS = game_state(Board, NWhite, NBlack),
+
+	% get_move(Type, game_state(Board, _NFirst, _NSecond), Mov, CurrC, NextC)
+	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
+	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
+	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov),
+
+	% Checking for game over and retrieving winner
+	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
+
+	NTurns2 is NTurns + 1,
+
+	Res = {
+		'"success"': true,
+
+		'"game_over"': true,
+		'"winner"': Winner,
+
+		'"currp"': [NextColor, NextDif],
+		'"nextp"': [CurrColor, CurrDif],
+		'"board"': NewBoard,
+		'"nWhite"': NewNWhite,
+		'"nBlack"': NewNBlack,
+		'"nTurns"': NTurns2,
+		'"performed_move"': Mov
+	}.
+
+% Move that does not result in a game over
+parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif], Res) :-
+	% Sanity check
+	\+ is_human(CurrDif),
+
+	GS = game_state(Board, NWhite, NBlack),
+
+	% get_move(Type, game_state(Board, _NFirst, _NSecond), Mov, CurrC, NextC)
+	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
+	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
+	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov), !,
+
+	NTurns2 is NTurns + 1,
+
+	Res = {
+		'"success"': true,
+
+		'"game_over"': false,
+
+		'"currp"': [NextColor, NextDif],
+		'"nextp"': [CurrColor, CurrDif],
+		'"board"': NewBoard,
+		'"nWhite"': NewNWhite,
+		'"nBlack"': NewNBlack,
+		'"nTurns"': NTurns2,
+		'"performed_move"': Mov
+	}.
+
+% Not sure what can trigger this, but throwing an error correctly nonetheless
+parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif], Res) :-
+	Res = {
+		'"success"': false,
+		'"reason"': '"Call the terminator, AI takeover!!"',
 
 		'"currp"': [CurrColor, CurrDif],
 		'"nextp"': [NextColor, NextDif],
