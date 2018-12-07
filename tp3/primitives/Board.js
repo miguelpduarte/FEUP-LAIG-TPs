@@ -23,28 +23,6 @@ class Board extends PrimitiveObject {
         this.createBoard();
         this.createPieces();
         this.initMaterials();
-
-        // Dummie light pieces
-        for (let i = 0; i < 25; ++i) {
-            this.pieces.push(new Piece(
-                Math.floor(Math.random()*10),
-                Math.floor(Math.random()*10),
-                'light'
-            ));
-        }
-        
-        // Dummie dark pieces
-        for (let i = 0; i < 25; ++i) {
-            this.pieces.push(new Piece(
-                Math.floor(Math.random()*10),
-                Math.floor(Math.random()*10),
-                'dark'
-            ));
-        }
-
-        for (let i = 0; i < 50; ++i) {
-            this.removePiece(this.pieces[i]);
-        }
     };
     
     display() {
@@ -139,10 +117,6 @@ class Board extends PrimitiveObject {
     }
 
     initPieces(board_pieces = []) {
-        // this.pieces.push(new Piece(1, 1, 'dark'));
-        // this.pieces.push(new Piece(3, 2, 'dark'));
-        // return;
-
         // In order to handle inits after the first one
         this.pieces = [];
 
@@ -249,24 +223,32 @@ class Board extends PrimitiveObject {
     }
 
     performMove(origin_row, origin_column, target_row, target_column) {
+        console.log("SDASD");
         for (let piece of this.pieces) {
             if (piece.row === origin_row && piece.column === origin_column) {
                 piece.setTarget(target_row, target_column);
+
+                // Remove piece if target square has piece
+                let target_piece = this.getSquarePiece(target_row, target_column);
+                if (target_piece) {
+                    this.removePiece(target_piece);
+                }
                 return;
             }
         }
     }
 
-    squareHasPiece(row, column) {
+    getSquarePiece(row, column) {
         for (let piece of this.pieces) {
             if (piece.row === row && piece.column === column) {
-                return true;
+                return piece;
             }
         }
-        return false;
+        return null;
     }
 
     removePiece(piece) {
+        
         if (piece.color === 'dark') {
             let row = Math.floor(this.num_dark_removed_pieces/13);
             piece.setTarget(
@@ -283,5 +265,4 @@ class Board extends PrimitiveObject {
             this.num_light_removed_pieces++;
         }
     }
-
 }

@@ -29,16 +29,15 @@ class ClickHandler {
     }
 
     static handler(clickId) {
-        let column = clickId % 10;
-        let row = Math.floor(clickId / 10);
+        const column = clickId % 10;
+        const row = Math.floor(clickId / 10);
 
-        if (this.scene.board.squareHasPiece(row, column)) {
-            this.origin = {row, column}
-            console.log(this.origin, " piece was selected");
-        } else if (this.origin !== null) {
-            console.log("MOVING!");
-            this.scene.board.performMove(this.origin.row, this.origin.column, row, column);
+        if (this.origin !== null) {
+            GameState.movePiece(this.origin.row, this.origin.column, row, column);
+            this.scene.board.performMove(this.origin.row, this.origin.column, row, column); // TO REMOVE
             this.origin = null;
+        } else {
+            this.origin = {row, column}
         }
     }
 };
