@@ -8,6 +8,4 @@ class PrimitiveObject extends CGFobject {
 	};
 
     setTexLengths(length_s, length_t) { }
-
-	updateAnimations() { }
 };

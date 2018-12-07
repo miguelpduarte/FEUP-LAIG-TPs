@@ -14,21 +14,13 @@ class Board extends PrimitiveObject {
         this.piece_offset = this.board_margin + this.square_size/2;
         this.piece_size_ratio = this.board_size / 20;
 
+        this.pieces = [];
+
         this.createTouchSquare();
         this.createBoard();
         this.createPieces();
         this.initMaterials();
         this.initPieces();
-        
-        // TEMPORARY !
-        let i = 0;
-        for (let piece of this.pieces) {
-            if (i++ % 2 == 0) {
-                piece.setTarget(piece.row+3, piece.column+1);
-            } else {
-                piece.setTarget(piece.row+2, piece.column+4);
-            }
-        }
     };
     
     display() {
@@ -122,21 +114,15 @@ class Board extends PrimitiveObject {
         this.piece = new Bishop(this.scene, this.createNurbsObject);
     }
 
-    initPieces() {
-        this.pieces = [];
-
-        this.pieces.push(new Piece(0, 1, "light"));
-        this.pieces.push(new Piece(0, 3, "light"));
-        this.pieces.push(new Piece(0, 5, "light"));
-        this.pieces.push(new Piece(1, 2, "light"));
-        this.pieces.push(new Piece(1, 4, "light"));
-        this.pieces.push(new Piece(1, 6, "light"));
-        this.pieces.push(new Piece(2, 1, "light"));
-        this.pieces.push(new Piece(2, 3, "light"));
-        this.pieces.push(new Piece(2, 5, "light"));
-        this.pieces.push(new Piece(3, 2, "light"));
-        this.pieces.push(new Piece(3, 4, "light"));
-        this.pieces.push(new Piece(3, 6, "light"));
+    initPieces(board_pieces) {
+        this.pieces.push(new Piece(1, 1, 'dark'));
+        this.pieces.push(new Piece(3, 2, 'dark'));
+        return;
+        for (let i = 0; i < board_pieces.length; ++i) {
+            for (let j = 0; j < board_pieces[i].length; ++j) {
+                this.pieces.push(new Piece(i, j, board_pieces[i][j] === 1 ? 'light' : 'dark'));
+            }
+        }
     }
 
     drawPieces() {
@@ -228,4 +214,24 @@ class Board extends PrimitiveObject {
             piece.update(delta_time/1e3);
         }
     }
+
+    performMove(origin_row, origin_column, target_row, target_column) {
+        for (let piece of this.pieces) {
+            if (piece.row === origin_row && piece.column === origin_column) {
+                piece.setTarget(target_row, target_column);
+                return;
+            }
+        }
+    }
+
+    squareHasPiece(row, column) {
+        for (let piece of this.pieces) {
+            if (piece.row === row && piece.column === column) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

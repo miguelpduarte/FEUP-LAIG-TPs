@@ -28,6 +28,7 @@ serialInclude([
     'TransformationFactory.js',
     'Component.js',
     'Piece.js',
+    'ClickHandler.js',
     'animations/Animation.js',
     'animations/LinearAnimation.js',
     'animations/CircularAnimation.js',

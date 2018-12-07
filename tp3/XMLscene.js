@@ -46,6 +46,7 @@ class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(1000 / UPDATE_RATE);
 
+        ClickHandler.setScene(this);
         this.setPickEnabled(true);
     }
 
@@ -65,16 +66,13 @@ class XMLscene extends CGFscene {
             this.updateComponentAnimations(delta_time);
             Water.updateTimeFactor(currTime);
             Flag.updateTimeFactor(currTime);
+            this.board && this.board.updateAnimations(delta_time);
         }
     }
     
     updateComponentAnimations(delta_time) {
         for(const [id, component] of this.cgf_components) {
             component.updateAnimations(delta_time);
-        }
-
-        for(const [id, primitive] of this.cgf_primitives) {
-            primitive.updateAnimations(delta_time);
         }
     }
 
@@ -279,6 +277,10 @@ class XMLscene extends CGFscene {
         for(let [id, primitive_model] of this.graph.primitives) {
             const cgf_primitive = primitive_factory.create(primitive_model);
             this.cgf_primitives.set(id, cgf_primitive);
+
+            if (primitive_model.type === "board") {
+                this.board = cgf_primitive;
+            }
         }
 
         //Create components
@@ -314,7 +316,7 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        this.logPicking();
+        ClickHandler.verifyClicks();
         
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -337,21 +339,5 @@ class XMLscene extends CGFscene {
         }
 
         this.popMatrix();
-    }
-
-    logPicking() {
-        if (this.pickMode == false) {
-            if (this.pickResults != null && this.pickResults.length > 0) {
-                for (let i=0; i< this.pickResults.length; i++) {
-                    let obj = this.pickResults[i][0];
-                    if (obj) {
-                        let customId = this.pickResults[i][1];				
-                        console.log("Picked object with pick id " + customId);
-                    }
-                }
-                this.pickResults = [];
-            }		
-        }
-        this.clearPickRegistration();
     }
 }
