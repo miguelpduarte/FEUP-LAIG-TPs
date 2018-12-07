@@ -36,7 +36,7 @@ class GameState {
     // To be called by ClickHandler
     static async movePiece(x1, y1, x2, y2) {
         // Safety check
-        if (this.state === STATE_ENUM.finished || this.num_pieces_moving !== 0) {
+        if (this.state !== STATE_ENUM.playing || this.num_pieces_moving !== 0) {
             return;
         }
 
