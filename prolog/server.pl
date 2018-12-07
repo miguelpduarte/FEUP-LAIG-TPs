@@ -153,7 +153,7 @@ parse_input(init/P1Dif/P2Dif, Res) :-
 		'"nTurns"': 0
 	}.
 
-parse_input(init/P1Dif/P2Dif, Res) :-
+parse_input(init/_P1Dif/_P2Dif, Res) :-
 	Res = {
 		'"success"': false,
 		'"reason"': '"Provided player difficulties not valid!"'
@@ -333,12 +333,13 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	% get_move(Type, game_state(Board, _NFirst, _NSecond), Mov, CurrC, NextC)
 	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
 	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
-	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), move(X1, Y1, X2, Y2)),
+	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov),
 
 	% Checking for game over and retrieving winner
 	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
 
 	NTurns2 is NTurns + 1,
+	Mov = mov(X1, Y1, X2, Y2),
 
 	Res = {
 		'"success"': true,
@@ -365,9 +366,10 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	% get_move(Type, game_state(Board, _NFirst, _NSecond), Mov, CurrC, NextC)
 	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
 	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
-	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), move(X1, Y1, X2, Y2)), !,
+	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov), !,
 
 	NTurns2 is NTurns + 1,
+	Mov = move(X1, Y1, X2, Y2),	
 
 	Res = {
 		'"success"': true,
