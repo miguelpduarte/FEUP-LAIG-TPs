@@ -99,7 +99,9 @@ class Clock extends PrimitiveObject {
     }
 
     createMaterials() {
-        let plastic_texture = new CGFtexture(this.scene, "primitives/resources/plastic.jpg");
+        this.yellow_plastic_texture = new CGFtexture(this.scene, "primitives/resources/yellow_plastic.jpg");
+        this.red_plastic_texture = new CGFtexture(this.scene, "primitives/resources/red_plastic.jpg");
+        this.green_plastic_texture = new CGFtexture(this.scene, "primitives/resources/green_plastic.jpg");
         let display_texture = new CGFtexture(this.scene, "primitives/resources/display.jpg");
         let metal_texture = new CGFtexture(this.scene, "primitives/resources/metal.jpg");
         this.number_texture = {}
@@ -120,7 +122,7 @@ class Clock extends PrimitiveObject {
         this.plastic_material.setSpecular(0.3, 0.3, 0.3, 1);
         this.plastic_material.setEmission(0, 0, 0, 1);
         this.plastic_material.setShininess(25);
-        this.plastic_material.setTexture(plastic_texture);
+        this.plastic_material.setTexture(this.yellow_plastic_texture);
 
         this.display_material = new CGFappearance(this.scene);
         this.display_material.setAmbient(0.15, 0.15, 0.15, 1);
@@ -151,7 +153,22 @@ class Clock extends PrimitiveObject {
         this.metal_material.setEmission(0, 0, 0, 1);
         this.metal_material.setShininess(25);
         this.metal_material.setTexture(metal_texture);
+    }
 
+    setColor(color) {
+        let texture;
+        if (color === "red") {
+            texture = this.red_plastic_texture;
+        } else if (color === "green") {
+            texture = this.green_plastic_texture;
+        } else {
+            return;
+        }
+
+        this.plastic_material.setTexture(texture);
+        setTimeout(() => {
+            this.plastic_material.setTexture(this.yellow_plastic_texture);
+        }, 2000);
     }
 };
 

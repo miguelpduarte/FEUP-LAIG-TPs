@@ -223,7 +223,6 @@ class Board extends PrimitiveObject {
     }
 
     performMove(origin_row, origin_column, target_row, target_column) {
-        console.log("SDASD");
         for (let piece of this.pieces) {
             if (piece.row === origin_row && piece.column === origin_column) {
                 piece.setTarget(target_row, target_column);

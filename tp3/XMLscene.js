@@ -282,6 +282,8 @@ class XMLscene extends CGFscene {
 
             if (primitive_model.type === "board") {
                 this.board = cgf_primitive;
+            } else if (primitive_model.type === "clock") {
+                this.clock = cgf_primitive;
             }
         }
 
