@@ -14,13 +14,37 @@ class Board extends PrimitiveObject {
         this.piece_offset = this.board_margin + this.square_size/2;
         this.piece_size_ratio = this.board_size / 20;
 
+        this.num_light_removed_pieces = 0;
+        this.num_dark_removed_pieces = 0;
+
         this.pieces = [];
 
         this.createTouchSquare();
         this.createBoard();
         this.createPieces();
         this.initMaterials();
-        // this.initPieces(); // This will be called by GameState, no need to call it here
+
+        // Dummie light pieces
+        for (let i = 0; i < 25; ++i) {
+            this.pieces.push(new Piece(
+                Math.floor(Math.random()*10),
+                Math.floor(Math.random()*10),
+                'light'
+            ));
+        }
+        
+        // Dummie dark pieces
+        for (let i = 0; i < 25; ++i) {
+            this.pieces.push(new Piece(
+                Math.floor(Math.random()*10),
+                Math.floor(Math.random()*10),
+                'dark'
+            ));
+        }
+
+        for (let i = 0; i < 50; ++i) {
+            this.removePiece(this.pieces[i]);
+        }
     };
     
     display() {
@@ -242,5 +266,22 @@ class Board extends PrimitiveObject {
         return false;
     }
 
+    removePiece(piece) {
+        if (piece.color === 'dark') {
+            let row = Math.floor(this.num_dark_removed_pieces/13);
+            piece.setTarget(
+                -(row + 1.5), 
+                -(this.board_margin + this.square_size + 1) + this.num_dark_removed_pieces%13 + (row ? 0.5 : 0)
+            );
+            this.num_dark_removed_pieces++;
+        } else if (piece.color === 'light') {
+            let row = Math.floor(this.num_light_removed_pieces/13);
+            piece.setTarget(
+                row + 10.5, 
+                -(this.board_margin + this.square_size + 1) + this.num_light_removed_pieces%13 + (row ? 0.5 : 0)
+            );
+            this.num_light_removed_pieces++;
+        }
+    }
 
 }
