@@ -33,6 +33,14 @@ class GameState {
         }
     }
 
+    static checkGameOver() {
+        if (res.game_over) {
+            console.log("Game is over! Player ", res.winner, " is the winner!");
+            this.state = STATE_ENUM.finished;
+            this.winner = res.winner;
+        }
+    }
+
     // To be called by ClickHandler
     static async movePiece(x1, y1, x2, y2) {
         // Safety check
@@ -58,15 +66,39 @@ class GameState {
             this.scene.board.performMove(performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2);
 
             // Testing if the game is over
-            if (res.game_over) {
-                console.log("Game is over! Player ", res.winner, " is the winner!");
-                this.state = STATE_ENUM.finished;
-                this.winner = res.winner;
-            }
+            this.checkGameOver();
         } catch(err) {
             console.error("Move piece unsuccessful:", err);
             // Signaling that the move was invalid
             this.scene.clock.setColor("red");
+        }
+    }
+
+    // For AI moves
+    static async aiMovePiece() {
+        // check if current player type is non human (1 means human)
+        if (this.curr_game_state.currp[1] === 1) {
+            return;
+        }
+
+        // If it is not, then request the AI move from the API and do the same as above
+        try {
+            const res = await CommunicationHandler.aiMovePiece(this.curr_game_state);
+            // Success! Updating state!
+            this.previous_states.push(this.curr_game_state);
+            this.curr_game_state = res;
+
+            console.log("Ai performed move!", res.performed_move);
+
+            // Updating the board
+            const [performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2] = res.performed_move;
+
+            this.scene.board.performMove(performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2);
+
+            // Testing if the game is over
+            this.checkGameOver();
+        } catch(err) {
+            console.error("Ai move piece unsuccessful:", err);
         }
     }
 
@@ -97,6 +129,10 @@ class GameState {
 
     static pieceStoppedMoving() {
         this.num_pieces_moving--;
+        // Triggering the check for AI moves (used for playing against an AI, or for AI vs AI after the first move)
+        if (this.num_pieces_moving === 0) {
+            this.aiMovePiece();
+        }
     }
 }
 
