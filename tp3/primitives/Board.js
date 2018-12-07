@@ -127,7 +127,7 @@ class Board extends PrimitiveObject {
                     continue;
                 }
                 
-                this.pieces.push(new Piece(i, j, board_pieces[i][j] === 1 ? 'light' : 'dark'));
+                this.pieces.push(new Piece(j, i, board_pieces[i][j] === 1 ? 'light' : 'dark'));
             }
         }
     }
