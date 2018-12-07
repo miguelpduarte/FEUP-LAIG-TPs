@@ -83,6 +83,14 @@ class GameState {
         return this.winner;
     }
 
+    static getNrWhite() {
+        return this.curr_game_state.nWhite;
+    }
+
+    static getNrBlack() {
+        return this.curr_game_state.nBlack;
+    }
+
     static pieceStartedMoving() {
         this.num_pieces_moving++;
     }
