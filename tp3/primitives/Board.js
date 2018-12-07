@@ -20,7 +20,7 @@ class Board extends PrimitiveObject {
         this.createBoard();
         this.createPieces();
         this.initMaterials();
-        this.initPieces();
+        // this.initPieces(); // This will be called by GameState, no need to call it here
     };
     
     display() {
@@ -114,12 +114,21 @@ class Board extends PrimitiveObject {
         this.piece = new Bishop(this.scene, this.createNurbsObject);
     }
 
-    initPieces(board_pieces) {
-        this.pieces.push(new Piece(1, 1, 'dark'));
-        this.pieces.push(new Piece(3, 2, 'dark'));
-        return;
+    initPieces(board_pieces = []) {
+        // this.pieces.push(new Piece(1, 1, 'dark'));
+        // this.pieces.push(new Piece(3, 2, 'dark'));
+        // return;
+
+        // In order to handle inits after the first one
+        this.pieces = [];
+
         for (let i = 0; i < board_pieces.length; ++i) {
             for (let j = 0; j < board_pieces[i].length; ++j) {
+                // Blank space
+                if (board_pieces[i][j] === 0) {
+                    continue;
+                }
+                
                 this.pieces.push(new Piece(i, j, board_pieces[i][j] === 1 ? 'light' : 'dark'));
             }
         }

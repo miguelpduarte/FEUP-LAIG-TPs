@@ -15,14 +15,15 @@ class GameState {
     static async initGame(player1_difficulty, player2_difficulty) {
         try {
             const res = await CommunicationHandler.initGame(player1_difficulty, player2_difficulty);
+            
             //Initial state cleanup
             this.state = STATE_ENUM.playing;
             this.curr_game_state = res;
             this.previous_states = [];
 
             console.log("Started game successfully");
-            // reset board pieces here
-            //TODO
+            // Setting board pieces
+            this.scene.board.initPieces(res.board);
             // Possibly also reset clicking state just in case
             //TODO
         } catch(err) {
