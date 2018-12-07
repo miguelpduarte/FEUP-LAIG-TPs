@@ -6,6 +6,10 @@ The server will then listen in port 8081 by default.
 
 ## "Endpoints:"
 
+General on endpoints: All responses have a `success` field that will be true or false.
+
+When the `success` field is false, there is a `reason` field that species the reason for the failure.
+
 ### Init
 
 **Request:**

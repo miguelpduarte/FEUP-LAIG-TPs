@@ -124,6 +124,9 @@ parse_input(handshake, handshake).
 
 parse_input(quit, goodbye).
 
+
+%%%%%%%%%%%%%%%%%%%%% /init
+
 % Player difficulty
 % 1 - human
 % 2 - random
@@ -155,6 +158,8 @@ parse_input(init/P1Dif/P2Dif, Res) :-
 		'"success"': false,
 		'"reason"': '"Provided player difficulties not valid!"'
 	}.
+
+%%%%%%%%%%%%%%%%%%%%% /move
 
 % Passed game is already over
 parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[_X1, _Y1, _X2, _Y2], Res) :-
@@ -265,7 +270,7 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 		'"nWhite"': NewNWhite,
 		'"nBlack"': NewNBlack,
 		'"nTurns"': NTurns2,
-		'"performed_move"': Mov
+		'"performed_move"': [X1, Y1, X2, Y2]
 	}.
 
 % Probably invalid move only, but test it more thoroughly later
@@ -328,7 +333,7 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	% get_move(Type, game_state(Board, _NFirst, _NSecond), Mov, CurrC, NextC)
 	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
 	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
-	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov),
+	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), move(X1, Y1, X2, Y2)),
 
 	% Checking for game over and retrieving winner
 	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
@@ -347,7 +352,7 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 		'"nWhite"': NewNWhite,
 		'"nBlack"': NewNBlack,
 		'"nTurns"': NTurns2,
-		'"performed_move"': Mov
+		'"performed_move"': [X1, Y1, X2, Y2]
 	}.
 
 % Move that does not result in a game over
@@ -360,7 +365,7 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	% get_move(Type, game_state(Board, _NFirst, _NSecond), Mov, CurrC, NextC)
 	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
 	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
-	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov), !,
+	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), move(X1, Y1, X2, Y2)), !,
 
 	NTurns2 is NTurns + 1,
 
@@ -375,7 +380,7 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 		'"nWhite"': NewNWhite,
 		'"nBlack"': NewNBlack,
 		'"nTurns"': NTurns2,
-		'"performed_move"': Mov
+		'"performed_move"': [X1, Y1, X2, Y2]
 	}.
 
 % Not sure what can trigger this, but throwing an error correctly nonetheless

@@ -34,7 +34,6 @@ class ClickHandler {
 
         if (this.origin !== null) {
             GameState.movePiece(this.origin.row, this.origin.column, row, column);
-            this.scene.board.performMove(this.origin.row, this.origin.column, row, column); // TO REMOVE
             this.origin = null;
         } else {
             this.origin = {row, column}
