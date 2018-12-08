@@ -29,6 +29,10 @@ class ClickHandler {
     }
 
     static handler(clickId) {
+        if (!GameState.isCurrentPlayerHuman()) {
+            return;
+        }
+
         const column = clickId % 10;
         const row = Math.floor(clickId / 10);
 

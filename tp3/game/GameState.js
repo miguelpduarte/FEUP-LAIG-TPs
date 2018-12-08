@@ -5,6 +5,13 @@ const STATE_ENUM = Object.freeze({
     finished: 4
 });
 
+const PLAYER_ENUM = Object.freeze({
+    human: 1,
+    ai_random: 2,
+    ai_beginner: 3,
+    ai_hard: 4
+});
+
 // TODO: Undo index? Or just pop when going back? A undo/redo would be cool
 
 class GameState {
@@ -108,6 +115,10 @@ class GameState {
     // 1 = White, 2 = Black
     static getCurrentPlayerColor() {
         return this.curr_game_state.currp[0];
+    }
+
+    static isCurrentPlayerHuman() {
+        return this.curr_game_state.currp[1] === PLAYER_ENUM.human;
     }
 
     static isFinished() {
