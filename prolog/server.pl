@@ -203,21 +203,11 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 	GS = game_state(Board, NWhite, NBlack),
 	Mov = move(X1, Y1, X2, Y2),
 	
-	% write(Mov), nl,
-	% display_game(Board, CurrP, NTurns), nl,
-
 	move(GS, Mov, game_state(NewBoard, NewNWhite, NewNBlack), CurrColor, NextColor),
 	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
 
 	NTurns2 is NTurns + 1,
 
-	% write('stuff'), nl,
-	% write(GS), nl,
-	% write(CurrP), nl,
-	% write(NextP), nl,
-	% write(Mov), nl,
-	% write('endstuff'), nl, nl,
-	
 	Res = {
 		'"success"': true,
 
@@ -233,8 +223,6 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 		'"performed_move"': [X1, Y1, X2, Y2]
 	}.
 
-% /move/[[[0,1],[2,0]],25,25]/[1,1]/[2,2]/[0,1,1,0]
-
 % Move does not result in game over
 parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :-
 	% Only an human player can attempt to move
@@ -245,20 +233,10 @@ parse_input(move/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor
 	NextP = player(NextColor, NextDif),
 	Mov = move(X1, Y1, X2, Y2),
 	
-	% write(Mov), nl,
-	% display_game(Board, CurrP, NTurns), nl,
-
 	move(GS, Mov, game_state(NewBoard, NewNWhite, NewNBlack), CurrColor, NextColor), !,
 
 	NTurns2 is NTurns + 1,
 
-	% write('stuff'), nl,
-	% write(GS), nl,
-	% write(CurrP), nl,
-	% write(NextP), nl,
-	% write(Mov), nl,
-	% write('endstuff'), nl, nl,
-	
 	Res = {
 		'"success"': true,
 
@@ -324,7 +302,7 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	}.
 
 % Check for gameover after moving -> Move results in game over
-parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif]/[X1, Y1, X2, Y2], Res) :-
+parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextColor, NextDif], Res) :-
 	% Sanity check
 	\+ is_human(CurrDif),
 
@@ -334,7 +312,6 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	get_move(CurrDif, GS, Mov, CurrColor, NextColor),
 	% move_piece(game_state(Board, NFirst, NSecond), game_state(NewBoard, NewNFirst, NewNSecond), move(FromX, FromY, ToX, ToY) )
 	move_piece(GS, game_state(NewBoard, NewNWhite, NewNBlack), Mov),
-
 	% Checking for game over and retrieving winner
 	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
 
