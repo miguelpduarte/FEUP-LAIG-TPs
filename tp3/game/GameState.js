@@ -227,9 +227,12 @@ class GameState {
 
         console.log("replaying t:", this.replaying_turn, "curr_state", this.previous_states[this.replaying_turn]);
 
+        this.curr_game_state = this.previous_states[this.replaying_turn];
+
         const curr_replay_state = this.previous_states[this.replaying_turn];
         // Perform the move of the current state
         this.scene.board.performMove(...curr_replay_state.performed_move);
+
 
         // Check for game finish
         if (this.replaying_turn < this.previous_states.length - 1) {
