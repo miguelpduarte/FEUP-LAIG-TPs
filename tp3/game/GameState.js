@@ -91,8 +91,8 @@ class GameState {
         try {
             const res = await CommunicationHandler.aiMovePiece(this.curr_game_state);
             // Success! Updating state!
-            this.previous_states.push(this.curr_game_state);
             this.curr_game_state = res;
+            this.previous_states.push(this.curr_game_state);
 
             // console.log("Ai performed move!", res.performed_move);
 
@@ -224,6 +224,8 @@ class GameState {
         if (this.state !== STATE_ENUM.replaying) {
             return;
         }
+
+        console.log("replaying t:", this.replaying_turn, "curr_state", this.previous_states[this.replaying_turn]);
 
         const curr_replay_state = this.previous_states[this.replaying_turn];
         // Perform the move of the current state
