@@ -25,7 +25,10 @@ class Board extends PrimitiveObject {
     };
     
     display() {
-        this.drawTouchSquares();
+        if (this.scene.pickMode) {
+            this.drawTouchSquares();
+        }
+        
         this.drawPieces();
         this.drawHighlightedSquare();
 
@@ -218,9 +221,7 @@ class Board extends PrimitiveObject {
             this.scene.translate(this.piece_offset + this.square_size*column, this.board_height + 0.001, this.piece_offset + this.square_size*row);
             this.scene.scale(this.square_size, 1, this.square_size);
             this.scene.registerForPick(row*10 + column, this.touch_square);
-            if (this.scene.pickMode) {
-                this.touch_square.display();
-            }
+            this.touch_square.display();
         this.scene.popMatrix();
     }
 

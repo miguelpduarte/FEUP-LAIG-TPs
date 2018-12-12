@@ -316,7 +316,7 @@ parse_input(calcmove/[Board, NWhite, NBlack, NTurns]/[CurrColor, CurrDif]/[NextC
 	game_over(game_state(NewBoard, NewNWhite, NewNBlack), Winner), !,
 
 	NTurns2 is NTurns + 1,
-	Mov = mov(X1, Y1, X2, Y2),
+	Mov = move(X1, Y1, X2, Y2),
 
 	Res = {
 		'"success"': true,

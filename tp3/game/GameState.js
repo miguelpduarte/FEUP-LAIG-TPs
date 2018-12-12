@@ -2,7 +2,8 @@ const STATE_ENUM = Object.freeze({
     initial: 1,
     playing: 2,
     undoing: 3,
-    finished: 4
+    finished: 4,
+    replaying: 5
 });
 
 // TODO: Undo index? Or just pop when going back? A undo/redo would be cool
@@ -39,7 +40,8 @@ class GameState {
 
     static checkGameOver(res) {
         if (res.game_over) {
-            alert("Game is over! Player ", res.winner, " is the winner!");
+            console.log("Game is over! Player ", res.winner, " is the winner!");
+            alert("Game is over! Player " + res.winner + " is the winner!");
             this.state = STATE_ENUM.finished;
             this.winner = res.winner;
         }
@@ -123,6 +125,11 @@ class GameState {
     }
 
     static undoMove() {
+        if (!this.isCurrentPlayerHuman()) {
+            console.warn("Cannot undo a move when a non human player is playing");
+            return;
+        }
+
         if (this.state !== STATE_ENUM.undoing && this.state !== STATE_ENUM.playing) {
             console.warn("Cannot undo if we are not undoing or playing");
             return;
@@ -199,6 +206,40 @@ class GameState {
         this.state = STATE_ENUM.playing;
     }
 
+    static replayGame() {
+        if (this.state !== STATE_ENUM.finished) {
+            console.error("Cannot replay a non finished game!");
+            return;
+        }
+
+        this.state = STATE_ENUM.replaying;
+        Piece.setPace(4);
+        // Set initial board pieces positions
+        this.scene.board.initPieces(this.previous_states[0].board);
+        this.replaying_turn = 1;
+        this.replayMove();
+    }
+
+    static replayMove() {
+        if (this.state !== STATE_ENUM.replaying) {
+            return;
+        }
+
+        const curr_replay_state = this.previous_states[this.replaying_turn];
+        // Perform the move of the current state
+        this.scene.board.performMove(...curr_replay_state.performed_move);
+
+        // Check for game finish
+        if (this.replaying_turn < this.previous_states.length - 1) {
+            // Move to the next state
+            this.replaying_turn++;
+        } else {
+            // Game over
+            this.state = STATE_ENUM.finished;
+            Piece.setPace(1);
+        }
+    }
+
     // 1 = White, 2 = Black
     static getCurrentPlayerColor() {
         return this.curr_game_state.currp[0];
@@ -237,6 +278,7 @@ class GameState {
         // Triggering the check for AI moves (used for playing against an AI, or for AI vs AI after the first move)
         if (this.num_pieces_moving === 0) {
             this.aiMovePiece();
+            this.replayMove();
         }
     }
 }

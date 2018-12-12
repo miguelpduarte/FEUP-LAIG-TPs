@@ -35,8 +35,8 @@ class Piece {
             return;
         }
 
-        this.column += this.column_speed * delta_time;
-        this.row += this.row_speed * delta_time;
+        this.column += this.column_speed * delta_time * Piece.pace;
+        this.row += this.row_speed * delta_time * Piece.pace;
 
         let distance_mid_point = Math.sqrt(Math.pow(this.row - this.target_mid_point.row, 2) + Math.pow(this.column - this.target_mid_point.column, 2));
         
@@ -75,4 +75,10 @@ class Piece {
 
         return false;
     }
+
+    static setPace(pace) {
+        this.pace = pace;
+    }
 };
+
+Piece.pace = 1;

@@ -119,14 +119,19 @@ class MyInterface extends CGFinterface {
         group.add(this.model, "p2dif", playerTypeModel)
            .name("Player 2 Type");
 
-        // Adding start/reset game button
-        
         this.model.start_game = () => {
             GameState.initGame(this.model.p1dif, this.model.p2dif);
         };
 
         group.add(this.model, "start_game")
            .name("Start/Reset Game");
+
+        this.model.replay_game = () => {
+            GameState.replayGame();
+        };
+
+        group.add(this.model, "replay_game")
+           .name("Replay Game");
 
         const undo_redo_group = group.addFolder("Undo/Redo Moves");
 
