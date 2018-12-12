@@ -29,7 +29,7 @@ class ClickHandler {
     }
 
     static handler(clickId) {
-        if (!GameState.isCurrentPlayerHuman()) {
+        if (!GameState.isCurrentPlayerHuman() || !GameState.isPlaying()) {
             return;
         }
 

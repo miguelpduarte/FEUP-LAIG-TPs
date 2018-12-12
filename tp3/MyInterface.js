@@ -128,13 +128,30 @@ class MyInterface extends CGFinterface {
         group.add(this.model, "start_game")
            .name("Start/Reset Game");
 
+        const undo_redo_group = group.addFolder("Undo/Redo Moves");
+
         this.model.undo_move = () => {
-            console.log("I don't do anything yet!");
+            GameState.undoMove();
         };
 
-        group.add(this.model, "undo_move")
-           .name("Undo Move (WIP)");
+        undo_redo_group.add(this.model, "undo_move")
+           .name("Undo Move");
 
+        this.model.redo_move = () => {
+            GameState.redoMove();
+        };
+
+        undo_redo_group.add(this.model, "redo_move")
+           .name("Redo Move");
+
+        this.model.continue_playing = () => {
+            GameState.continuePlaying();
+        };
+
+        undo_redo_group.add(this.model, "continue_playing")
+           .name("Continue Playing");
+
+        // undo_redo_group.open();
         group.open();
     }
 }

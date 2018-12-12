@@ -140,6 +140,7 @@ class XMLscene extends CGFscene {
 
         this.camera = selected_camera || this.default_camera;
         this.interface.setActiveCamera(this.camera);
+        // this.interface.setActiveCamera(null);
     }
 
     setLightState(lightId, newVal) {

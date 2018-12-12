@@ -19,9 +19,10 @@ class GameState {
             //Initial state cleanup
             this.state = STATE_ENUM.playing;
             this.curr_game_state = res;
-            this.previous_states = [];
+            this.previous_states = [res];
             this.winner = null;
             this.num_pieces_moving = 0;
+            this.current_undo_index = 0;
 
             console.log("Started game successfully");
             // Setting board pieces
@@ -38,7 +39,7 @@ class GameState {
 
     static checkGameOver(res) {
         if (res.game_over) {
-            console.log("Game is over! Player ", res.winner, " is the winner!");
+            alert("Game is over! Player ", res.winner, " is the winner!");
             this.state = STATE_ENUM.finished;
             this.winner = res.winner;
         }
@@ -47,7 +48,7 @@ class GameState {
     // To be called by ClickHandler
     static async movePiece(x1, y1, x2, y2) {
         // Safety check
-        if (this.state !== STATE_ENUM.playing || this.num_pieces_moving !== 0) {
+        if (this.state !== STATE_ENUM.playing || this.isAnimationRunning()) {
             return;
         }
 
@@ -55,8 +56,8 @@ class GameState {
             const desired_move = [x1, y1, x2, y2];
             const res = await CommunicationHandler.movePiece(this.curr_game_state, desired_move);
             // Success! Updating state!
-            this.previous_states.push(this.curr_game_state);
             this.curr_game_state = res;
+            this.previous_states.push(this.curr_game_state);
 
             // Signaling that the move was valid
             this.scene.clock.setColor("green");
@@ -64,9 +65,9 @@ class GameState {
             console.log("Performed move!", res.performed_move);
 
             // Updating the board
-            const [performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2] = res.performed_move;
+            // const [performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2] = res.performed_move;
 
-            this.scene.board.performMove(performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2);
+            this.scene.board.performMove(...res.performed_move);
 
             // Testing if the game is over
             this.checkGameOver(res);
@@ -91,7 +92,7 @@ class GameState {
             this.previous_states.push(this.curr_game_state);
             this.curr_game_state = res;
 
-            console.log("Ai performed move!", res.performed_move);
+            // console.log("Ai performed move!", res.performed_move);
 
             // Updating the board
             const [performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2] = res.performed_move;
@@ -105,6 +106,99 @@ class GameState {
         }
     }
 
+    static isAnimationRunning() {
+        return this.num_pieces_moving !== 0;
+    }
+
+    static wasPieceTaken(old_nr_white, new_nr_white, old_nr_black, new_nr_black) {
+        if (old_nr_white < new_nr_white) {
+            return 1;
+        }
+
+        if (old_nr_black < new_nr_black) {
+            return 2;
+        }
+
+        return 0;
+    }
+
+    static undoMove() {
+        if (this.state !== STATE_ENUM.undoing && this.state !== STATE_ENUM.playing) {
+            console.warn("Cannot undo if we are not undoing or playing");
+            return;
+        }
+
+        if (this.isAnimationRunning()) {
+            console.warn("Can't undo in the middle of an animation")
+            return;
+        }
+
+        if (this.curr_game_state.nTurns === 0) {
+            console.warn("No moves to undo yet!");
+            return;
+        }        
+
+        if (this.current_undo_index >= this.previous_states.length) {
+            console.warn("No more moves to undo!");
+            return;
+        }
+
+        this.state = STATE_ENUM.undoing;
+
+        // Changing game state due to undo
+        const old_state = this.curr_game_state;
+        this.current_undo_index++;
+        this.curr_game_state = this.previous_states[this.previous_states.length - 1 - this.current_undo_index];
+
+        // const [move_x1, move_y1, move_x2, move_y2] = old_state.performed_move;
+
+        // Do animation by passing information to board
+        this.scene.board.undoMove(...old_state.performed_move, this.wasPieceTaken(old_state.nWhite, this.curr_game_state.nWhite, old_state.nBlack, this.curr_game_state.nBlack));
+    }
+
+    static redoMove() {
+        if (this.state !== STATE_ENUM.undoing) {
+            console.warn("Not in undo mode! Cannot redo!");
+            return;
+        }
+
+        if (this.isAnimationRunning()) {
+            console.warn("Can't redo in the middle of an animation")
+            return;
+        }
+
+        if (this.current_undo_index === 0) {
+            console.warn("No more moves to redo!");
+            return;
+        }
+
+         // Changing game state due to redo
+         this.current_undo_index--;
+         this.curr_game_state = this.previous_states[this.previous_states.length - 1 - this.current_undo_index];
+ 
+         // const [move_x1, move_y1, move_x2, move_y2] = old_state.performed_move;
+ 
+         // Do animation by passing information to board
+         this.scene.board.performMove(...this.curr_game_state.performed_move);
+    }
+
+    static continuePlaying() {
+        if (this.state !== STATE_ENUM.undoing) {
+            console.error("Cannot continue playing if not in undoing state!!");
+            return;
+        }
+
+        if (this.isAnimationRunning()) {
+            console.warn("Can't continue playing in the middle of an animation")
+            return;
+        }
+
+        // Continue playing with current undo level state
+        this.previous_states = this.previous_states.slice(0, this.current_undo_index + 1);
+        this.current_undo_index = 0;
+        this.state = STATE_ENUM.playing;
+    }
+
     // 1 = White, 2 = Black
     static getCurrentPlayerColor() {
         return this.curr_game_state.currp[0];
@@ -112,6 +206,10 @@ class GameState {
 
     static isCurrentPlayerHuman() {
         return this.curr_game_state && this.curr_game_state.currp[1] === 1;
+    }
+
+    static isPlaying() {
+        return this.state === STATE_ENUM.playing;
     }
 
     static isFinished() {
@@ -148,3 +246,4 @@ GameState.previous_states = [];
 GameState.curr_game_state = null;
 GameState.winner = null;
 GameState.num_pieces_moving = 0;
+GameState.current_undo_index = 0;

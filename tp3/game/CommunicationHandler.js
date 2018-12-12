@@ -47,7 +47,6 @@ class CommunicationHandler {
             fetch(`${FULLHOST}/${request_url}`)
                 .then(res => res.json())
                 .then(data => {
-                    console.log("ai res", data);
                     if (data.success) {
                         return resolve(data);
                     } else {

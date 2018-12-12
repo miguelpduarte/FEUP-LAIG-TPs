@@ -117,8 +117,6 @@ class Board extends PrimitiveObject {
     }
 
     initPieces(board_pieces = []) {
-        this.num_light_removed_pieces = 0;
-        this.num_dark_removed_pieces = 0;
         // In order to handle inits after the first one
         this.pieces = [];
 
@@ -233,17 +231,16 @@ class Board extends PrimitiveObject {
     }
 
     performMove(origin_row, origin_column, target_row, target_column) {
-        for (let piece of this.pieces) {
-            if (piece.row === origin_row && piece.column === origin_column) {
-                piece.setTarget(target_row, target_column);
+        let piece = this.getSquarePiece(origin_row, origin_column);
+        if (!piece) {
+            return;
+        }
+        piece.setTarget(target_row, target_column);
 
-                // Remove piece if target square has piece
-                let target_piece = this.getSquarePiece(target_row, target_column);
-                if (target_piece) {
-                    this.removePiece(target_piece);
-                }
-                return;
-            }
+        // Remove piece if target square has piece
+        let target_piece = this.getSquarePiece(target_row, target_column);
+        if (target_piece) {
+            this.removePiece(target_piece);
         }
     }
 
@@ -258,19 +255,40 @@ class Board extends PrimitiveObject {
 
     removePiece(piece) {
         if (piece.color === 'dark') {
-            let row = Math.floor(this.num_dark_removed_pieces/13);
+            let num_dark_removed_pieces = 25 - GameState.getNrBlack() - 1;
+            let row = Math.floor(num_dark_removed_pieces/13);
             piece.setTarget(
                 -(row + 1.5), 
-                -(this.board_margin + this.square_size + 1) + this.num_dark_removed_pieces%13 + (row ? 0.5 : 0)
+                -(this.board_margin + this.square_size + 1) + num_dark_removed_pieces%13 + (row ? 0.5 : 0)
             );
-            this.num_dark_removed_pieces++;
         } else if (piece.color === 'light') {
-            let row = Math.floor(this.num_light_removed_pieces/13);
+            let num_light_removed_pieces = 25 - GameState.getNrWhite() - 1;
+            let row = Math.floor(num_light_removed_pieces/13);
             piece.setTarget(
                 row + 10.5, 
-                -(this.board_margin + this.square_size + 1) + this.num_light_removed_pieces%13 + (row ? 0.5 : 0)
+                -(this.board_margin + this.square_size + 1) + num_light_removed_pieces%13 + (row ? 0.5 : 0)
             );
-            this.num_light_removed_pieces++;
+        }
+    }
+
+    undoMove(origin_row, origin_column, target_row, target_column, taken_piece) {
+        this.performMove(target_row, target_column, origin_row, origin_column);
+        if (taken_piece == 1) {
+            let num_light_removed_pieces = 25 - GameState.getNrWhite();
+            let row = Math.floor(num_light_removed_pieces/13);
+            let piece = this.getSquarePiece(
+                row + 10.5,
+                -(this.board_margin + this.square_size + 1) + num_light_removed_pieces%13 + (row ? 0.5 : 0)
+            );
+            piece.setTarget(target_row, target_column);
+        } else if (taken_piece == 2) {
+            let num_dark_removed_pieces = 25 - GameState.getNrBlack();
+            let row = Math.floor(num_dark_removed_pieces/13);
+            let piece = this.getSquarePiece(
+                -(row + 1.5),
+                -(this.board_margin + this.square_size + 1) + num_dark_removed_pieces%13 + (row ? 0.5 : 0)
+            );
+            piece.setTarget(target_row, target_column);
         }
     }
 
@@ -281,6 +299,8 @@ class Board extends PrimitiveObject {
     setHighlightedSquare(square) {
         this.highlighted_square = square;
     }
+
+    //removeHightlightedSqua
 
     drawHighlightedSquare() {
         if (!this.highlighted_square) {
