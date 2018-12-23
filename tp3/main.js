@@ -47,6 +47,7 @@ serialInclude([
     'primitives/Clock.js',
     'game/CommunicationHandler.js',
     'game/GameState.js',
+    'game/CameraHandler.js',
 
     main=function() {
         // Standard application, scene and interface setup

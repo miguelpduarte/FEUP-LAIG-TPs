@@ -47,8 +47,9 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(1000 / UPDATE_RATE);
 
         GameState.setScene(this);
-
         ClickHandler.setScene(this);
+        CameraHandler.setScene(this);
+
         this.setPickEnabled(true);
     }
 
@@ -68,6 +69,7 @@ class XMLscene extends CGFscene {
             this.updateComponentAnimations(delta_time);
             Water.updateTimeFactor(currTime);
             Flag.updateTimeFactor(currTime);
+            CameraHandler.update(delta_time);
             this.board && this.board.updateAnimations(delta_time);
         }
     }
@@ -128,7 +130,7 @@ class XMLscene extends CGFscene {
         }
 
         this.camera = initial_camera || this.default_camera;
-        this.interface.setActiveCamera(this.camera);
+        // this.interface.setActiveCamera(this.camera);
     }
 
     setCurrentCamera(camera_id) {
@@ -139,7 +141,7 @@ class XMLscene extends CGFscene {
         }
 
         this.camera = selected_camera || this.default_camera;
-        this.interface.setActiveCamera(this.camera);
+        // this.interface.setActiveCamera(this.camera);
         // this.interface.setActiveCamera(null);
     }
 

@@ -1,20 +1,12 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
-    <views default="meio-gordo" >
-        <perspective id="meio-gordo" near="0.1" far="90" angle="60">
-            <from x="2" y="10" z="0" />
-            <to x="-1" y="0" z="0" />
-        </perspective>
+    <views default="player-camera" >
         <perspective id="room-overview" near="0.1" far="90" angle="60">
             <from x="10" y="12" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="player-white" near="0.1" far="90" angle="60">
+        <perspective id="player-camera" near="0.1" far="90" angle="60">
             <from x="0" y="8" z="2.5" />
-            <to x="0" y="4.8" z="0" />
-        </perspective>
-        <perspective id="player-black" near="0.1" far="90" angle="60">
-            <from x="0" y="8" z="-2.5" />
             <to x="0" y="4.8" z="0" />
         </perspective>
         <perspective id="spectator" near="0.1" far="90" angle="60">

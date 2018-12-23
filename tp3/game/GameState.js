@@ -71,6 +71,10 @@ class GameState {
 
             this.scene.board.performMove(...res.performed_move);
 
+            if (this.curr_game_state.currp[1] === 1) {
+                CameraHandler.swapPlayer();
+            }
+
             // Testing if the game is over
             this.checkGameOver(res);
         } catch(err) {
