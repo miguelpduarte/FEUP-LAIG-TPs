@@ -39,13 +39,12 @@ class ClickHandler {
         const current_player = GameState.getCurrentPlayerColor();
         const square_piece = this.scene.board.getSquarePiece(row, column);
 
-        if (!square_piece) {
-            this.origin = null;
+        if (!square_piece && this.origin === null) {
             this.scene.board.setHighlightedSquare(null);
         }
         else {
-            if (square_piece.color === 'light' && current_player === 1 ||
-                square_piece.color === 'dark' && current_player === 2) {
+            if (square_piece && square_piece.color === 'light' && current_player === 1 ||
+                square_piece && square_piece.color === 'dark' && current_player === 2) {
                 
                 this.origin = {row, column};
                 this.scene.board.setHighlightedSquare(this.origin);

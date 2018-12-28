@@ -746,6 +746,8 @@ class MySceneGraph {
             primitive = this.createBoard();
         } else if (primitiveChild.nodeName === "clock") {
             primitive = this.createClock();
+        } else if (primitiveChild.nodeName === "scoreboard") {
+            primitive = this.createScoreBoard();
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
@@ -980,15 +982,15 @@ class MySceneGraph {
     }
 
     createBoard() {
-        return {
-            type: "board"
-        }
+        return { type: "board" };
     }
 
     createClock() {
-        return {
-            type: "clock"
-        }
+        return { type: "clock" };
+    }
+
+    createScoreBoard() {
+        return { type: "scoreBoard" };
     }
 
     parseComponents(componentsNode) {

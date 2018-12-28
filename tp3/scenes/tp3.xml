@@ -96,6 +96,9 @@
         <primitive id="clock">
             <clock />
         </primitive>
+        <primitive id="scoreboard">
+            <scoreboard />
+        </primitive>
         <primitive id="table_leg">
             <cylinder base="0.1" top="0.1" height="2.2" slices="10" stacks="3" />
         </primitive>
@@ -116,6 +119,7 @@
                 <componentref id="board_comp" />
                 <componentref id="table" />
                 <componentref id="clock_comp" />
+                <componentref id="scoreboard_comp" />
             </children>
         </component>
 
@@ -315,8 +319,8 @@
 
         <component id="clock_comp">
             <transformation>
-                <translate x="3" y="4.8" z="0" />
-                <rotate axis="y" angle="-90" />
+                <translate x="3" y="4.8" z="-0.8" />
+                <rotate axis="y" angle="-70" />
             </transformation>
             <animations></animations>
             <materials>
@@ -325,6 +329,21 @@
             <texture id="none" />
             <children>
                 <primitiveref id="clock" />
+            </children>
+        </component>
+
+        <component id="scoreboard_comp">
+            <transformation>
+                <translate x="3" y="4.8" z="0.8" />
+                <rotate axis="y" angle="-110" />
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="scoreboard" />
             </children>
         </component>
     </components>

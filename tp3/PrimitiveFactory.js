@@ -14,7 +14,8 @@ class PrimitiveFactory {
             "terrain": this.createTerrain,
             "water": this.createWater,
             "board": this.createBoard,
-            "clock": this.createClock
+            "clock": this.createClock,
+            "scoreBoard": this.createScoreBoard
         };
 
         //Binding this
@@ -35,6 +36,10 @@ class PrimitiveFactory {
 
     createClock() {
         return new Clock(this.scene, this.createNurbsObject);
+    }
+
+    createScoreBoard() {
+        return new ScoreBoard(this.scene, this.createNurbsObject);
     }
 
     createRectangle(rectangle_model) {

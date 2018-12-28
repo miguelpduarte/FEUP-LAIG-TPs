@@ -75,6 +75,8 @@ class GameState {
                 CameraHandler.swapPlayer();
             }
 
+            this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
+
             // Testing if the game is over
             this.checkGameOver(res);
         } catch(err) {
@@ -104,6 +106,8 @@ class GameState {
             const [performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2] = res.performed_move;
 
             this.scene.board.performMove(performed_move_x1, performed_move_y1, performed_move_x2, performed_move_y2);
+            
+            this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
 
             // Testing if the game is over
             this.checkGameOver(res);
@@ -162,6 +166,8 @@ class GameState {
         this.curr_game_state = this.previous_states[this.previous_states.length - 1 - this.current_undo_index];
 
         // const [move_x1, move_y1, move_x2, move_y2] = old_state.performed_move;
+            
+        this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
 
         // Do animation by passing information to board
         this.scene.board.undoMove(...old_state.performed_move, this.wasPieceTaken(old_state.nWhite, this.curr_game_state.nWhite, old_state.nBlack, this.curr_game_state.nBlack));

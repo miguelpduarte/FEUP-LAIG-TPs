@@ -1,9 +1,9 @@
 /**
- * Clock
+ * ScoreBoard
  * @constructor
  */
 
-class Clock extends PrimitiveObject {
+class ScoreBoard extends PrimitiveObject {
 	constructor(scene, createNurbsObject) {
         super(scene);
 
@@ -20,13 +20,12 @@ class Clock extends PrimitiveObject {
 
         this.createMaterials();
         this.createBody();
-        this.createButton();
-        this.createTimeDisplay();
-        this.setTime(0);
+        this.createScoreDisplay();
+        this.setScore(0);
 	};
 
 	display() {
-        // Clock body
+        // Score Board body
         this.scene.pushMatrix();
             this.scene.translate(0, this.height/2, 0);
             this.scene.scale(this.width, this.height, this.breadth);
@@ -34,7 +33,7 @@ class Clock extends PrimitiveObject {
             this.body.display();
         this.scene.popMatrix();
 
-        // Clock display
+        // Score Board display
         this.scene.pushMatrix();
             this.scene.translate(0, this.height/2, this.breadth/2 + 0.001);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
@@ -43,60 +42,50 @@ class Clock extends PrimitiveObject {
             this.display_part.display();
         this.scene.popMatrix();
 
-        // Clock display left digit
+        // Score Board sign
         this.scene.pushMatrix();
-            this.scene.translate(-this.display_digit_width/2 - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
+            this.scene.translate(-this.display_digit_width - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
+            this.scene.rotate(Math.PI/2, 1, 0, 0);
+            this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
+            this.number_sign_material.apply();
+            this.display_part.display();
+        this.scene.popMatrix();
+
+        // Score Board display left digit
+        this.scene.pushMatrix();
+            this.scene.translate(0, this.height/2, this.breadth/2 + 0.002);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
             this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
             this.number_left_material.apply();
             this.display_part.display();
         this.scene.popMatrix();
 
-        // Clock display right digit
+        // Score Board display right digit
         this.scene.pushMatrix();
-            this.scene.translate(this.display_digit_width/2 + this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
+            this.scene.translate(this.display_digit_width + this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
             this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
             this.number_right_material.apply();
             this.display_part.display();
         this.scene.popMatrix();
-        
-        // Button
-        this.scene.pushMatrix();
-            this.scene.translate(0, this.height, 0);
-            this.scene.rotate(-Math.PI/2, 1, 0, 0);
-            this.metal_material.apply();
-            this.scene.registerForPick(Clock.button_pick_id, this.button);
-            this.button.display();
-        this.scene.popMatrix();
     }
 
-    setTime(time) {
-        let timeStr = "00" + time;
-        timeStr = timeStr.substr(timeStr.length-2);
+    setScore(score) {
+        if (score > 0) {
+            this.number_sign_material.setTexture(this.plus_texture);
+        } else if (score < 0) {
+            this.number_sign_material.setTexture(this.minus_texture);
+        } else {
+            this.number_sign_material.setTexture(this.no_sign_texture);
+        }
 
-        this.number_left_material.setTexture(this.number_texture[parseInt(timeStr[0])]);
-        this.number_right_material.setTexture(this.number_texture[parseInt(timeStr[1])]);
-    }
+        score = Math.abs(score);
 
-    createBody() {
-        this.body = new Cube(this.scene, 5, this.createNurbsObject);
-    }
+        let scoreStr = "00" + score;
+        scoreStr = scoreStr.substr(scoreStr.length-2);
 
-    createTimeDisplay() {
-        this.display_part = new Plane(
-            this.scene, 
-            {
-                npartsU: 5,
-                npartsV: 5
-            },
-            this.createNurbsObject
-        );
-    }
-
-    createButton() {
-        this.button = new Cylinder(this.scene, 30, 4, this.height/15, this.breadth*7/20, this.breadth*7/20);
-        this.button.pickingEnabled = true;
+        this.number_left_material.setTexture(this.number_texture[parseInt(scoreStr[0])]);
+        this.number_right_material.setTexture(this.number_texture[parseInt(scoreStr[1])]);
     }
 
     createMaterials() {
@@ -116,6 +105,9 @@ class Clock extends PrimitiveObject {
         this.number_texture[7] = new CGFtexture(this.scene, "primitives/resources/7.png");
         this.number_texture[8] = new CGFtexture(this.scene, "primitives/resources/8.png");
         this.number_texture[9] = new CGFtexture(this.scene, "primitives/resources/9.png");
+        this.plus_texture = new CGFtexture(this.scene, "primitives/resources/plus.png");
+        this.minus_texture = new CGFtexture(this.scene, "primitives/resources/minus.png");
+        this.no_sign_texture = new CGFtexture(this.scene, "primitives/resources/no_sign.png");
 
         this.plastic_material = new CGFappearance(this.scene);
         this.plastic_material.setAmbient(0.15, 0.15, 0.15, 1);
@@ -147,6 +139,13 @@ class Clock extends PrimitiveObject {
         this.number_right_material.setEmission(0.3, 0.3, 0.3, 1);
         this.number_right_material.setShininess(25);
 
+        this.number_sign_material = new CGFappearance(this.scene);
+        this.number_sign_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.number_sign_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.number_sign_material.setSpecular(0.6, 0.6, 0.6, 1);
+        this.number_sign_material.setEmission(0.3, 0.3, 0.3, 1);
+        this.number_sign_material.setShininess(25);
+
         this.metal_material = new CGFappearance(this.scene);
         this.metal_material.setAmbient(0.15, 0.15, 0.15, 1);
         this.metal_material.setDiffuse(0.5, 0.5, 0.5, 1);
@@ -156,24 +155,18 @@ class Clock extends PrimitiveObject {
         this.metal_material.setTexture(metal_texture);
     }
 
-    setColor(color) {
-        let texture;
-        if (color === "red") {
-            texture = this.red_plastic_texture;
-        } else if (color === "green") {
-            texture = this.green_plastic_texture;
-        } else {
-            return;
-        }
+    createBody() {
+        this.body = new Cube(this.scene, 5, this.createNurbsObject);
+    }
 
-        clearTimeout(this.timeout_id);
-
-        this.plastic_material.setTexture(texture);
-        
-        this.timeout_id = setTimeout(() => {
-            this.plastic_material.setTexture(this.yellow_plastic_texture);
-        }, 2000);
+    createScoreDisplay() {
+        this.display_part = new Plane(
+            this.scene, 
+            {
+                npartsU: 5,
+                npartsV: 5
+            },
+            this.createNurbsObject
+        );
     }
 };
-
-Clock.button_pick_id = 1000;

@@ -45,6 +45,7 @@ serialInclude([
     'primitives/King.js',
     'primitives/Cube.js',
     'primitives/Clock.js',
+    'primitives/ScoreBoard.js',
     'game/CommunicationHandler.js',
     'game/GameState.js',
     'game/CameraHandler.js',

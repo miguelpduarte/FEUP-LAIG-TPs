@@ -130,7 +130,7 @@ class XMLscene extends CGFscene {
         }
 
         this.camera = initial_camera || this.default_camera;
-        // this.interface.setActiveCamera(this.camera);
+        this.interface.setActiveCamera(null);
     }
 
     setCurrentCamera(camera_id) {
@@ -287,6 +287,8 @@ class XMLscene extends CGFscene {
                 this.board = cgf_primitive;
             } else if (primitive_model.type === "clock") {
                 this.clock = cgf_primitive;
+            } else if (primitive_model.type === "scoreBoard") {
+                this.scoreBoard = cgf_primitive;
             }
         }
 
