@@ -301,8 +301,6 @@ class Board extends PrimitiveObject {
         this.highlighted_square = square;
     }
 
-    //removeHightlightedSqua
-
     drawHighlightedSquare() {
         if (!this.highlighted_square) {
             return;

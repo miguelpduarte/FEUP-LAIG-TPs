@@ -34,7 +34,7 @@ class GameState {
             // Setting board pieces
             this.scene.board.initPieces(res.board);
             
-            // TODO: Possibly also reset clicking state just in case
+            ClickHandler.reset();
 
             // Starting the player turn - if the player is human starts the clock countdown
             this.startPlayerTurn();

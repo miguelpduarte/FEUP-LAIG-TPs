@@ -55,6 +55,11 @@ class ClickHandler {
             }
         }
     }
+
+    static reset() {
+        this.origin = null;
+        this.scene.board.setHighlightedSquare(null);
+    }
 };
 
 ClickHandler.origin = null;
