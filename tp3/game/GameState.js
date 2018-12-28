@@ -234,6 +234,8 @@ class GameState {
         this.current_undo_index = 0;
         this.scene.clock.resumeCountdown();
         this.state = STATE_ENUM.playing;
+        // Rotate camera just in case the current player changed
+        CameraHandler.swapPlayer(this.getCurrentPlayerColor());
     }
 
     static replayGame() {
