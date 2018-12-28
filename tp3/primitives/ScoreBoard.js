@@ -71,12 +71,10 @@ class ScoreBoard extends PrimitiveObject {
     }
 
     setScore(score) {
-        if (score > 0) {
+        if (score >= 0) {
             this.number_sign_material.setTexture(this.plus_texture);
-        } else if (score < 0) {
-            this.number_sign_material.setTexture(this.minus_texture);
         } else {
-            this.number_sign_material.setTexture(this.no_sign_texture);
+            this.number_sign_material.setTexture(this.minus_texture);
         }
 
         score = Math.abs(score);
@@ -89,9 +87,7 @@ class ScoreBoard extends PrimitiveObject {
     }
 
     createMaterials() {
-        this.yellow_plastic_texture = new CGFtexture(this.scene, "primitives/resources/yellow_plastic.jpg");
-        this.red_plastic_texture = new CGFtexture(this.scene, "primitives/resources/red_plastic.jpg");
-        this.green_plastic_texture = new CGFtexture(this.scene, "primitives/resources/green_plastic.jpg");
+        let grey_plastic_texture = new CGFtexture(this.scene, "primitives/resources/grey_plastic.jpg");
         let display_texture = new CGFtexture(this.scene, "primitives/resources/display.png");
         let metal_texture = new CGFtexture(this.scene, "primitives/resources/metal.jpg");
         this.number_texture = {}
@@ -107,7 +103,6 @@ class ScoreBoard extends PrimitiveObject {
         this.number_texture[9] = new CGFtexture(this.scene, "primitives/resources/9.png");
         this.plus_texture = new CGFtexture(this.scene, "primitives/resources/plus.png");
         this.minus_texture = new CGFtexture(this.scene, "primitives/resources/minus.png");
-        this.no_sign_texture = new CGFtexture(this.scene, "primitives/resources/no_sign.png");
 
         this.plastic_material = new CGFappearance(this.scene);
         this.plastic_material.setAmbient(0.15, 0.15, 0.15, 1);
@@ -115,7 +110,7 @@ class ScoreBoard extends PrimitiveObject {
         this.plastic_material.setSpecular(0.3, 0.3, 0.3, 1);
         this.plastic_material.setEmission(0, 0, 0, 1);
         this.plastic_material.setShininess(25);
-        this.plastic_material.setTexture(this.yellow_plastic_texture);
+        this.plastic_material.setTexture(grey_plastic_texture);
 
         this.display_material = new CGFappearance(this.scene);
         this.display_material.setAmbient(0.15, 0.15, 0.15, 1);
