@@ -109,6 +109,12 @@ class MyInterface extends CGFinterface {
             "Hard AI (SLOW!)": 4
         };
 
+        const countdownModel = {
+            "Slow": "slow",
+            "Fast": "fast",
+            "Bullet": "bullet",
+        };
+
         const group = this.gui.addFolder("Game Controls");
 
         // Adding player 1 and player 2 type dropdowns
@@ -119,8 +125,13 @@ class MyInterface extends CGFinterface {
         group.add(this.model, "p2dif", playerTypeModel)
            .name("Player 2 Type");
 
+        // Adding countdown amount dropdown
+        this.model.countdown_speed = "slow";
+        group.add(this.model, "countdown_speed", countdownModel)
+           .name("Player turn speed");
+
         this.model.start_game = () => {
-            GameState.initGame(this.model.p1dif, this.model.p2dif);
+            GameState.initGame(this.model.p1dif, this.model.p2dif, this.model.countdown_speed);
         };
 
         group.add(this.model, "start_game")

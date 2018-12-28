@@ -8,7 +8,6 @@ class CommunicationHandler {
             fetch(`${FULLHOST}/init/${player1_difficulty}/${player2_difficulty}`)
                 .then(res => res.json())
                 .then(data => {
-                    console.log("Received init data:", data);
                     if (data.success) {
                         return resolve(data);
                     } else {

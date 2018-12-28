@@ -23,7 +23,47 @@ class Clock extends PrimitiveObject {
         this.createButton();
         this.createTimeDisplay();
         this.setTime(0);
-	};
+    };
+    
+    countdown(countdown_time_s, callback) {
+        this.curr_countdown_time_ms = countdown_time_s * 1000;
+        this.curr_countdown_callback = callback;
+        // To prevent repeated countdown triggering
+        this.counting_down = true;
+        this.paused = false;
+
+        this.setTime(Math.floor(this.curr_countdown_time_ms/1000));
+    }
+
+    resetCountdown() {
+        this.curr_countdown_callback = null;
+        this.curr_countdown_time_ms = null;
+        this.counting_down = false;
+        this.paused = false;
+    }
+
+    pauseCountdown() {
+        this.paused = true;
+    }
+
+    resumeCountdown() {
+        this.paused = false;
+    }
+
+    updateCountdown(deltaTime) {
+        if (this.counting_down && !this.paused) {
+            this.curr_countdown_time_ms -= deltaTime;
+
+            this.setTime(Math.floor(this.curr_countdown_time_ms/1000))
+
+            if (this.curr_countdown_time_ms <= 0) {
+                // Countdown over, trigger callback and then reset
+                this.curr_countdown_callback();
+                this.resetCountdown();
+                this.setTime(0);
+            }
+        }
+    }
 
 	display() {
         // Clock body
