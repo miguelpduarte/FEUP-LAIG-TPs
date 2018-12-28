@@ -54,7 +54,7 @@ class Clock extends PrimitiveObject {
         if (this.counting_down && !this.paused) {
             this.curr_countdown_time_ms -= deltaTime;
 
-            this.setTime(Math.floor(this.curr_countdown_time_ms/1000))
+            this.setTime(Math.ceil(this.curr_countdown_time_ms/1000));
 
             if (this.curr_countdown_time_ms <= 0) {
                 // Countdown over, trigger callback and then reset
