@@ -28,7 +28,6 @@ serialInclude([
     'TransformationFactory.js',
     'Component.js',
     'Piece.js',
-    'ClickHandler.js',
     'animations/Animation.js',
     'animations/LinearAnimation.js',
     'animations/CircularAnimation.js',
@@ -45,10 +44,14 @@ serialInclude([
     'primitives/King.js',
     'primitives/Cube.js',
     'primitives/Clock.js',
+    'primitives/Button.js',
     'primitives/ScoreBoard.js',
     'game/CommunicationHandler.js',
     'game/GameState.js',
     'game/CameraHandler.js',
+    'game/ClickHandler.js',
+    'game/MenuHandler.js',
+    'menus/Menu.js',
 
     main = () => {
         // Standard application, scene and interface setup

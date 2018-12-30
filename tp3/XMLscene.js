@@ -24,9 +24,10 @@ class XMLscene extends CGFscene {
 
         // Default initializations
         this.sceneInited = false;
-        this.initDefaultCamera();
+        this.initMenuCamera();
         this.axis = new CGFaxis(this);
         this.axisIsActive = false;
+        this.menuMode = true;
         this.createDefaultMaterial();
         
         // Initial configurations
@@ -40,15 +41,16 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
+        // Helper classes instance creation
+        this.transformation_factory = new TransformationFactory();
+        // Creates a primitive factory for this scene
+        this.primitive_factory = new PrimitiveFactory(this);
+
         // Static objects scene setting
         GameState.setScene(this);
         ClickHandler.setScene(this);
         CameraHandler.setScene(this);
-
-        // Helper classes instance creation
-        this.transformation_factory = new TransformationFactory();
-        //Creates a primitive factory for this scene
-        this.primitive_factory = new PrimitiveFactory(this);
+        MenuHandler.setScene(this);
     }
 
     update(currTime) {
@@ -88,9 +90,9 @@ class XMLscene extends CGFscene {
         this.defaultMaterial.setShininess(55);
     }
 
-    initDefaultCamera() {
-        this.default_camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-        this.camera = this.default_camera;
+    initMenuCamera() {
+        this.menu_camera = new CGFcamera(1, 0.1, 5, vec3.fromValues(0, 0, 2.2), vec3.fromValues(0, 0, 0));
+        this.camera = this.menu_camera;
     }
     
     /**
@@ -128,8 +130,13 @@ class XMLscene extends CGFscene {
             console.warn("The specified initial camera was not found!\nUsing a default camera instead");
         }
 
-        this.camera = initial_camera || this.default_camera;
+        this.game_camera = initial_camera || this.default_camera;
         this.interface.setActiveCamera(null);
+    }
+
+    initGame() {
+        this.camera = this.game_camera;
+        this.menuMode = false;
     }
 
     setCurrentCamera(camera_id) {
@@ -340,7 +347,6 @@ class XMLscene extends CGFscene {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-        // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
         this.updateLights();
         this.loadIdentity();
@@ -349,12 +355,15 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-
         
         this.axisIsActive && this.axis.display();
 
-        if (this.sceneInited) {            
-            this.rootComponent.display();
+        if (this.sceneInited) {        
+            if (this.menuMode) {
+                MenuHandler.displayCurrentMenu();
+            } else {
+                this.rootComponent.display();
+            }   
         }
 
         this.popMatrix();

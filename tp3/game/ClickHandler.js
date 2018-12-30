@@ -21,15 +21,14 @@ class ClickHandler {
     }
 
     static verifyClick(clickId) {
-        if (clickId === Clock.button_pick_id) {
-            console.log("Clock clicked!!!");
-            this.origin = null;
-        } else if (clickId >= 0 && clickId < 100) {
-            this.handler(clickId);
+        if (clickId >= 0 && clickId < 100) {
+            this.boardClickHandler(clickId);
+        } else if (clickId > 500) {
+            this.buttonClickHandler(clickId);
         }
     }
 
-    static handler(clickId) {
+    static boardClickHandler(clickId) {
         if (!GameState.isCurrentPlayerHuman() || !GameState.isPlaying()) {
             return;
         }
@@ -57,6 +56,19 @@ class ClickHandler {
         }
     }
 
+    static buttonClickHandler(clickId) {
+        this.buttonActions[clickId]();
+    }
+
+    static registerButton(action) {
+        this.numRegisteredButtons++;
+
+        let index = this.baseButtonPickId + this.numRegisteredButtons;
+        this.buttonActions[index] = action;
+
+        return index;
+    }
+
     static reset() {
         this.origin = null;
         this.scene.board.setHighlightedSquare(null);
@@ -64,3 +76,6 @@ class ClickHandler {
 };
 
 ClickHandler.origin = null;
+ClickHandler.buttonActions = [];
+ClickHandler.numRegisteredButtons = 0;
+ClickHandler.baseButtonPickId = 500;
