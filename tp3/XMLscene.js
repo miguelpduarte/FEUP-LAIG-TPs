@@ -12,12 +12,7 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
         this.interface = myinterface;
-        this.lightValues = {};
-        this.transformation_factory = new TransformationFactory();
-        //Creates a primitive factory for this scene
-        this.primitive_factory = new PrimitiveFactory(this);
     }
 
     /**
@@ -27,30 +22,33 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
-        //Move to constructor (?)
+        // Default initializations
         this.sceneInited = false;
-
         this.initDefaultCamera();
-
+        this.axis = new CGFaxis(this);
+        this.axisIsActive = false;
+        this.createDefaultMaterial();
+        
+        // Initial configurations
         this.enableTextures(true);
+        this.setUpdatePeriod(1000 / UPDATE_RATE);
+        this.setPickEnabled(true);
 
+        // GL initializations
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
-        this.axis = new CGFaxis(this);
-        this.axisIsActive = false;
-
-        this.createDefaultMaterial();
-
-        this.setUpdatePeriod(1000 / UPDATE_RATE);
-
+        // Static objects scene setting
         GameState.setScene(this);
         ClickHandler.setScene(this);
         CameraHandler.setScene(this);
 
-        this.setPickEnabled(true);
+        // Helper classes instance creation
+        this.transformation_factory = new TransformationFactory();
+        //Creates a primitive factory for this scene
+        this.primitive_factory = new PrimitiveFactory(this);
     }
 
     update(currTime) {
@@ -101,7 +99,7 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.cameras = new Map();
 
-        for(let [id, camera] of this.graph.cameras) {
+        for(const [id, camera] of this.graph.cameras) {
             if(camera.type === "ortho") {
                 //left, right, bottom, top, near, far, position, target, up
                 const cam = new CGFcameraOrtho(
@@ -164,6 +162,12 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
+        // Resetting lights initializtion
+        for (const light of this.lights) {
+            light.disable();
+            light.setVisible(false);
+        }
+
         let num_created_lights = 0;
         this.lightsMap = {};
 
@@ -204,8 +208,9 @@ class XMLscene extends CGFscene {
 
     initMaterials() {
         this.materials = new Map();
-        for (let [id, material] of this.graph.materials) {
-            let mat = new CGFappearance(this);
+
+        for (const [id, material] of this.graph.materials) {
+            const mat = new CGFappearance(this);
             mat.setAmbient(...Object.values(material.ambient));
             mat.setDiffuse(...Object.values(material.diffuse));
             mat.setSpecular(...Object.values(material.specular));
@@ -218,8 +223,8 @@ class XMLscene extends CGFscene {
 
     initTextures() {
         this.textures = new Map();
-        for (let [id, texture] of this.graph.textures) {
-            let tex = new CGFtexture(this, texture.file);
+        for (const [id, texture] of this.graph.textures) {
+            const tex = new CGFtexture(this, texture.file);
             this.textures.set(id, tex);
         }
     }
@@ -227,8 +232,8 @@ class XMLscene extends CGFscene {
     initTransformations() {
         this.transformations = new Map();
         
-        for(let [id, transformation_model] of this.graph.transformations) {
-            let transf_mat = this.transformation_factory.create(transformation_model);
+        for(const [id, transformation_model] of this.graph.transformations) {
+            const transf_mat = this.transformation_factory.create(transformation_model);
             this.transformations.set(id, transf_mat);
         }
     }
@@ -238,13 +243,13 @@ class XMLscene extends CGFscene {
 	}
 
 	toggleViewLights() {
-		for (let light of this.lights) {
+		for (const light of this.lights) {
             light.setVisible(!light.visible);
         }
 	}
 
     updateLights() {
-        for (let light of this.lights) {
+        for (const light of this.lights) {
             light.update();
         }
     }
@@ -254,6 +259,9 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        // If another scene was loaded before, "pause" the scene rendering to ensure there are no unnecessary errors
+        this.sceneInited = false;
+
         // Change referential length according to parsed graph
         this.axis = new CGFaxis(this, this.graph.referentialLength);
 
@@ -270,6 +278,7 @@ class XMLscene extends CGFscene {
 
         this.interface.createInterface();
 
+        // Start or "resume" scene displaying
         this.sceneInited = true;
     }
 

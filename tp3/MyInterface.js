@@ -15,24 +15,26 @@ class MyInterface extends CGFinterface {
      */
     init(application) {
         super.init(application);
-        // init GUI. For more information on the methods, check:
-        //  http://workshop.chromeexperiments.com/examples/gui
-
-        this.gui = new dat.GUI({width: 300});
-
-        //Internal data model
-        this.model = {};
-
-        // add a group of controls (and open/expand by defult)
 
         return true;
     }
 
     createInterface() {
+        // Destroying any previously created GUIs, if they existed (preventing memory leakage and reuse problems)
+        this.gui && this.gui.destroy();
+
+        // GUI initialization. For more information check:
+        //  http://workshop.chromeexperiments.com/examples/gui
+        this.gui = new dat.GUI({width: 300});
+
+        //Internal data model
+        this.model = {};
+
         this.createLightsCheckboxes();
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
+        this.createChangeSceneMenu();
         this.createGameControls();
         this.initKeys();
     }
@@ -99,6 +101,22 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.model, "cameraIndex", cameraDropdownModel)
             .name("Current Camera")
             .onChange(val => this.scene.setCurrentCamera(val));
+    }
+
+    createChangeSceneMenu() {
+        const group = this.gui.addFolder("Change Scene");
+
+        this.model.filename = this.scene.graph.filename;
+
+        group.add(this.model, "filename")
+           .name("File Name");
+        
+        this.model.load_file = () => {
+            this.scene.graph.loadXML(this.model.filename);
+        };
+
+        group.add(this.model, "load_file")
+           .name("Load XML scene");
     }
 
     createGameControls() {

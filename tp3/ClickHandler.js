@@ -7,15 +7,16 @@ class ClickHandler {
         if (!this.scene.pickMode) {
             if (this.scene.pickResults !== null && this.scene.pickResults.length > 0) {
                 for (let i = 0; i < this.scene.pickResults.length; i++) {
-                    let obj = this.scene.pickResults[i][0];
+                    const obj = this.scene.pickResults[i][0];
                     if (obj) {
-                        let clickId = this.scene.pickResults[i][1];		
+                        const clickId = this.scene.pickResults[i][1];		
                         this.verifyClick(clickId);
                     }
                 }
                 this.scene.pickResults = [];
-            }		
+            }
         }
+
         this.scene.clearPickRegistration();
     }
 

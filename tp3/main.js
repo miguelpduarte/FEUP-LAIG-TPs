@@ -50,11 +50,11 @@ serialInclude([
     'game/GameState.js',
     'game/CameraHandler.js',
 
-    main=function() {
+    main = () => {
         // Standard application, scene and interface setup
-        var app = new CGFapplication(document.body);
-        var myInterface = new MyInterface();
-        var myScene = new XMLscene(myInterface);
+        const app = new CGFapplication(document.body);
+        const myInterface = new MyInterface();
+        const myScene = new XMLscene(myInterface);
 
         app.init();
 
@@ -64,15 +64,15 @@ serialInclude([
         myInterface.setActiveCamera(myScene.camera);
 
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
-        // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-        
-        var filename = getUrlVars()['file'] || "t2g05_scene.xml";
+        // or use the given default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
+        const filename = getUrlVars()['file'] || "tp3.xml";
 
-        // create and load graph, and associate it to scene. 
-        // Check console for loading errors
-        var myGraph = new MySceneGraph(filename, myScene);
+        // Create graph (XML parser), and associate it to scene
+        const myGraph = new MySceneGraph(myScene);
+        // Load the XML file (check console for loading errors)
+        myGraph.loadXML(filename);
         
-        // start
+        // start the app
         app.run();
     }
 ]);

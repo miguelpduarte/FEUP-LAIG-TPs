@@ -18,36 +18,12 @@ class MySceneGraph {
     /**
      * @constructor
      */
-    constructor(filename, scene) {
+    constructor(scene) {
         this.loadedOk = null;
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
         scene.graph = this;
-
-        this.nodes = [];
-
-        this.rootElementId = null;
-        this.ambient = null;
-        this.background = null;
-
-        //To use for checking if ids are repeated
-        this.cameras = new Map();
-        this.lights = new Map();
-        this.textures = new Map();
-        this.materials = new Map();
-        this.transformations = new Map();
-        this.animations = new Map();
-        this.primitives = new Map();
-        this.components = new Map();
-
-        this.requestedChildComponentIds = new Set();
-        this.tree = {};
-
-        this.axisCoords = [];
-        this.axisCoords['x'] = [1, 0, 0];
-        this.axisCoords['y'] = [0, 1, 0];
-        this.axisCoords['z'] = [0, 0, 1];
 
         //Defining parsing helpers
         this.XML_ELEMENTS_PARSING_FUNCS = {
@@ -66,6 +42,30 @@ class MySceneGraph {
         //Binding this
         Object.keys(this.XML_ELEMENTS_PARSING_FUNCS)
             .forEach(key => this.XML_ELEMENTS_PARSING_FUNCS[key] = this.XML_ELEMENTS_PARSING_FUNCS[key].bind(this));
+    }
+
+    loadXML(filename) {
+        // Stored just for displaying in the interface and knowing the currently loaded scene
+        this.filename = filename;
+        
+        this.log(`Starting loading of file: ${filename}`);
+        this.nodes = [];
+
+        this.rootElementId = null;
+        this.ambient = null;
+        this.background = null;
+
+        //To use for checking if ids are repeated
+        this.cameras = new Map();
+        this.lights = new Map();
+        this.textures = new Map();
+        this.materials = new Map();
+        this.transformations = new Map();
+        this.animations = new Map();
+        this.primitives = new Map();
+        this.components = new Map();
+
+        this.requestedChildComponentIds = new Set();
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -82,13 +82,13 @@ class MySceneGraph {
      * Callback to be executed after successful reading
      */
     onXMLReady() {
-        this.log("XML Loading finished.");
+        this.log("XML Loading finished. Starting parsing");
         const rootElement = this.reader.xmlDoc.documentElement;
 
         try {
-            // Here should go the calls for different functions to parse the various blocks
+            // Starts the XML file parsing
             const legacy_ret = this.parseXMLFile(rootElement);
-            if(legacy_ret) {
+            if (legacy_ret) {
                 console.warn("Some parsing function attempted to return an error, this is legacy behaviour and will no longer be supported, please use exceptions instead");
                 console.error("Legacy Error: ", legacy_ret);
             }
@@ -99,6 +99,7 @@ class MySceneGraph {
             }
         }
 
+        this.log("XML parsing finished");
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -117,19 +118,21 @@ class MySceneGraph {
         const nodes = rootElement.children;
 
         //Checking elements order
-        for(let i = 0; i < XML_NODES.length; ++i) {
-            if(nodes[i].nodeName !== XML_NODES[i]) {
+        for (let i = 0; i < XML_NODES.length; ++i) {
+            if (nodes[i].nodeName !== XML_NODES[i]) {
                 throw "node " + XML_NODES[i] + " missing or out of order!";
             }
         }
 
-        if(nodes.length > XML_NODES.length) {
+        if (nodes.length > XML_NODES.length) {
             this.onXMLMinorError("The XML File has additional unexpected nodes. These were not parsed.");
         }
 
-        for(let i = 0; i < XML_NODES.length; ++i) {
+        for (let i = 0; i < XML_NODES.length; ++i) {
             this.XML_ELEMENTS_PARSING_FUNCS[XML_NODES[i]](nodes[i]);
         }
+
+        // TODO: Parse pieces node for templating
     }
 
     /**
@@ -149,21 +152,21 @@ class MySceneGraph {
         this.defaultViewId = this.parseStringAttr(viewsNode, "default");
 
         const views = viewsNode.children;
-        
-        for(let i = 0; i < views.length; ++i) {
-            if(views[i].nodeName === "perspective") {
+
+        for (let i = 0; i < views.length; ++i) {
+            if (views[i].nodeName === "perspective") {
                 this.createPerspectiveCamera(views[i]);
-            } else if(views[i].nodeName === "ortho") {
+            } else if (views[i].nodeName === "ortho") {
                 this.createOrthoCamera(views[i]);
             }
         }
-        
+
         //Check if it has one view defined at least and it matches the default view id
-        if(this.cameras.size === 0) {
+        if (this.cameras.size === 0) {
             throw "no views were defined";
         }
 
-        if(!this.cameras.has(this.defaultViewId)) {
+        if (!this.cameras.has(this.defaultViewId)) {
             throw "specified default view id does not exist";
         }
     }
@@ -239,15 +242,15 @@ class MySceneGraph {
 
         const left = this.parseFloatAttr(viewNode, "left");
         const right = this.parseFloatAttr(viewNode, "right");
-        
-        if(left >= right) {
+
+        if (left >= right) {
             throw `left is larger than or equal to right for ortho camera with id '${id}'`;
         }
-        
+
         const bottom = this.parseFloatAttr(viewNode, "bottom");
         const top = this.parseFloatAttr(viewNode, "top");
-        
-        if(bottom >= top) {
+
+        if (bottom >= top) {
             throw `bottom is larger than or equal to top for ortho camera with id '${id}'`;
         }
 
@@ -307,10 +310,10 @@ class MySceneGraph {
     parseLights(lightsNode) {
         const lights = lightsNode.children;
 
-        for(let i = 0; i < lights.length; ++i) {
-            if(lights[i].nodeName === "omni") {
+        for (let i = 0; i < lights.length; ++i) {
+            if (lights[i].nodeName === "omni") {
                 this.createOmniLight(lights[i]);
-            } else if(lights[i].nodeName === "spot") {
+            } else if (lights[i].nodeName === "spot") {
                 this.createSpotLight(lights[i]);
             }
         }
@@ -326,7 +329,7 @@ class MySceneGraph {
         const id = this.parseStringAttr(lightNode, "id");
 
         //enabled
-        if(!this.reader.hasAttribute(lightNode, "enabled")) {
+        if (!this.reader.hasAttribute(lightNode, "enabled")) {
             throw this.missingNodeAttributeMessage("omni", "enabled");
         }
 
@@ -376,7 +379,7 @@ class MySceneGraph {
     createSpotLight(lightNode) {
         const id = this.parseStringAttr(lightNode, "id");
 
-        if(!this.reader.hasAttribute(lightNode, "enabled")) {
+        if (!this.reader.hasAttribute(lightNode, "enabled")) {
             throw this.missingNodeAttributeMessage("spot", "enabled");
         }
         const enabled = this.reader.getBoolean(lightNode, "enabled");
@@ -443,11 +446,11 @@ class MySceneGraph {
     parseTextures(texturesNode) {
         const textures = texturesNode.children;
 
-        for(let i = 0; i < textures.length; ++i) {
+        for (let i = 0; i < textures.length; ++i) {
             this.createTexture(textures[i]);
         }
 
-        if(this.textures.size === 0) {
+        if (this.textures.size === 0) {
             throw "no textures were defined";
         }
     }
@@ -470,11 +473,11 @@ class MySceneGraph {
     parseMaterials(materialsNode) {
         const materials = materialsNode.children;
 
-        for(let i = 0; i < materials.length; ++i) {
+        for (let i = 0; i < materials.length; ++i) {
             this.createMaterial(materials[i]);
         }
 
-        if(this.materials.size === 0) {
+        if (this.materials.size === 0) {
             throw "no materials were defined";
         }
     }
@@ -519,11 +522,11 @@ class MySceneGraph {
     parseTransformations(transformationsNode) {
         const transformations = transformationsNode.children;
 
-        for(let i = 0; i < transformations.length; ++i) {
+        for (let i = 0; i < transformations.length; ++i) {
             this.parseTransformation(transformations[i]);
         }
 
-        if(this.transformations.size === 0) {
+        if (this.transformations.size === 0) {
             throw "no transformations were defined";
         }
     }
@@ -539,7 +542,7 @@ class MySceneGraph {
         const transformations = transformationNode.children;
 
         let ret;
-        for(let i = 0; i < transformations.length; ++i) {
+        for (let i = 0; i < transformations.length; ++i) {
             if (transformations[i].nodeName === "translate") {
                 ret = this.createTranslate(transformations[i]);
             } else if (transformations[i].nodeName === "rotate") {
@@ -549,7 +552,7 @@ class MySceneGraph {
             } else {
                 throw "invalid transformation '" + transformations[i].nodeName + "' in transformation with id '" + id + "'";
             }
-            
+
             transformation.transformations.push(ret);
         }
 
@@ -572,7 +575,7 @@ class MySceneGraph {
 
     createRotate(transformationNode) {
         const axis = this.parseStringAttr(transformationNode, "axis");
-        
+
         if (axis !== "x" && axis !== "y" && axis !== "z") {
             throw "rotate transformation with invalid axis (must be 'x', 'y' or 'z')";
         }
@@ -598,7 +601,7 @@ class MySceneGraph {
     parseAnimations(animationsNode) {
         const animations = animationsNode.children;
 
-        for(let i = 0; i < animations.length; ++i) {
+        for (let i = 0; i < animations.length; ++i) {
             this.parseAnimation(animations[i]);
         }
     }
@@ -634,7 +637,7 @@ class MySceneGraph {
                 const xx = this.parseFloatAttr(controlPointNode, "xx");
                 const yy = this.parseFloatAttr(controlPointNode, "yy");
                 const zz = this.parseFloatAttr(controlPointNode, "zz");
-                controlPoints.push({xx, yy, zz});
+                controlPoints.push({ xx, yy, zz });
             } else {
                 this.onXMLError(`animation '${id}': invalid control point named '${controlPointNode.nodeName}'`);
             }
@@ -670,17 +673,17 @@ class MySceneGraph {
     }
 
     parseCenter(node, id) {
-        if(!this.reader.hasAttribute(node, "center")) {
+        if (!this.reader.hasAttribute(node, "center")) {
             throw `The circular animation with id '${id}' does not have a center defined`;
         }
 
         const centerString = this.reader.getString(node, "center");
         const values = centerString.split(' ');
 
-        if (values.length !== 3 || 
-            isNaN(values[0]) || values[0] === '' || 
+        if (values.length !== 3 ||
+            isNaN(values[0]) || values[0] === '' ||
             isNaN(values[1]) || values[1] === '' ||
-            isNaN(values[2]) || values[2] === '' ) {
+            isNaN(values[2]) || values[2] === '') {
             throw `animation '${id}': a circular animation center must have 3 spacial coordinates, in the format 'xx yy zz'`;
         }
 
@@ -694,11 +697,11 @@ class MySceneGraph {
     parsePrimitives(primitivesNode) {
         const primitives = primitivesNode.children;
 
-        for(let i = 0; i < primitives.length; ++i) {
+        for (let i = 0; i < primitives.length; ++i) {
             this.parsePrimitive(primitives[i]);
         }
 
-        if(this.primitives.size === 0) {
+        if (this.primitives.size === 0) {
             throw "no primitives were defined";
         }
     }
@@ -911,7 +914,7 @@ class MySceneGraph {
                 const xx = this.parseFloatAttr(controlPointNode, "xx");
                 const yy = this.parseFloatAttr(controlPointNode, "yy");
                 const zz = this.parseFloatAttr(controlPointNode, "zz");
-                controlPoints.push({xx, yy, zz});
+                controlPoints.push({ xx, yy, zz });
             } else {
                 this.onXMLMinorError(`Invalid '${controlPointNode.nodeName}' controlpoint tag in patch with id '${id}'.`);
             }
@@ -1001,15 +1004,15 @@ class MySceneGraph {
         // and a set that will store the "requested" component ids of the children
         // in the end, these data structures should only differ by one element (the root component)
 
-        for(let i = 0; i < components.length; ++i) {
+        for (let i = 0; i < components.length; ++i) {
             this.createComponent(components[i]);
         }
 
-        if(this.components.size === 0) {
+        if (this.components.size === 0) {
             throw "no components were defined";
         }
 
-        if(!this.components.has(this.rootElementId)) {
+        if (!this.components.has(this.rootElementId)) {
             throw `root component with id '${this.rootElementId}' is missing.`;
         }
 
@@ -1043,7 +1046,7 @@ class MySceneGraph {
                 }
             }
         }
-         
+
         if (componentProperties.length !== 4 + index_shift) {
             throw "component '" + id + "' invalid number of component properties";
         } else if (componentProperties[0].nodeName !== "transformation") {
@@ -1065,10 +1068,10 @@ class MySceneGraph {
         let explicit_transformation_found = false;
         let transformationref = null;
         let explicitTransformations = [];
-        
-        for(let transformation of transformations) {
-            if(transformation.nodeName === "transformationref") {
-                if (explicit_transformation_found) {                    
+
+        for (let transformation of transformations) {
+            if (transformation.nodeName === "transformationref") {
+                if (explicit_transformation_found) {
                     this.onXMLMinorError(`component '${id}': an explicit transformation has already been found, ignoring transformation references.`);
                     continue;
                 }
@@ -1086,7 +1089,7 @@ class MySceneGraph {
                 transformationref = transformation_id;
                 break;
             }
-            else {                
+            else {
                 let ret;
                 if (transformation.nodeName === "translate") {
                     ret = this.createTranslate(transformation);
@@ -1105,7 +1108,7 @@ class MySceneGraph {
 
         //materials
         const materials = componentProperties[1 + index_shift].children;
-        let materialIds = [];        
+        let materialIds = [];
         for (let material of materials) {
             if (material.nodeName !== "material") {
                 this.onXMLMinorError(`Invalid '${material.nodeName}' material tag in component materials.`);
@@ -1114,7 +1117,7 @@ class MySceneGraph {
                 this.verifyInheritableId("material", matId, this.materials);
                 materialIds.push(matId);
             }
-        } 
+        }
 
         //texture
         const textureNode = componentProperties[2 + index_shift];
@@ -1135,10 +1138,10 @@ class MySceneGraph {
         for (let child of children) {
             if (child.nodeName === "componentref") {
                 const childId = this.parseStringAttr(child, "id");
-                if(childId === id) {
+                if (childId === id) {
                     throw `component with id '${id}' includes itself in its children`;
                 }
-                if(componentIds.has(childId)) {
+                if (componentIds.has(childId)) {
                     this.onXMLMinorError(`component with id '${id}' has a duplicate child component with id '${childId}'. It will be ignored.`);
                 } else {
                     componentIds.add(childId);
@@ -1150,7 +1153,7 @@ class MySceneGraph {
                 if (!this.primitives.has(childId)) {
                     throw `primitive child with id '${childId}' in component with id '${id}' is not defined.`;
                 } else {
-                    if(primitiveIds.has(childId)) {
+                    if (primitiveIds.has(childId)) {
                         this.onXMLMinorError(`component with id '${id}' has a duplicate child primitive with id '${childId}'. It will be ignored.`);
                     } else {
                         primitiveIds.add(childId);
@@ -1160,7 +1163,7 @@ class MySceneGraph {
                 this.onXMLMinorError(`invalid '${child.nodeName}' child tag in component children. It will be ignored.`);
             }
         }
-        
+
         const component = {
             id,
             animationIds,
@@ -1183,7 +1186,7 @@ class MySceneGraph {
 
     parseStringAttr(node, attribute_name) {
         //TODO: Check if empty?
-        if(!this.reader.hasAttribute(node, attribute_name)) {
+        if (!this.reader.hasAttribute(node, attribute_name)) {
             throw this.missingNodeAttributeMessage(node.nodeName, attribute_name);
         }
         return this.reader.getString(node, attribute_name);
@@ -1192,13 +1195,13 @@ class MySceneGraph {
     attrIsNumber(attribute) {
         return !isNaN(attribute);
     }
-    
+
     parseFloatAttr(node, attribute_name) {
-        if(!this.reader.hasAttribute(node, attribute_name)) {
+        if (!this.reader.hasAttribute(node, attribute_name)) {
             throw this.missingNodeAttributeMessage(node.nodeName, attribute_name);
         }
         let attr = this.reader.getFloat(node, attribute_name);
-        if(!this.attrIsNumber(attr)) {
+        if (!this.attrIsNumber(attr)) {
             throw this.isNanAttributeMessage(node.nodeName, attribute_name);
         }
         return attr;
@@ -1209,7 +1212,7 @@ class MySceneGraph {
         if (!Number.isInteger(attr)) {
             throw this.isNotIntegerAttributeMessage(node.nodeName, attribute_name);
         }
-     
+
         return attr;
     }
 
@@ -1218,7 +1221,7 @@ class MySceneGraph {
         let x = this.parseFloatAttr(node, "x");
         let y = this.parseFloatAttr(node, "y");
         let z = this.parseFloatAttr(node, "z");
-        return {x, y, z};
+        return { x, y, z };
     }
 
     parseRGBA(node) {
@@ -1253,7 +1256,7 @@ class MySceneGraph {
             a = 1;
         }
 
-        return {r, g, b, a};
+        return { r, g, b, a };
     }
 
     /*
@@ -1350,12 +1353,12 @@ class MySceneGraph {
     }
 
     verifyComponentChildren() {
-        if(this.components.length < this.requestedChildComponentIds.length) {
+        if (this.components.length < this.requestedChildComponentIds.length) {
             throw "some requested component ids were not found";
         }
 
-        for(let child_component_id of this.requestedChildComponentIds) {
-            if(!this.components.has(child_component_id)) {
+        for (let child_component_id of this.requestedChildComponentIds) {
+            if (!this.components.has(child_component_id)) {
                 throw `child component with id ${child_component_id} was not defined!`;
             }
         }
