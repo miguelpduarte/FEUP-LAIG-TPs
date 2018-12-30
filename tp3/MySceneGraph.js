@@ -1017,6 +1017,14 @@ class MySceneGraph {
         }
 
         this.verifyComponentChildren();
+
+        if (!this.boardPrimitivePresent) {
+            throw "primitive of type 'board' must be present in the scene";
+        } else if (!this.clockPrimitivePresent) {
+            throw "primitive of type 'clock' must be present in the scene";
+        } else if (!this.scoreBoardPrimitivePresent) {
+            throw "primitive of type 'scoreboard' must be present in the scene";
+        }
     }
 
     createComponent(componentNode) {
@@ -1161,6 +1169,16 @@ class MySceneGraph {
                 }
             } else {
                 this.onXMLMinorError(`invalid '${child.nodeName}' child tag in component children. It will be ignored.`);
+            }
+        }
+
+        for (let primitiveId of primitiveIds) {
+            if (this.primitives.get(primitiveId).type === "board") {
+                this.boardPrimitivePresent = true;
+            } else if (this.primitives.get(primitiveId).type === "clock") {
+                this.clockPrimitivePresent = true;
+            } else if (this.primitives.get(primitiveId).type === "scoreBoard") {
+                this.scoreBoardPrimitivePresent = true;
             }
         }
 
