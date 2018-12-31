@@ -4,12 +4,20 @@
  */
 class Menu extends PrimitiveObject {
 	constructor(scene, button_actions, backgroundTexturePath) {
-		super(scene);
-
-        this.menu_height = 2;
+        super(scene);
+        
+        this.button_spacing = 0.35;
         this.menu_width = 3;
         this.menu_breadth = 0.5;
-        this.button_spacing = 0.35;
+        this.num_button_actions = button_actions.length;
+
+        if (this.num_button_actions <= 3) {
+            this.menu_height = 2;
+            this.buttons_padding = this.button_spacing/4;
+        } else {
+            this.menu_height = 2 + (this.num_button_actions - 3) * (this.button_spacing * 0.7);
+            this.buttons_padding = this.button_spacing * 1.3;
+        }
 
         this.menuBody = scene.primitive_factory.createCube(20);
         this.background = scene.primitive_factory.create({ 
@@ -27,6 +35,9 @@ class Menu extends PrimitiveObject {
     };
 
     display() {
+        if (this.num_button_actions > 3) {
+            this.scene.scale(0.8, 0.8, 0.8);
+        }
         this.scene.pushMatrix();
             this.scene.translate(0, 0, -(this.menu_breadth/2 + 0.001));
             this.scene.scale(this.menu_width, this.menu_height, this.menu_breadth);
@@ -40,7 +51,7 @@ class Menu extends PrimitiveObject {
             this.background.display();
         this.scene.popMatrix();
         this.scene.pushMatrix();
-            this.scene.translate(-this.menu_width/3, this.button_spacing/4, 0);
+            this.scene.translate(-this.menu_width/3, this.buttons_padding, 0);
             for (let button of this.buttons) {
                 button.display();
                 this.scene.translate(0, -this.button_spacing, 0);

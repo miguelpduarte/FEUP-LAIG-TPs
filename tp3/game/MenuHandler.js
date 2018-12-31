@@ -1,6 +1,8 @@
 class MenuHandler {
-    static setScene(scene) {
+    static init(scene) {
         this.scene = scene;
+        this.scene.menuMode = true;
+        this.scene.camera = this.scene.menu_camera;
 
         let player2_computer_level_menu = new Menu (
             scene, 

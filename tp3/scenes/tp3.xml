@@ -139,7 +139,7 @@
             <translate x="0" y="1.2" z="0" />
         </transformation>
         <transformation id="trf_donut_plate_to_table">
-            <translate x="3.9" y="2.4" z="6.5" />
+            <translate x="3.9" y="2.4" z="6.7" />
             <scale x="1" y="1" z="1" />
             <rotate axis="x" angle="-90" />
         </transformation>
@@ -179,6 +179,9 @@
         </primitive>
         <primitive id="scoreboard">
             <scoreboard />
+        </primitive>
+        <primitive id="gamecontrols">
+            <gamecontrols />
         </primitive>
         <primitive id="simpson_donut">
             <torus inner="0.06" outer="0.12" slices="20" loops="20" />
@@ -233,6 +236,7 @@
                 <componentref id="board_comp" />
                 <componentref id="clock_comp" />
                 <componentref id="scoreboard_comp" />
+                <componentref id="gamecontrols_comp" />
             </children>
         </component>
 
@@ -712,6 +716,21 @@
             <texture id="none" />
             <children>
                 <primitiveref id="scoreboard" />
+            </children>
+        </component>
+
+        <component id="gamecontrols_comp">
+            <transformation>
+                <translate x="-3" y="5.9" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="gamecontrols" />
             </children>
         </component>
 

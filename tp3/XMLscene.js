@@ -27,7 +27,6 @@ class XMLscene extends CGFscene {
         this.initMenuCamera();
         this.axis = new CGFaxis(this);
         this.axisIsActive = false;
-        this.menuMode = true;
         this.createDefaultMaterial();
         
         // Initial configurations
@@ -50,7 +49,7 @@ class XMLscene extends CGFscene {
         GameState.setScene(this);
         ClickHandler.setScene(this);
         CameraHandler.setScene(this);
-        MenuHandler.setScene(this);
+        MenuHandler.init(this);
     }
 
     update(currTime) {
@@ -131,7 +130,7 @@ class XMLscene extends CGFscene {
         }
 
         this.game_camera = initial_camera || this.default_camera;
-        this.interface.setActiveCamera(null);
+        //this.interface.setActiveCamera(null);
     }
 
     initGame() {

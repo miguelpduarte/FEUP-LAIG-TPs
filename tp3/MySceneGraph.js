@@ -751,6 +751,8 @@ class MySceneGraph {
             primitive = this.createClock();
         } else if (primitiveChild.nodeName === "scoreboard") {
             primitive = this.createScoreBoard();
+        } else if (primitiveChild.nodeName === "gamecontrols") {
+            primitive = this.createGameControls();
         } else {
             throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
@@ -996,6 +998,10 @@ class MySceneGraph {
         return { type: "scoreBoard" };
     }
 
+    createGameControls() {
+        return { type: "gameControls" };
+    }
+
     parseComponents(componentsNode) {
         const components = componentsNode.children;
 
@@ -1024,6 +1030,8 @@ class MySceneGraph {
             throw "primitive of type 'clock' must be present in the scene";
         } else if (!this.scoreBoardPrimitivePresent) {
             throw "primitive of type 'scoreboard' must be present in the scene";
+        } else if (!this.gameControlsPrimitivePresent) {
+            throw "primitive of type 'gameControls' must be present in the scene";
         }
     }
 
@@ -1179,6 +1187,8 @@ class MySceneGraph {
                 this.clockPrimitivePresent = true;
             } else if (this.primitives.get(primitiveId).type === "scoreBoard") {
                 this.scoreBoardPrimitivePresent = true;
+            } else if (this.primitives.get(primitiveId).type === "gameControls") {
+                this.gameControlsPrimitivePresent = true;
             }
         }
 

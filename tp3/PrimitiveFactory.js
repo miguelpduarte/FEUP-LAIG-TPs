@@ -15,7 +15,8 @@ class PrimitiveFactory {
             "water": this.createWater,
             "board": this.createBoard,
             "clock": this.createClock,
-            "scoreBoard": this.createScoreBoard
+            "scoreBoard": this.createScoreBoard,
+            "gameControls": this.createGameControls
         };
 
         //Binding this
@@ -116,5 +117,19 @@ class PrimitiveFactory {
 
     createCube(numDivs) {
         return new Cube(this.scene, numDivs, this.createNurbsObject);
+    }
+
+    createGameControls() {
+        return new Menu (
+            this.scene, 
+            [
+                () => (GameState.undoMove()),
+                () => (GameState.redoMove()),
+                () => (GameState.continuePlaying()),
+                () => (GameState.replayGame()),
+                () => (MenuHandler.init(this.scene))
+            ],
+            "menus/resources/gamecontrolsmenu.png"
+        );
     }
 };
