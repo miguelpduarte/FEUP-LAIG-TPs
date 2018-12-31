@@ -14,7 +14,6 @@ class Button extends PrimitiveObject {
     };
 
     display() {
-        this.scene.translate(0, 0, 0.001);
         this.metal_material.apply();
         this.scene.registerForPick(this.pickIndex, this.button);
         this.button.display();

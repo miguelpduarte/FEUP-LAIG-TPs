@@ -8,8 +8,10 @@ class Menu extends PrimitiveObject {
 
         this.menu_height = 2;
         this.menu_width = 3;
+        this.menu_breadth = 0.5;
         this.button_spacing = 0.35;
 
+        this.menuBody = scene.primitive_factory.createCube(20);
         this.background = scene.primitive_factory.create({ 
             type: "plane", 
             npartsU: 20, 
@@ -26,12 +28,15 @@ class Menu extends PrimitiveObject {
 
     display() {
         this.scene.pushMatrix();
+            this.scene.translate(0, 0, -(this.menu_breadth/2 + 0.001));
+            this.scene.scale(this.menu_width, this.menu_height, this.menu_breadth);
+            this.menu_body_material.apply();
+            this.menuBody.display();
+        this.scene.popMatrix();
+        this.scene.pushMatrix();
             this.scene.scale(this.menu_width, this.menu_height, 1);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
             this.menu_material.apply();
-            this.background.display();
-            this.scene.rotate(Math.PI, 1, 0, 0);
-            this.menu_back_material.apply();
             this.background.display();
         this.scene.popMatrix();
         this.scene.pushMatrix();
@@ -45,7 +50,7 @@ class Menu extends PrimitiveObject {
 
     initMaterials(backgroundTexturePath) {
         let background_texture = new CGFtexture(this.scene, backgroundTexturePath);
-        let background_back_texture = new CGFtexture(this.scene, "menus/resources/menuback.png");
+        let menu_body_texture = new CGFtexture(this.scene, "menus/resources/menuback.png");
 
         this.menu_material = new CGFappearance(this.scene);
         this.menu_material.setAmbient(0.15, 0.15, 0.15, 1);
@@ -55,12 +60,12 @@ class Menu extends PrimitiveObject {
         this.menu_material.setShininess(25);
         this.menu_material.setTexture(background_texture);
 
-        this.menu_back_material = new CGFappearance(this.scene);
-        this.menu_back_material.setAmbient(0.15, 0.15, 0.15, 1);
-        this.menu_back_material.setDiffuse(0.5, 0.5, 0.5, 1);
-        this.menu_back_material.setSpecular(0.3, 0.3, 0.3, 1);
-        this.menu_back_material.setEmission(0, 0, 0, 1);
-        this.menu_back_material.setShininess(25);
-        this.menu_back_material.setTexture(background_back_texture);
+        this.menu_body_material = new CGFappearance(this.scene);
+        this.menu_body_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.menu_body_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.menu_body_material.setSpecular(0.3, 0.3, 0.3, 1);
+        this.menu_body_material.setEmission(0, 0, 0, 1);
+        this.menu_body_material.setShininess(25);
+        this.menu_body_material.setTexture(menu_body_texture);
     }
 };

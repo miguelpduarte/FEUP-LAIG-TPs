@@ -97,6 +97,8 @@ class GameState {
             return;
         }
 
+        this.scene.clock.setDisabled();
+
         // If it is not, then request the AI move from the API and do the same as above
         try {
             const res = await CommunicationHandler.aiMovePiece(this.curr_game_state);

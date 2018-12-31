@@ -113,4 +113,8 @@ class PrimitiveFactory {
 
         return new CGFnurbsObject(this.scene, divs_u, divs_v, nurbs_surface);
     }
+
+    createCube(numDivs) {
+        return new Cube(this.scene, numDivs, this.createNurbsObject);
+    }
 };

@@ -118,6 +118,11 @@ class Clock extends PrimitiveObject {
         this.number_right_material.setTexture(this.number_texture[parseInt(timeStr[1])]);
     }
 
+    setDisabled() {
+        this.number_left_material.setTexture(this.minus_texture);
+        this.number_right_material.setTexture(this.minus_texture);
+    }
+
     createBody() {
         this.body = new Cube(this.scene, 5, this.createNurbsObject);
     }
@@ -144,6 +149,7 @@ class Clock extends PrimitiveObject {
         this.green_plastic_texture = new CGFtexture(this.scene, "primitives/resources/green_plastic.jpg");
         let display_texture = new CGFtexture(this.scene, "primitives/resources/display.png");
         let metal_texture = new CGFtexture(this.scene, "primitives/resources/metal.jpg");
+        this.minus_texture = new CGFtexture(this.scene, "primitives/resources/minus.png");
         this.number_texture = {}
         this.number_texture[0] = new CGFtexture(this.scene, "primitives/resources/0.png");
         this.number_texture[1] = new CGFtexture(this.scene, "primitives/resources/1.png");
