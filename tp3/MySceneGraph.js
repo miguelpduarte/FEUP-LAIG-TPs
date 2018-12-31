@@ -728,37 +728,61 @@ class MySceneGraph {
         let primitiveChild = childNodes[0];
 
         let primitive;
-        if (primitiveChild.nodeName === "rectangle") {
-            primitive = this.createRectangle(primitiveChild);
-        } else if (primitiveChild.nodeName === "triangle") {
-            primitive = this.createTriangle(primitiveChild);
-        } else if (primitiveChild.nodeName === "cylinder") {
-            primitive = this.createCylinder(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "cylinder2") {
-            primitive = this.createCylinder(primitiveChild, id);
-            primitive.type = "cylinder2";
-        } else if (primitiveChild.nodeName === "sphere") {
-            primitive = this.createSphere(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "torus") {
-            primitive = this.createTorus(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "plane") {
-            primitive = this.createPlane(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "patch") {
-            primitive = this.createPatch(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "vehicle") {
-            primitive = this.createVehicle();
-        } else if (primitiveChild.nodeName === "terrain") {
-            primitive = this.createTerrain(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "water") {
-            primitive = this.createWater(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "board") {
-            primitive = this.createBoard();
-        } else if (primitiveChild.nodeName === "clock") {
-            primitive = this.createClock();
-        } else if (primitiveChild.nodeName === "scoreboard") {
-            primitive = this.createScoreBoard();
-        } else {
-            throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
+        switch (primitiveChild.nodeName) {
+            case "rectangle":
+                primitive = this.createRectangle(primitiveChild);
+                break;
+            case "triangle":
+                primitive = this.createTriangle(primitiveChild);
+                break;
+            case "cylinder":
+                primitive = this.createCylinder(primitiveChild, id);
+                break;
+            case "cylinder2":
+                primitive = this.createCylinder(primitiveChild, id);
+                primitive.type = "cylinder2";
+                break;
+            case "sphere":
+                primitive = this.createSphere(primitiveChild, id);
+                break;
+            case "torus":
+                primitive = this.createTorus(primitiveChild, id);
+                break;
+            case "plane":
+                primitive = this.createPlane(primitiveChild, id);
+                break;
+            case "patch":
+                primitive = this.createPatch(primitiveChild, id);
+                break;
+            case "vehicle":
+                primitive = this.createVehicle();
+                break;
+            case "terrain":
+                primitive = this.createTerrain(primitiveChild, id);
+                break;
+            case "water":
+                primitive = this.createWater(primitiveChild, id);
+                break;
+            case "board":
+                primitive = this.createBoard();
+                break;
+            case "clock":
+                primitive = this.createClock();
+                break;
+            case "scoreboard":
+                primitive = this.createScoreBoard();
+                break;
+            case "king":
+                primitive = this.createKing();
+                break;
+            case "bishop":
+                primitive = this.createBishop();
+                break;
+            case "pawn":
+                primitive = this.createPawn();
+                break;
+            default:
+                throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
 
         primitive.id = id;
@@ -1005,6 +1029,24 @@ class MySceneGraph {
     createScoreBoard() {
         return {
             type: "scoreBoard"
+        };
+    }
+
+    createKing() {
+        return {
+            type: "king"
+        };
+    }
+
+    createBishop() {
+        return {
+            type: "bishop"
+        };
+    }
+
+    createPawn() {
+        return {
+            type: "pawn"
         };
     }
 
@@ -1424,19 +1466,25 @@ class MySceneGraph {
         } else if (r > 1) {
             this.onXMLMinorError(`${node.nodeName} red attribute must be in the range [0, 1]. Assuming value 1.`);
             r = 1;
-        } else if (g < 0) {
+        }
+        
+        if (g < 0) {
             this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 0.`);
             g = 0;
         } else if (g > 1) {
             this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 1.`);
             g = 1;
-        } else if (b < 0) {
+        }
+        
+        if (b < 0) {
             this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 0.`);
             b = 0;
         } else if (b > 1) {
             this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 1.`);
             b = 1;
-        } else if (a < 0) {
+        }
+        
+        if (a < 0) {
             this.onXMLMinorError(`${node.nodeName} alpha attribute must be in the range [0, 1]. Assuming value 0.`);
             a = 0;
         } else if (a > 1) {

@@ -199,9 +199,9 @@ class Board extends PrimitiveObject {
 
     drawPiece(piece) {
         this.scene.pushMatrix();
-            this.scene.translate(this.piece_offset + this.square_size*piece.column, this.board_height + piece.height, this.piece_offset + this.square_size*piece.row);
-
             const piece_to_display = this.getCustomOrFallbackPiece(piece);
+
+            this.scene.translate(this.piece_offset + this.square_size*piece.column, this.board_height + piece.height, this.piece_offset + this.square_size*piece.row);
             this.scene.scale(this.piece_size_ratio, this.piece_size_ratio, this.piece_size_ratio);
             this.scene.registerForPick(piece.row*10 + piece.column, this.fallback_piece);
             piece_to_display.display();

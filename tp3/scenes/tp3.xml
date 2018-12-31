@@ -62,6 +62,8 @@
         <texture id="tex_wood" file="scenes/images/wood.png" />
         <texture id="tex_floor" file="scenes/images/floor.png" />
         <texture id="tex_donut" file="scenes/images/donut.png" />
+        <texture id="tex_piece_white" file="primitives/resources/white_piece.jpg" />
+        <texture id="tex_piece_black" file="primitives/resources/black_piece.jpg" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -130,6 +132,12 @@
             <diffuse r="0.27" g="0.27" b="0.27" a="1" />
             <specular r="0.1" g="0.1" b="0.1" a="1" />
         </material>
+        <material id="mat_piece_regular" shininess="25" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+        </material>
     </materials>
     <transformations>
         <transformation id="trf_standup_y">
@@ -191,6 +199,12 @@
         </primitive>
         <primitive id="test_cone">
             <cylinder base="0.35" top="0" height="0.24" slices="10" stacks="6" />
+        </primitive>
+        <primitive id="king">
+            <king />
+        </primitive>
+        <primitive id="pawn">
+            <pawn />
         </primitive>
     </primitives>
     <components>
@@ -728,7 +742,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="tex_piece_white" length_s="1" length_t="1" />
             <children>
                 <componentref id="donut_plate" />
                 <componentref id="simpson_donut" />
@@ -741,7 +755,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="tex_piece_black" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="donut_plate" />
             </children>
@@ -761,4 +775,28 @@
         </component>
 
     </components>
+
+     <pieces>
+        <piece_white>
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="mat_piece_regular" />
+            </materials>
+            <texture id="tex_piece_white" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="king" />
+            </children>
+        </piece_white>
+        <piece_black>
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="mat_piece_regular" />
+            </materials>
+            <texture id="tex_piece_black" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="pawn" />
+            </children>
+        </piece_black>
 </yas>
