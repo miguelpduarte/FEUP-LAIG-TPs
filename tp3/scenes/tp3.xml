@@ -799,4 +799,5 @@
                 <primitiveref id="pawn" />
             </children>
         </piece_black>
+    </pieces>
 </yas>
