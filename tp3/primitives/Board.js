@@ -116,7 +116,7 @@ class Board extends PrimitiveObject {
     }
 
     createPieces() {
-        this.piece = new Bishop(this.scene, this.createNurbsObject);
+        this.fallback_piece = new Bishop(this.scene, this.createNurbsObject);
     }
 
     initPieces(board_pieces = []) {
@@ -130,7 +130,7 @@ class Board extends PrimitiveObject {
                     continue;
                 }
                 
-                this.pieces.push(new Piece(j, i, board_pieces[i][j] === 1 ? 'light' : 'dark'));
+                this.pieces.push(new Piece(j, i, board_pieces[i][j] === 1 ? "white" : "black"));
             }
         }
     }
@@ -145,8 +145,8 @@ class Board extends PrimitiveObject {
         this.board_cover_texture = new CGFtexture(this.scene, "primitives/resources/board.jpg");
         this.board_edge_texture = new CGFtexture(this.scene, "primitives/resources/board_edge.jpg");
         this.board_bottom_texture = new CGFtexture(this.scene, "primitives/resources/board_bottom.jpg");
-        this.dark_piece_texture = new CGFtexture(this.scene, "primitives/resources/dark_piece.jpg");
-        this.light_piece_texture = new CGFtexture(this.scene, "primitives/resources/light_piece.jpg");
+        this.black_piece_texture = new CGFtexture(this.scene, "primitives/resources/black_piece.jpg");
+        this.white_piece_texture = new CGFtexture(this.scene, "primitives/resources/white_piece.jpg");
         this.piece_material = {};
 
         this.board_cover_material = new CGFappearance(this.scene);
@@ -180,31 +180,62 @@ class Board extends PrimitiveObject {
         this.highlighted_material.setEmission(0, 0, 0, 1);
         this.highlighted_material.setShininess(25);
 
-        this.piece_material["dark"] = new CGFappearance(this.scene);
-        this.piece_material["dark"].setAmbient(0.15, 0.15, 0.15, 1);
-        this.piece_material["dark"].setDiffuse(0.5, 0.5, 0.5, 1);
-        this.piece_material["dark"].setSpecular(0.3, 0.3, 0.3, 1);
-        this.piece_material["dark"].setEmission(0, 0, 0, 1);
-        this.piece_material["dark"].setShininess(25);
-        this.piece_material["dark"].setTexture(this.dark_piece_texture);
+        this.piece_material["black"] = new CGFappearance(this.scene);
+        this.piece_material["black"].setAmbient(0.15, 0.15, 0.15, 1);
+        this.piece_material["black"].setDiffuse(0.5, 0.5, 0.5, 1);
+        this.piece_material["black"].setSpecular(0.3, 0.3, 0.3, 1);
+        this.piece_material["black"].setEmission(0, 0, 0, 1);
+        this.piece_material["black"].setShininess(25);
+        this.piece_material["black"].setTexture(this.black_piece_texture);
 
-        this.piece_material["light"] = new CGFappearance(this.scene);
-        this.piece_material["light"].setAmbient(0.15, 0.15, 0.15, 1);
-        this.piece_material["light"].setDiffuse(0.5, 0.5, 0.5, 1);
-        this.piece_material["light"].setSpecular(0.3, 0.3, 0.3, 1);
-        this.piece_material["light"].setEmission(0, 0, 0, 1);
-        this.piece_material["light"].setShininess(25);
-        this.piece_material["light"].setTexture(this.light_piece_texture);
+        this.piece_material["white"] = new CGFappearance(this.scene);
+        this.piece_material["white"].setAmbient(0.15, 0.15, 0.15, 1);
+        this.piece_material["white"].setDiffuse(0.5, 0.5, 0.5, 1);
+        this.piece_material["white"].setSpecular(0.3, 0.3, 0.3, 1);
+        this.piece_material["white"].setEmission(0, 0, 0, 1);
+        this.piece_material["white"].setShininess(25);
+        this.piece_material["white"].setTexture(this.white_piece_texture);
     }
 
     drawPiece(piece) {
         this.scene.pushMatrix();
+            const piece_to_display = this.getCustomOrFallbackPiece(piece);
+
             this.scene.translate(this.piece_offset + this.square_size*piece.column, this.board_height + piece.height, this.piece_offset + this.square_size*piece.row);
-            this.piece_material[piece.color].apply();
             this.scene.scale(this.piece_size_ratio, this.piece_size_ratio, this.piece_size_ratio);
-            this.scene.registerForPick(piece.row*10 + piece.column, this.piece);
-            this.piece.display();
+            this.scene.registerForPick(piece.row*10 + piece.column, this.fallback_piece);
+            piece_to_display.display();
         this.scene.popMatrix();
+    }
+
+    getCustomOrFallbackPiece(piece) {
+        switch(piece.color) {
+            case "white":
+                if (this.white_piece) {
+                    return this.white_piece;
+                } else {
+                    this.prepareFallbackPiece(piece);
+                    return this.fallback_piece;
+                }
+            case "black":
+                if (this.black_piece) {
+                    return this.black_piece;
+                } else {
+                    this.prepareFallbackPiece(piece);
+                    return this.fallback_piece;
+                }
+            default:
+                break;
+        }
+    }
+
+    prepareFallbackPiece(piece) {
+        this.piece_material[piece.color].apply();
+    }
+
+    setCustomPieces(white_piece, black_piece) {
+        this.white_piece = white_piece;
+        this.black_piece = black_piece;
     }
 
     drawTouchSquares() {
@@ -255,19 +286,19 @@ class Board extends PrimitiveObject {
     }
 
     removePiece(piece) {
-        if (piece.color === 'dark') {
-            let num_dark_removed_pieces = 25 - GameState.getNrBlack() - 1;
-            let row = Math.floor(num_dark_removed_pieces/13);
+        if (piece.color === 'black') {
+            let num_black_removed_pieces = 25 - GameState.getNrBlack() - 1;
+            let row = Math.floor(num_black_removed_pieces/13);
             piece.setTarget(
                 -(row + 1.5), 
-                -(this.board_margin + this.square_size + 1) + num_dark_removed_pieces%13 + (row ? 0.5 : 0)
+                -(this.board_margin + this.square_size + 1) + num_black_removed_pieces%13 + (row ? 0.5 : 0)
             );
-        } else if (piece.color === 'light') {
-            let num_light_removed_pieces = 25 - GameState.getNrWhite() - 1;
-            let row = Math.floor(num_light_removed_pieces/13);
+        } else if (piece.color === 'white') {
+            let num_white_removed_pieces = 25 - GameState.getNrWhite() - 1;
+            let row = Math.floor(num_white_removed_pieces/13);
             piece.setTarget(
                 row + 10.5, 
-                -(this.board_margin + this.square_size + 1) + num_light_removed_pieces%13 + (row ? 0.5 : 0)
+                -(this.board_margin + this.square_size + 1) + num_white_removed_pieces%13 + (row ? 0.5 : 0)
             );
         }
     }
@@ -275,19 +306,19 @@ class Board extends PrimitiveObject {
     undoMove(origin_row, origin_column, target_row, target_column, taken_piece) {
         this.performMove(target_row, target_column, origin_row, origin_column);
         if (taken_piece == 1) {
-            let num_light_removed_pieces = 25 - GameState.getNrWhite();
-            let row = Math.floor(num_light_removed_pieces/13);
+            let num_white_removed_pieces = 25 - GameState.getNrWhite();
+            let row = Math.floor(num_white_removed_pieces/13);
             let piece = this.getSquarePiece(
                 row + 10.5,
-                -(this.board_margin + this.square_size + 1) + num_light_removed_pieces%13 + (row ? 0.5 : 0)
+                -(this.board_margin + this.square_size + 1) + num_white_removed_pieces%13 + (row ? 0.5 : 0)
             );
             piece.setTarget(target_row, target_column);
         } else if (taken_piece == 2) {
-            let num_dark_removed_pieces = 25 - GameState.getNrBlack();
-            let row = Math.floor(num_dark_removed_pieces/13);
+            let num_black_removed_pieces = 25 - GameState.getNrBlack();
+            let row = Math.floor(num_black_removed_pieces/13);
             let piece = this.getSquarePiece(
                 -(row + 1.5),
-                -(this.board_margin + this.square_size + 1) + num_dark_removed_pieces%13 + (row ? 0.5 : 0)
+                -(this.board_margin + this.square_size + 1) + num_black_removed_pieces%13 + (row ? 0.5 : 0)
             );
             piece.setTarget(target_row, target_column);
         }

@@ -54,6 +54,8 @@ class MySceneGraph {
         this.rootElementId = null;
         this.ambient = null;
         this.background = null;
+        this.piece_white = null;
+        this.piece_black = null;
 
         //To use for checking if ids are repeated
         this.cameras = new Map();
@@ -116,15 +118,17 @@ class MySceneGraph {
         }
 
         const nodes = rootElement.children;
-
+        
         //Checking elements order
         for (let i = 0; i < XML_NODES.length; ++i) {
             if (nodes[i].nodeName !== XML_NODES[i]) {
                 throw "node " + XML_NODES[i] + " missing or out of order!";
             }
         }
+        
+        const piecesNode = rootElement.querySelector("pieces");
 
-        if (nodes.length > XML_NODES.length) {
+        if (nodes.length > XML_NODES.length + !!piecesNode) {
             this.onXMLMinorError("The XML File has additional unexpected nodes. These were not parsed.");
         }
 
@@ -132,7 +136,9 @@ class MySceneGraph {
             this.XML_ELEMENTS_PARSING_FUNCS[XML_NODES[i]](nodes[i]);
         }
 
-        // TODO: Parse pieces node for templating
+        if (piecesNode) {
+            this.parsePieces(piecesNode);
+        }
     }
 
     /**
@@ -722,39 +728,65 @@ class MySceneGraph {
         let primitiveChild = childNodes[0];
 
         let primitive;
-        if (primitiveChild.nodeName === "rectangle") {
-            primitive = this.createRectangle(primitiveChild);
-        } else if (primitiveChild.nodeName === "triangle") {
-            primitive = this.createTriangle(primitiveChild);
-        } else if (primitiveChild.nodeName === "cylinder") {
-            primitive = this.createCylinder(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "cylinder2") {
-            primitive = this.createCylinder(primitiveChild, id);
-            primitive.type = "cylinder2";
-        } else if (primitiveChild.nodeName === "sphere") {
-            primitive = this.createSphere(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "torus") {
-            primitive = this.createTorus(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "plane") {
-            primitive = this.createPlane(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "patch") {
-            primitive = this.createPatch(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "vehicle") {
-            primitive = this.createVehicle();
-        } else if (primitiveChild.nodeName === "terrain") {
-            primitive = this.createTerrain(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "water") {
-            primitive = this.createWater(primitiveChild, id);
-        } else if (primitiveChild.nodeName === "board") {
-            primitive = this.createBoard();
-        } else if (primitiveChild.nodeName === "clock") {
-            primitive = this.createClock();
-        } else if (primitiveChild.nodeName === "scoreboard") {
-            primitive = this.createScoreBoard();
-        } else if (primitiveChild.nodeName === "gamecontrols") {
-            primitive = this.createGameControls();
-        } else {
-            throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
+        
+        switch (primitiveChild.nodeName) {
+            case "rectangle":
+                primitive = this.createRectangle(primitiveChild);
+                break;
+            case "triangle":
+                primitive = this.createTriangle(primitiveChild);
+                break;
+            case "cylinder":
+                primitive = this.createCylinder(primitiveChild, id);
+                break;
+            case "cylinder2":
+                primitive = this.createCylinder(primitiveChild, id);
+                primitive.type = "cylinder2";
+                break;
+            case "sphere":
+                primitive = this.createSphere(primitiveChild, id);
+                break;
+            case "torus":
+                primitive = this.createTorus(primitiveChild, id);
+                break;
+            case "plane":
+                primitive = this.createPlane(primitiveChild, id);
+                break;
+            case "patch":
+                primitive = this.createPatch(primitiveChild, id);
+                break;
+            case "vehicle":
+                primitive = this.createVehicle();
+                break;
+            case "terrain":
+                primitive = this.createTerrain(primitiveChild, id);
+                break;
+            case "water":
+                primitive = this.createWater(primitiveChild, id);
+                break;
+            case "board":
+                primitive = this.createBoard();
+                break;
+            case "clock":
+                primitive = this.createClock();
+                break;
+            case "scoreboard":
+                primitive = this.createScoreBoard();
+                break;
+            case "gamecontrols":
+                primitive = this.createGameControls();
+                break;
+            case "king":
+                primitive = this.createKing();
+                break;
+            case "bishop":
+                primitive = this.createBishop();
+                break;
+            case "pawn":
+                primitive = this.createPawn();
+                break;
+            default:
+                throw "invalid primitive type '" + primitiveChild.nodeName + "' in primitive with id '" + id + "'";
         }
 
         primitive.id = id;
@@ -987,15 +1019,39 @@ class MySceneGraph {
     }
 
     createBoard() {
-        return { type: "board" };
+        return {
+            type: "board"
+        };
     }
 
     createClock() {
-        return { type: "clock" };
+        return {
+            type: "clock"
+        };
     }
 
     createScoreBoard() {
-        return { type: "scoreBoard" };
+        return {
+            type: "scoreBoard"
+        };
+    }
+
+    createKing() {
+        return {
+            type: "king"
+        };
+    }
+
+    createBishop() {
+        return {
+            type: "bishop"
+        };
+    }
+
+    createPawn() {
+        return {
+            type: "pawn"
+        };
     }
 
     createGameControls() {
@@ -1212,6 +1268,164 @@ class MySceneGraph {
         this.components.set(component.id, component);
     }
 
+    parsePieces(piecesNode) {
+        const piece_white = piecesNode.querySelector("piece_white");
+        if (piece_white) {
+            this.piece_white = this.createPiece(piece_white);
+        } else {
+            this.onXMLMinorError("Custom white piece was not defined in pieces node, using 'bishop' as fallback");
+        }
+        const piece_black = piecesNode.querySelector("piece_black");
+        if (piece_black) {
+            this.piece_black = this.createPiece(piece_black);
+        } else {
+            this.onXMLMinorError("Custom black piece was not defined in pieces node, using 'bishop' as fallback");
+        }
+    }
+
+    createPiece(pieceNode) {
+        const pieceProperties = pieceNode.children;
+
+        if (pieceProperties.length !== 4) {
+            throw `${pieceNode.tagName} has an invalid number of properties`;
+        } else if (pieceProperties[0].nodeName !== "transformation") {
+            throw this.missingNodeMessage(pieceNode.tagName, "transformation");
+        } else if (pieceProperties[1].nodeName !== "materials") {
+            throw this.missingNodeMessage(pieceNode.tagName, "materials");
+        } else if (pieceProperties[2].nodeName !== "texture") {
+            throw this.missingNodeMessage(pieceNode.tagName, "texture");
+        } else if (pieceProperties[3].nodeName !== "children") {
+            throw this.missingNodeMessage(pieceNode.tagName, "children");
+        }
+
+        if (pieceProperties[3].children.length === 0) {
+            throw `${pieceNode.tagName} has no children`;
+        }
+
+        //transformations
+        const transformations = pieceProperties[0].children;
+        let explicit_transformation_found = false;
+        let transformationref = null;
+        let explicitTransformations = [];
+
+        for (const transformation of transformations) {
+            if (transformation.nodeName === "transformationref") {
+                if (explicit_transformation_found) {
+                    this.onXMLMinorError(`${pieceNode.tagName}: an explicit transformation has already been found, ignoring transformation references.`);
+                    continue;
+                }
+
+                const transformation_id = this.parseStringAttr(transformation, "id");
+
+                if (!this.transformations.has(transformation_id)) {
+                    throw `${pieceNode.tagName}: transformation with id '${transformation_id}' is not defined.`;
+                }
+
+                if (transformations.length > 1) {
+                    this.onXMLMinorError(`${pieceNode.tagName}: only one transformation reference in allowed in each piece. Further references will be ignored.`);
+                }
+
+                transformationref = transformation_id;
+                break;
+            } else {
+                let ret;
+                if (transformation.nodeName === "translate") {
+                    ret = this.createTranslate(transformation);
+                } else if (transformation.nodeName === "rotate") {
+                    ret = this.createRotate(transformation);
+                } else if (transformation.nodeName === "scale") {
+                    ret = this.createScale(transformation);
+                } else {
+                    throw `invalid transformation '${transformation.nodeName}' in ${pieceNode.tagName}.`
+                }
+
+                explicit_transformation_found = true;
+                explicitTransformations.push(ret);
+            }
+        }
+
+        //materials
+        const materials = pieceProperties[1].children;
+        let materialIds = [];
+        for (let material of materials) {
+            if (material.nodeName !== "material") {
+                this.onXMLMinorError(`Invalid '${material.nodeName}' material tag in piece materials.`);
+            } else {
+                const matId = this.parseStringAttr(material, "id");
+                this.verifyExistingId("material", matId, this.materials);
+                materialIds.push(matId);
+            }
+        }
+
+        //texture
+        const textureNode = pieceProperties[2];
+        const texId = this.parseStringAttr(textureNode, "id");
+        this.verifyExistingOrNoneId("texture", texId, this.textures);
+        let length_s, length_t;
+
+        if (texId !== "none") {
+            length_s = this.parseFloatAttr(textureNode, "length_s");
+            length_t = this.parseFloatAttr(textureNode, "length_t");
+        }
+
+        //children
+        const children = pieceProperties[3].children;
+        let primitiveIds = new Set();
+        let componentIds = new Set();
+
+        for (let child of children) {
+            if (child.nodeName === "componentref") {
+                const childId = this.parseStringAttr(child, "id");
+                if (componentIds.has(childId)) {
+                    this.onXMLMinorError(`${pieceNode.tagName} has a duplicate child component with id '${childId}'. It will be ignored.`);
+                } else {
+                    componentIds.add(childId);
+                }
+            } else if (child.nodeName === "primitiveref") {
+                const childId = this.parseStringAttr(child, "id");
+                if (!this.primitives.has(childId)) {
+                    throw `primitive child with id '${childId}' in ${pieceNode.tagName} is not defined.`;
+                } else {
+                    if (primitiveIds.has(childId)) {
+                        this.onXMLMinorError(`${pieceNode.tagName} has a duplicate child primitive with id '${childId}'. It will be ignored.`);
+                    } else {
+                        primitiveIds.add(childId);
+                    }
+                }
+            } else {
+                this.onXMLMinorError(`invalid '${child.nodeName}' child tag in ${pieceNode.tagName} children. It will be ignored.`);
+            }
+        }
+
+        for (const primitiveId of primitiveIds) {
+            switch (this.primitives.get(primitiveId).type) {
+                case "board": case "clock": case "scoreBoard":
+                    throw `${this.primitives.get(primitiveId).type} being used as children in ${pieceNode.tagName}`;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Removed id and animationIds from component model
+        const piece = {
+            texture: {
+                id: texId,
+                length_s,
+                length_t
+            },
+            materialIds,
+            children: {
+                primitiveIds,
+                componentIds
+            },
+            transformationref,
+            explicitTransformations
+        };
+
+        return piece;
+    }
+
     parseStringAttr(node, attribute_name) {
         //TODO: Check if empty?
         if (!this.reader.hasAttribute(node, attribute_name)) {
@@ -1264,19 +1478,25 @@ class MySceneGraph {
         } else if (r > 1) {
             this.onXMLMinorError(`${node.nodeName} red attribute must be in the range [0, 1]. Assuming value 1.`);
             r = 1;
-        } else if (g < 0) {
+        }
+        
+        if (g < 0) {
             this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 0.`);
             g = 0;
         } else if (g > 1) {
             this.onXMLMinorError(`${node.nodeName} green attribute must be in the range [0, 1]. Assuming value 1.`);
             g = 1;
-        } else if (b < 0) {
+        }
+        
+        if (b < 0) {
             this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 0.`);
             b = 0;
         } else if (b > 1) {
             this.onXMLMinorError(`${node.nodeName} blue attribute must be in the range [0, 1]. Assuming value 1.`);
             b = 1;
-        } else if (a < 0) {
+        }
+        
+        if (a < 0) {
             this.onXMLMinorError(`${node.nodeName} alpha attribute must be in the range [0, 1]. Assuming value 0.`);
             a = 0;
         } else if (a > 1) {
@@ -1313,14 +1533,26 @@ class MySceneGraph {
         console.log("XMLParserLog:   ", message);
     }
 
+    verifyExistingId(node_name, id, container) {
+        if (!container.has(id)) {
+            throw `${node_name} with id '${id}' is not defined`;
+        }
+    }
+
+    verifyExistingOrNoneId(node_name, id, container) {
+        if (id !== "none" && !container.has(id)) {
+            throw `${node_name} with id '${id}' is not defined`;
+        }
+    }
+
     verifyInheritableId(node_name, id, container) {
-        if (!container.has(id) && id !== "inherit") {
+        if (id !== "inherit" && !container.has(id)) {
             throw `${node_name} with id '${id}' is not defined.`;
         }
     }
 
     verifyInheritableNoneId(node_name, id, container) {
-        if (!container.has(id) && id !== "inherit" && id !== "none") {
+        if (id !== "inherit" && id !== "none" && !container.has(id)) {
             throw `${node_name} with id '${id}' is not defined.`;
         }
     }

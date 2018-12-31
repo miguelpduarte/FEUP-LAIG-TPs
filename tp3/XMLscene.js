@@ -277,10 +277,10 @@ class XMLscene extends CGFscene {
         this.initLights();
         this.initCameras();
         this.initTransformations();
-        //this.initAnimations();
         this.initMaterials();
         this.initTextures();
         this.createSceneGraph();
+        this.createCustomPieces();
 
         this.interface.createInterface();
 
@@ -334,6 +334,42 @@ class XMLscene extends CGFscene {
 
         this.materialStack.push(this.defaultMaterial);
         this.textureStack.push(null);
+    }
+
+    createCustomPieces() {
+        const white_piece_model = this.graph.piece_white;
+        const black_piece_model = this.graph.piece_black;
+
+        let white_piece, black_piece;
+
+        if (white_piece_model) {
+            white_piece = new PieceComponent(this, white_piece_model, this.transformation_factory);
+            // Setting children
+            let child_arr = [];
+            for(const child_primitive_id of white_piece_model.children.primitiveIds) {
+                child_arr.push(this.cgf_primitives.get(child_primitive_id));
+            }
+            for(const child_component_id of white_piece_model.children.componentIds) {
+                child_arr.push(this.cgf_components.get(child_component_id));
+            }
+            white_piece.setChildren(child_arr);
+        }
+
+        if (black_piece_model) {
+            black_piece = new PieceComponent(this, black_piece_model, this.transformation_factory);
+            // Setting children
+            let child_arr = [];
+            for(const child_primitive_id of black_piece_model.children.primitiveIds) {
+                child_arr.push(this.cgf_primitives.get(child_primitive_id));
+            }
+            for(const child_component_id of black_piece_model.children.componentIds) {
+                child_arr.push(this.cgf_components.get(child_component_id));
+            }
+            black_piece.setChildren(child_arr);
+        }
+
+        // Passing the created pieces to the board
+        this.board.setCustomPieces(white_piece, black_piece);
     }
 
 

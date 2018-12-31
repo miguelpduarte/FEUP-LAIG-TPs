@@ -16,7 +16,10 @@ class PrimitiveFactory {
             "board": this.createBoard,
             "clock": this.createClock,
             "scoreBoard": this.createScoreBoard,
-            "gameControls": this.createGameControls
+            "gameControls": this.createGameControls,
+            "king": this.createKing,
+            "bishop": this.createBishop,
+            "pawn": this.createPawn
         };
 
         //Binding this
@@ -29,6 +32,18 @@ class PrimitiveFactory {
 
     create(primitive_model) {
         return this.PRIMITIVE_CREATION_FUNCS[primitive_model.type](primitive_model);
+    }
+
+    createKing() {
+        return new King(this.scene, this.createNurbsObject);
+    }
+
+    createBishop() {
+        return new Bishop(this.scene, this.createNurbsObject);
+    }
+
+    createPawn() {
+        return new Pawn(this.scene, this.createNurbsObject);
     }
 
     createBoard() {

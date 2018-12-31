@@ -27,6 +27,7 @@ serialInclude([
     'PrimitiveFactory.js',
     'TransformationFactory.js',
     'Component.js',
+    'PieceComponent.js',
     'Piece.js',
     'animations/Animation.js',
     'animations/LinearAnimation.js',
