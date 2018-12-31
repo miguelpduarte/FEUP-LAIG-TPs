@@ -54,6 +54,8 @@ class MySceneGraph {
         this.rootElementId = null;
         this.ambient = null;
         this.background = null;
+        this.piece_white = null;
+        this.piece_black = null;
 
         //To use for checking if ids are repeated
         this.cameras = new Map();
@@ -116,15 +118,17 @@ class MySceneGraph {
         }
 
         const nodes = rootElement.children;
-
+        
         //Checking elements order
         for (let i = 0; i < XML_NODES.length; ++i) {
             if (nodes[i].nodeName !== XML_NODES[i]) {
                 throw "node " + XML_NODES[i] + " missing or out of order!";
             }
         }
+        
+        const piecesNode = rootElement.querySelector("pieces");
 
-        if (nodes.length > XML_NODES.length) {
+        if (nodes.length > XML_NODES.length + !!piecesNode) {
             this.onXMLMinorError("The XML File has additional unexpected nodes. These were not parsed.");
         }
 
@@ -132,7 +136,9 @@ class MySceneGraph {
             this.XML_ELEMENTS_PARSING_FUNCS[XML_NODES[i]](nodes[i]);
         }
 
-        // TODO: Parse pieces node for templating
+        if (piecesNode) {
+            this.parsePieces(piecesNode);
+        }
     }
 
     /**
@@ -985,15 +991,21 @@ class MySceneGraph {
     }
 
     createBoard() {
-        return { type: "board" };
+        return {
+            type: "board"
+        };
     }
 
     createClock() {
-        return { type: "clock" };
+        return {
+            type: "clock"
+        };
     }
 
     createScoreBoard() {
-        return { type: "scoreBoard" };
+        return {
+            type: "scoreBoard"
+        };
     }
 
     parseComponents(componentsNode) {
@@ -1202,6 +1214,164 @@ class MySceneGraph {
         this.components.set(component.id, component);
     }
 
+    parsePieces(piecesNode) {
+        const piece_white = piecesNode.querySelector("piece_white");
+        if (piece_white) {
+            this.piece_white = this.createPiece(piece_white);
+        } else {
+            this.onXMLMinorError("Custom white piece was not defined in pieces node, using 'bishop' as fallback");
+        }
+        const piece_black = piecesNode.querySelector("piece_black");
+        if (piece_black) {
+            this.piece_black = this.createPiece(piece_black);
+        } else {
+            this.onXMLMinorError("Custom black piece was not defined in pieces node, using 'bishop' as fallback");
+        }
+    }
+
+    createPiece(pieceNode) {
+        const pieceProperties = pieceNode.children;
+
+        if (pieceProperties.length !== 4) {
+            throw `${pieceNode.tagName} has an invalid number of properties`;
+        } else if (pieceProperties[0].nodeName !== "transformation") {
+            throw this.missingNodeMessage(pieceNode.tagName, "transformation");
+        } else if (pieceProperties[1].nodeName !== "materials") {
+            throw this.missingNodeMessage(pieceNode.tagName, "materials");
+        } else if (pieceProperties[2].nodeName !== "texture") {
+            throw this.missingNodeMessage(pieceNode.tagName, "texture");
+        } else if (pieceProperties[3].nodeName !== "children") {
+            throw this.missingNodeMessage(pieceNode.tagName, "children");
+        }
+
+        if (pieceProperties[3].children.length === 0) {
+            throw `${pieceNode.tagName} has no children`;
+        }
+
+        //transformations
+        const transformations = pieceProperties[0].children;
+        let explicit_transformation_found = false;
+        let transformationref = null;
+        let explicitTransformations = [];
+
+        for (const transformation of transformations) {
+            if (transformation.nodeName === "transformationref") {
+                if (explicit_transformation_found) {
+                    this.onXMLMinorError(`${pieceNode.tagName}: an explicit transformation has already been found, ignoring transformation references.`);
+                    continue;
+                }
+
+                const transformation_id = this.parseStringAttr(transformation, "id");
+
+                if (!this.transformations.has(transformation_id)) {
+                    throw `${pieceNode.tagName}: transformation with id '${transformation_id}' is not defined.`;
+                }
+
+                if (transformations.length > 1) {
+                    this.onXMLMinorError(`${pieceNode.tagName}: only one transformation reference in allowed in each piece. Further references will be ignored.`);
+                }
+
+                transformationref = transformation_id;
+                break;
+            } else {
+                let ret;
+                if (transformation.nodeName === "translate") {
+                    ret = this.createTranslate(transformation);
+                } else if (transformation.nodeName === "rotate") {
+                    ret = this.createRotate(transformation);
+                } else if (transformation.nodeName === "scale") {
+                    ret = this.createScale(transformation);
+                } else {
+                    throw `invalid transformation '${transformation.nodeName}' in ${pieceNode.tagName}.`
+                }
+
+                explicit_transformation_found = true;
+                explicitTransformations.push(ret);
+            }
+        }
+
+        //materials
+        const materials = pieceProperties[1].children;
+        let materialIds = [];
+        for (let material of materials) {
+            if (material.nodeName !== "material") {
+                this.onXMLMinorError(`Invalid '${material.nodeName}' material tag in piece materials.`);
+            } else {
+                const matId = this.parseStringAttr(material, "id");
+                this.verifyExistingId("material", matId, this.materials);
+                materialIds.push(matId);
+            }
+        }
+
+        //texture
+        const textureNode = pieceProperties[2];
+        const texId = this.parseStringAttr(textureNode, "id");
+        this.verifyExistingOrNoneId("texture", texId, this.textures);
+        let length_s, length_t;
+
+        if (texId !== "none") {
+            length_s = this.parseFloatAttr(textureNode, "length_s");
+            length_t = this.parseFloatAttr(textureNode, "length_t");
+        }
+
+        //children
+        const children = pieceProperties[3].children;
+        let primitiveIds = new Set();
+        let componentIds = new Set();
+
+        for (let child of children) {
+            if (child.nodeName === "componentref") {
+                const childId = this.parseStringAttr(child, "id");
+                if (componentIds.has(childId)) {
+                    this.onXMLMinorError(`${pieceNode.tagName} has a duplicate child component with id '${childId}'. It will be ignored.`);
+                } else {
+                    componentIds.add(childId);
+                }
+            } else if (child.nodeName === "primitiveref") {
+                const childId = this.parseStringAttr(child, "id");
+                if (!this.primitives.has(childId)) {
+                    throw `primitive child with id '${childId}' in ${pieceNode.tagName} is not defined.`;
+                } else {
+                    if (primitiveIds.has(childId)) {
+                        this.onXMLMinorError(`${pieceNode.tagName} has a duplicate child primitive with id '${childId}'. It will be ignored.`);
+                    } else {
+                        primitiveIds.add(childId);
+                    }
+                }
+            } else {
+                this.onXMLMinorError(`invalid '${child.nodeName}' child tag in ${pieceNode.tagName} children. It will be ignored.`);
+            }
+        }
+
+        for (const primitiveId of primitiveIds) {
+            switch (this.primitives.get(primitiveId).type) {
+                case "board": case "clock": case "scoreBoard":
+                    throw `${this.primitives.get(primitiveId).type} being used as children in ${pieceNode.tagName}`;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Removed id and animationIds from component model
+        const piece = {
+            texture: {
+                id: texId,
+                length_s,
+                length_t
+            },
+            materialIds,
+            children: {
+                primitiveIds,
+                componentIds
+            },
+            transformationref,
+            explicitTransformations
+        };
+
+        return piece;
+    }
+
     parseStringAttr(node, attribute_name) {
         //TODO: Check if empty?
         if (!this.reader.hasAttribute(node, attribute_name)) {
@@ -1303,14 +1473,26 @@ class MySceneGraph {
         console.log("XMLParserLog:   ", message);
     }
 
+    verifyExistingId(node_name, id, container) {
+        if (!container.has(id)) {
+            throw `${node_name} with id '${id}' is not defined`;
+        }
+    }
+
+    verifyExistingOrNoneId(node_name, id, container) {
+        if (id !== "none" && !container.has(id)) {
+            throw `${node_name} with id '${id}' is not defined`;
+        }
+    }
+
     verifyInheritableId(node_name, id, container) {
-        if (!container.has(id) && id !== "inherit") {
+        if (id !== "inherit" && !container.has(id)) {
             throw `${node_name} with id '${id}' is not defined.`;
         }
     }
 
     verifyInheritableNoneId(node_name, id, container) {
-        if (!container.has(id) && id !== "inherit" && id !== "none") {
+        if (id !== "inherit" && id !== "none" && !container.has(id)) {
             throw `${node_name} with id '${id}' is not defined.`;
         }
     }

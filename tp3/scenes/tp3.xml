@@ -186,6 +186,12 @@
         <primitive id="donut_plate">
             <cylinder base="0.26" top="0.26" height="0.015" slices="30" stacks="3" />
         </primitive>
+        <primitive id="test_square">
+            <rectangle x1="0" y1="0" x2="2" y2="2" />
+        </primitive>
+        <primitive id="test_cone">
+            <cylinder base="0.35" top="0" height="0.24" slices="10" stacks="6" />
+        </primitive>
     </primitives>
     <components>
         <component id="root_comp">
