@@ -33,8 +33,6 @@ class ClickHandler {
             return;
         }
 
-        console.log("borad", clickId);
-
         const column = clickId % 10;
         const row = Math.floor(clickId / 10);
 

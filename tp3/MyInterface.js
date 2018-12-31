@@ -19,6 +19,10 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
+    setFilename(filename) {
+        this.filename = filename;
+    }
+
     createInterface() {
         // Destroying any previously created GUIs, if they existed (preventing memory leakage and reuse problems)
         this.gui && this.gui.destroy();
@@ -35,7 +39,8 @@ class MyInterface extends CGFinterface {
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
         this.createChangeSceneMenu();
-        this.createGameControls();
+        //this.createGameControls();
+        this.createScenesDropdown();
         this.initKeys();
     }
 
@@ -117,6 +122,18 @@ class MyInterface extends CGFinterface {
 
         group.add(this.model, "load_file")
            .name("Load XML scene");
+    }
+
+    createScenesDropdown() {
+        const sceneDropdownModel = [
+            "scene1.xml", "scene2.xml", "scene3.xml"
+        ];
+
+        this.model.sceneIndex = this.filename;
+
+        this.gui.add(this.model, "sceneIndex", sceneDropdownModel)
+            .name("Current Scene")
+            .onChange(filename => (this.scene.graph.loadXML(filename), this.setFilename(filename)));
     }
 
     createGameControls() {

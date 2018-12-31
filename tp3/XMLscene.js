@@ -130,7 +130,7 @@ class XMLscene extends CGFscene {
         }
 
         this.game_camera = initial_camera || this.default_camera;
-        //this.interface.setActiveCamera(null);
+        this.interface.setActiveCamera(null);
     }
 
     initGame() {

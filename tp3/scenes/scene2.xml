@@ -62,8 +62,8 @@
         <texture id="tex_wood" file="scenes/images/wood.png" />
         <texture id="tex_floor" file="scenes/images/floor.png" />
         <texture id="tex_donut" file="scenes/images/donut.png" />
-        <texture id="tex_piece_white" file="primitives/resources/white_piece.jpg" />
-        <texture id="tex_piece_black" file="primitives/resources/black_piece.jpg" />
+        <texture id="tex_piece_white" file="primitives/resources/yellow_plastic_piece.jpg" />
+        <texture id="tex_piece_black" file="primitives/resources/purple_plastic_piece.jpg" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -138,6 +138,12 @@
             <diffuse r="0.5" g="0.5" b="0.5" a="1" />
             <specular r="0.3" g="0.3" b="0.3" a="1" />
         </material>
+        <material id="mat_piece_neon" shininess="25" >
+            <emission r="0.3" g="0.3" b="0.3" a="1" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+        </material>
     </materials>
     <transformations>
         <transformation id="trf_standup_y">
@@ -208,6 +214,9 @@
         </primitive>
         <primitive id="pawn">
             <pawn />
+        </primitive>
+        <primitive id="bishop">
+            <bishop />
         </primitive>
     </primitives>
     <components>
@@ -761,7 +770,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="tex_piece_white" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="donut_plate" />
                 <componentref id="simpson_donut" />
@@ -774,7 +783,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="tex_piece_black" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="donut_plate" />
             </children>
