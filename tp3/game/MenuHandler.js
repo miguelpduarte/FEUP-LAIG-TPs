@@ -71,19 +71,6 @@ class MenuHandler {
         }
     }
 
-    static swapPlayer(player_type) {
-        if (player_type === this.curr_player) {
-            // No need to rotate, already in the right position
-            return;
-        }
-        
-        // Only engage motion if no motion is ongoing
-        if (!this.rotationAmount > 0) {
-            this.curr_player = player_type;
-            this.rotationAmount = Math.PI;
-        }    
-    }
-
     static initGame() {
         GameState.initGame(this.player1_difficulty, this.player2_difficulty, this.clock_speed);
         this.menu = null;

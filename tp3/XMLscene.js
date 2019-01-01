@@ -130,6 +130,12 @@ class XMLscene extends CGFscene {
             console.warn("The specified initial camera was not found!\nUsing a default camera instead");
         }
 
+        if (!this.menuMode) {
+            // Already playing (not in menu mode), change player camera to the defined default
+            this.setCurrentCamera(this.graph.defaultViewId);
+        }
+
+        // Store the XML-defined default camera as the game camera so that the menu can change to it when necessary
         this.game_camera = initial_camera || this.default_camera;
         this.interface.setActiveCamera(null);
     }
@@ -148,7 +154,7 @@ class XMLscene extends CGFscene {
 
         this.camera = selected_camera || this.default_camera;
         // this.interface.setActiveCamera(this.camera);
-        // this.interface.setActiveCamera(null);
+        this.interface.setActiveCamera(null);
     }
 
     setLightState(lightId, newVal) {
