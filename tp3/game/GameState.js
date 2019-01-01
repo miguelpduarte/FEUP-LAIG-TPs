@@ -33,6 +33,9 @@ class GameState {
 
             // Setting board pieces
             this.scene.board.initPieces(res.board);
+
+            // Initialize score board
+            this.scene.scoreBoard.init();
             
             ClickHandler.reset();
 
@@ -49,7 +52,6 @@ class GameState {
     static checkGameOver(res) {
         if (res.game_over) {
             console.log("Game is over! Player ", res.winner, " is the winner!");
-            alert("Game is over! Player " + res.winner + " is the winner!");
             this.state = STATE_ENUM.finished;
             this.winner = res.winner;
         }
@@ -131,7 +133,6 @@ class GameState {
 
     static playerTimedOut() {
         console.log("Time's up! Player ", this.getCurrentPlayerColor(), " lost and Player ", this.getOtherPlayerColor(), " won!");
-        alert("Time's up! Player " + this.getCurrentPlayerColor() + " lost and Player " + this.getOtherPlayerColor() + " won!");
         this.state = STATE_ENUM.finished;
         this.winner = this.getOtherPlayerColor();
     }
@@ -247,7 +248,7 @@ class GameState {
         }
 
         this.state = STATE_ENUM.replaying;
-        Piece.setPace(4);
+        Piece.setPace(2.5);
         // Set initial board pieces positions
         this.scene.board.initPieces(this.previous_states[0].board);
         this.replaying_turn = 1;

@@ -15,7 +15,7 @@ class Menu extends PrimitiveObject {
             this.menu_height = 2;
             this.buttons_padding = this.button_spacing/4;
         } else {
-            this.menu_height = 2 + (this.num_button_actions - 3) * (this.button_spacing * 0.7);
+            this.menu_height = 2 + (this.num_button_actions - 3) * this.button_spacing;
             this.buttons_padding = this.button_spacing * 1.3;
         }
 

@@ -69,7 +69,7 @@ serialInclude([
 
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
         // or use the given default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-        const filename = getUrlVars()['file'] || "scene1.xml";
+        const filename = getUrlVars()['file'] || "room_scene.xml";
         myInterface.setFilename(filename);
 
         // Create graph (XML parser), and associate it to scene

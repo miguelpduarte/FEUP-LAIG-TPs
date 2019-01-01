@@ -195,7 +195,7 @@ class XMLscene extends CGFscene {
                 this.lights[num_created_lights].setSpotDirection(...direction);
             }
 
-            this.lights[num_created_lights].setVisible(true);
+            this.lights[num_created_lights].setVisible(false);
             this.lightsMap[id] = num_created_lights;
             if(light.enabled) {
                 this.lights[num_created_lights].enable();

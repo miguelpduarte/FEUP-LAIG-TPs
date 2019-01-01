@@ -79,27 +79,39 @@ class Clock extends PrimitiveObject {
             this.scene.translate(0, this.height/2, this.breadth/2 + 0.001);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
             this.scene.scale(this.display_width, 1, this.display_height);
-            this.display_material.apply();
+
+            if (GameState.isFinished()) {
+                if (GameState.getWinner() === 1) {
+                    this.player1wins_display_material.apply();
+                } else if (GameState.getWinner() === 2) {
+                    this.player2wins_display_material.apply();
+                }
+            } else {
+                this.empty_display_material.apply();
+            }
+
             this.display_part.display();
         this.scene.popMatrix();
 
-        // Clock display left digit
-        this.scene.pushMatrix();
-            this.scene.translate(-this.display_digit_width/2 - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
-            this.scene.rotate(Math.PI/2, 1, 0, 0);
-            this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
-            this.number_left_material.apply();
-            this.display_part.display();
-        this.scene.popMatrix();
+        if (!GameState.isFinished()) {
+            // Clock display left digit
+            this.scene.pushMatrix();
+                this.scene.translate(-this.display_digit_width/2 - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
+                this.scene.rotate(Math.PI/2, 1, 0, 0);
+                this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
+                this.number_left_material.apply();
+                this.display_part.display();
+            this.scene.popMatrix();
 
-        // Clock display right digit
-        this.scene.pushMatrix();
-            this.scene.translate(this.display_digit_width/2 + this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
-            this.scene.rotate(Math.PI/2, 1, 0, 0);
-            this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
-            this.number_right_material.apply();
-            this.display_part.display();
-        this.scene.popMatrix();
+            // Clock display right digit
+            this.scene.pushMatrix();
+                this.scene.translate(this.display_digit_width/2 + this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
+                this.scene.rotate(Math.PI/2, 1, 0, 0);
+                this.scene.scale(this.display_digit_width, 1, this.display_digit_height);
+                this.number_right_material.apply();
+                this.display_part.display();
+            this.scene.popMatrix();
+        }
         
         // Button
         this.scene.pushMatrix();
@@ -147,7 +159,9 @@ class Clock extends PrimitiveObject {
         this.yellow_plastic_texture = new CGFtexture(this.scene, "primitives/resources/yellow_plastic.jpg");
         this.red_plastic_texture = new CGFtexture(this.scene, "primitives/resources/red_plastic.jpg");
         this.green_plastic_texture = new CGFtexture(this.scene, "primitives/resources/green_plastic.jpg");
-        let display_texture = new CGFtexture(this.scene, "primitives/resources/display.png");
+        let empty_display_texture = new CGFtexture(this.scene, "primitives/resources/display.png");
+        let player1wins_display_texture = new CGFtexture(this.scene, "primitives/resources/player1wins.png");
+        let player2wins_display_texture = new CGFtexture(this.scene, "primitives/resources/player2wins.png");
         let metal_texture = new CGFtexture(this.scene, "primitives/resources/metal.jpg");
         this.minus_texture = new CGFtexture(this.scene, "primitives/resources/minus.png");
         this.number_texture = {}
@@ -170,13 +184,29 @@ class Clock extends PrimitiveObject {
         this.plastic_material.setShininess(25);
         this.plastic_material.setTexture(this.yellow_plastic_texture);
 
-        this.display_material = new CGFappearance(this.scene);
-        this.display_material.setAmbient(0.15, 0.15, 0.15, 1);
-        this.display_material.setDiffuse(0.5, 0.5, 0.5, 1);
-        this.display_material.setSpecular(0.6, 0.6, 0.6, 1);
-        this.display_material.setEmission(0.3, 0.3, 0.3, 1);
-        this.display_material.setShininess(25);
-        this.display_material.setTexture(display_texture);
+        this.empty_display_material = new CGFappearance(this.scene);
+        this.empty_display_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.empty_display_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.empty_display_material.setSpecular(0.6, 0.6, 0.6, 1);
+        this.empty_display_material.setEmission(0.3, 0.3, 0.3, 1);
+        this.empty_display_material.setShininess(25);
+        this.empty_display_material.setTexture(empty_display_texture);
+
+        this.player1wins_display_material = new CGFappearance(this.scene);
+        this.player1wins_display_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.player1wins_display_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.player1wins_display_material.setSpecular(0.6, 0.6, 0.6, 1);
+        this.player1wins_display_material.setEmission(0.3, 0.3, 0.3, 1);
+        this.player1wins_display_material.setShininess(25);
+        this.player1wins_display_material.setTexture(player1wins_display_texture);
+
+        this.player2wins_display_material = new CGFappearance(this.scene);
+        this.player2wins_display_material.setAmbient(0.15, 0.15, 0.15, 1);
+        this.player2wins_display_material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.player2wins_display_material.setSpecular(0.6, 0.6, 0.6, 1);
+        this.player2wins_display_material.setEmission(0.3, 0.3, 0.3, 1);
+        this.player2wins_display_material.setShininess(25);
+        this.player2wins_display_material.setTexture(player2wins_display_texture);
 
         this.number_left_material = new CGFappearance(this.scene);
         this.number_left_material.setAmbient(0.15, 0.15, 0.15, 1);

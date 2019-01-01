@@ -38,7 +38,7 @@ class MyInterface extends CGFinterface {
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
         this.createCamerasDropdown();
-        this.createChangeSceneMenu();
+        //this.createChangeSceneMenu();
         //this.createGameControls();
         this.createScenesDropdown();
         this.initKeys();
@@ -88,7 +88,7 @@ class MyInterface extends CGFinterface {
     }
 
     createToggleLightsCheckbox() {
-        this.model["Show Lights"] = true;
+        this.model["Show Lights"] = false;
         this.gui.add(this.model, "Show Lights").onChange(val => {
             this.scene.toggleViewLights();
         });
@@ -126,7 +126,9 @@ class MyInterface extends CGFinterface {
 
     createScenesDropdown() {
         const sceneDropdownModel = [
-            "scene1.xml", "scene2.xml", "scene3.xml"
+            "room_scene.xml", 
+            "boat_scene.xml", 
+            "scene3.xml"
         ];
 
         this.model.sceneIndex = this.filename;
