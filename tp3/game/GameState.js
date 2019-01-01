@@ -247,6 +247,7 @@ class GameState {
             return;
         }
 
+        this.scene.clock.setDisabled();
         this.state = STATE_ENUM.replaying;
         Piece.setPace(2.5);
         // Set initial board pieces positions
