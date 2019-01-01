@@ -19,10 +19,6 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
-    setFilename(filename) {
-        this.filename = filename;
-    }
-
     createInterface() {
         // Destroying any previously created GUIs, if they existed (preventing memory leakage and reuse problems)
         this.gui && this.gui.destroy();
@@ -131,11 +127,11 @@ class MyInterface extends CGFinterface {
             "scene3.xml"
         ];
 
-        this.model.sceneIndex = this.filename;
+        this.model.sceneIndex = this.scene.graph.filename;
 
         this.gui.add(this.model, "sceneIndex", sceneDropdownModel)
             .name("Current Scene")
-            .onChange(filename => (this.scene.graph.loadXML(filename), this.setFilename(filename)));
+            .onChange(filename => this.scene.graph.loadXML(filename));
     }
 
     createGameControls() {
