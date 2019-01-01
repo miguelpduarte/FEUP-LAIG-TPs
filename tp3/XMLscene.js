@@ -69,7 +69,8 @@ class XMLscene extends CGFscene {
             Water.updateTimeFactor(currTime);
             Flag.updateTimeFactor(currTime);
             CameraHandler.update(delta_time);
-            this.board && this.board.updateAnimations(delta_time);
+            BoardState.updatePieceAnimations(delta_time);
+
             this.clock && this.clock.updateCountdown(delta_time);
         }
     }

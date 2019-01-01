@@ -37,20 +37,20 @@ class ClickHandler {
         const row = Math.floor(clickId / 10);
 
         const current_player = GameState.getCurrentPlayerColor();
-        const square_piece = this.scene.board.getSquarePiece(row, column);
+        const square_piece = BoardState.getPieceAt(row, column);
 
         if (!square_piece && this.origin === null) {
-            this.scene.board.setHighlightedSquare(null);
+            BoardState.setHighlightedSquare(null);
         } else {
             if (square_piece && square_piece.color === "white" && current_player === 1 ||
                 square_piece && square_piece.color === "black" && current_player === 2) {
                 
                 this.origin = {row, column};
-                this.scene.board.setHighlightedSquare(this.origin);
+                BoardState.setHighlightedSquare(this.origin);
             } else if (this.origin !== null) {
                 GameState.movePiece(this.origin.row, this.origin.column, row, column);
                 this.origin = null;
-                this.scene.board.setHighlightedSquare(null);
+                BoardState.setHighlightedSquare(null);
             }
         }
     }
@@ -70,7 +70,7 @@ class ClickHandler {
 
     static reset() {
         this.origin = null;
-        this.scene.board.setHighlightedSquare(null);
+        BoardState.setHighlightedSquare(null);
     }
 };
 

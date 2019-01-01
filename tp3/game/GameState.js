@@ -31,8 +31,8 @@ class GameState {
             this.num_pieces_moving = 0;
             this.current_undo_index = 0;
 
-            // Setting board pieces
-            this.scene.board.initPieces(res.board);
+            // Initializing board state pieces
+            BoardState.initPieces(res.board);
 
             // Initialize score board
             this.scene.scoreBoard.init();
@@ -79,7 +79,7 @@ class GameState {
             // console.log("Performed move!", res.performed_move);
 
             // Updating the board
-            this.scene.board.performMove(...res.performed_move);
+            BoardState.performMove(...res.performed_move);
             // Updating the scoreboard
             this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
             
@@ -111,7 +111,7 @@ class GameState {
             // console.log("Ai performed move!", res.performed_move);
 
             // Updating the board
-            this.scene.board.performMove(...res.performed_move);
+            BoardState.performMove(...res.performed_move);
             // Updating the scoreboard
             this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
 
@@ -191,7 +191,7 @@ class GameState {
         this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
 
         // Do animation by passing information to board
-        this.scene.board.undoMove(...old_state.performed_move, this.wasPieceTaken(old_state.nWhite, this.curr_game_state.nWhite, old_state.nBlack, this.curr_game_state.nBlack));
+        BoardState.undoMove(...old_state.performed_move, this.wasPieceTaken(old_state.nWhite, this.curr_game_state.nWhite, old_state.nBlack, this.curr_game_state.nBlack));
     }
 
     static redoMove() {
@@ -218,12 +218,12 @@ class GameState {
         this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
  
         // Do animation by passing information to board
-        this.scene.board.performMove(...this.curr_game_state.performed_move);
+        BoardState.performMove(...this.curr_game_state.performed_move);
     }
 
     static continuePlaying() {
         if (this.state !== STATE_ENUM.undoing) {
-            console.error("Cannot continue playing if not in undoing state!!");
+            console.warn("Cannot continue playing if not in undoing state!!");
             return;
         }
 
@@ -243,7 +243,7 @@ class GameState {
 
     static replayGame() {
         if (this.state !== STATE_ENUM.finished) {
-            console.error("Cannot replay a non finished game!");
+            console.warn("Cannot replay a non finished game!");
             return;
         }
 
@@ -251,7 +251,7 @@ class GameState {
         this.state = STATE_ENUM.replaying;
         Piece.setPace(2.5);
         // Set initial board pieces positions
-        this.scene.board.initPieces(this.previous_states[0].board);
+        BoardState.initPieces(this.previous_states[0].board);
         this.replaying_turn = 1;
         this.replayMove();
     }
@@ -261,13 +261,10 @@ class GameState {
             return;
         }
 
-        // console.log("replaying t:", this.replaying_turn, "curr_state", this.previous_states[this.replaying_turn]);
-
         this.curr_game_state = this.previous_states[this.replaying_turn];
 
-        const curr_replay_state = this.previous_states[this.replaying_turn];
         // Perform the move of the current state
-        this.scene.board.performMove(...curr_replay_state.performed_move);
+        BoardState.performMove(...this.curr_game_state.performed_move);
         // Update the scoreboard score as well
         this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
 

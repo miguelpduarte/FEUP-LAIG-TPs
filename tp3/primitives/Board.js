@@ -7,20 +7,17 @@ class Board extends PrimitiveObject {
         super(scene);
 
         this.createNurbsObject = createNurbsObject;
-        this.board_size = 4;
+        this.board_size = BOARD_SIZE;
         this.board_height = 0.1;
-        this.board_margin = this.board_size/32;
-        this.square_size = (this.board_size - 2*this.board_margin)/10;
+        this.board_margin = BOARD_MARGIN;
+        this.square_size = SQUARE_SIZE;
         this.piece_offset = this.board_margin + this.square_size/2;
         this.piece_size_ratio = this.board_size / 20;
-
-        this.pieces = [];
-        this.highlighted_square = null;
 
         this.createHighlight();
         this.createTouchSquare();
         this.createBoard();
-        this.createPieces();
+        this.createFallbackPiece();
         this.initMaterials();
     };
     
@@ -115,31 +112,9 @@ class Board extends PrimitiveObject {
         );
     }
 
-    createPieces() {
+    createFallbackPiece() {
         this.fallback_piece = new Bishop(this.scene, this.createNurbsObject);
-    }
-
-    initPieces(board_pieces = []) {
-        // In order to handle inits after the first one
-        this.pieces = [];
-
-        for (let i = 0; i < board_pieces.length; ++i) {
-            for (let j = 0; j < board_pieces[i].length; ++j) {
-                // Blank space
-                if (board_pieces[i][j] === 0) {
-                    continue;
-                }
-                
-                this.pieces.push(new Piece(j, i, board_pieces[i][j] === 1 ? "white" : "black"));
-            }
-        }
-    }
-
-    drawPieces() {
-        for (let piece of this.pieces) {
-            this.drawPiece(piece);
-        }
-    }
+    } 
 
     initMaterials() {
         this.board_cover_texture = new CGFtexture(this.scene, "primitives/resources/board.jpg");
@@ -195,6 +170,14 @@ class Board extends PrimitiveObject {
         this.piece_material["white"].setEmission(0, 0, 0, 1);
         this.piece_material["white"].setShininess(25);
         this.piece_material["white"].setTexture(this.white_piece_texture);
+    }
+
+    drawPieces() {
+        const current_pieces = BoardState.getPieces();
+
+        for (const piece of current_pieces) {
+            this.drawPiece(piece);
+        }
     }
 
     drawPiece(piece) {
@@ -256,92 +239,22 @@ class Board extends PrimitiveObject {
         this.scene.popMatrix();
     }
 
-    updateAnimations(delta_time) {
-        for (let piece of this.pieces) {
-            piece.update(delta_time/1e3);
-        }
-    }
-
-    performMove(origin_row, origin_column, target_row, target_column) {
-        let piece = this.getSquarePiece(origin_row, origin_column);
-        if (!piece) {
-            return;
-        }
-        piece.setTarget(target_row, target_column);
-
-        // Remove piece if target square has piece
-        let target_piece = this.getSquarePiece(target_row, target_column);
-        if (target_piece) {
-            this.removePiece(target_piece);
-        }
-    }
-
-    getSquarePiece(row, column) {
-        for (let piece of this.pieces) {
-            if (piece.row === row && piece.column === column) {
-                return piece;
-            }
-        }
-        return null;
-    }
-
-    removePiece(piece) {
-        if (piece.color === 'black') {
-            let num_black_removed_pieces = 25 - GameState.getNrBlack() - 1;
-            let row = Math.floor(num_black_removed_pieces/13);
-            piece.setTarget(
-                -(row + 1.5), 
-                -(this.board_margin + this.square_size + 1) + num_black_removed_pieces%13 + (row ? 0.5 : 0)
-            );
-        } else if (piece.color === 'white') {
-            let num_white_removed_pieces = 25 - GameState.getNrWhite() - 1;
-            let row = Math.floor(num_white_removed_pieces/13);
-            piece.setTarget(
-                row + 10.5, 
-                -(this.board_margin + this.square_size + 1) + num_white_removed_pieces%13 + (row ? 0.5 : 0)
-            );
-        }
-    }
-
-    undoMove(origin_row, origin_column, target_row, target_column, taken_piece) {
-        this.performMove(target_row, target_column, origin_row, origin_column);
-        if (taken_piece == 1) {
-            let num_white_removed_pieces = 25 - GameState.getNrWhite();
-            let row = Math.floor(num_white_removed_pieces/13);
-            let piece = this.getSquarePiece(
-                row + 10.5,
-                -(this.board_margin + this.square_size + 1) + num_white_removed_pieces%13 + (row ? 0.5 : 0)
-            );
-            piece.setTarget(target_row, target_column);
-        } else if (taken_piece == 2) {
-            let num_black_removed_pieces = 25 - GameState.getNrBlack();
-            let row = Math.floor(num_black_removed_pieces/13);
-            let piece = this.getSquarePiece(
-                -(row + 1.5),
-                -(this.board_margin + this.square_size + 1) + num_black_removed_pieces%13 + (row ? 0.5 : 0)
-            );
-            piece.setTarget(target_row, target_column);
-        }
-    }
-
     createHighlight() {
         this.highlight = new Circle(this.scene, 25);
     }
 
-    setHighlightedSquare(square) {
-        this.highlighted_square = square;
-    }
-
     drawHighlightedSquare() {
-        if (!this.highlighted_square) {
+        const current_highlighted_square = BoardState.getHighlightedSquare();
+    
+        if (!current_highlighted_square) {
             return;
         }
 
         this.scene.pushMatrix();
             this.scene.translate(
-                this.piece_offset + this.square_size*this.highlighted_square.column, 
+                this.piece_offset + this.square_size*current_highlighted_square.column, 
                 this.board_height + 0.001, 
-                this.piece_offset + this.square_size*this.highlighted_square.row
+                this.piece_offset + this.square_size*current_highlighted_square.row
             );
             this.scene.scale(0.165, 1, 0.165);
             this.scene.rotate(-Math.PI/2, 1, 0, 0);
