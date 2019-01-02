@@ -13,10 +13,6 @@ const DIFFICULTY_TIME_ENUM = Object.freeze({
 });
 
 class GameState {
-    static setScene(scene) {
-        this.scene = scene;
-    }
-
     static async initGame(player1_difficulty, player2_difficulty, countdown_speed = "slow") {
         this.countdown_speed = countdown_speed;
 
@@ -34,8 +30,8 @@ class GameState {
             // Initializing board state pieces
             BoardState.initPieces(res.board);
 
-            // Initialize score board
-            this.scene.scoreBoard.init();
+            // Initialize score board (Score starts at 0)
+            ScoreboardState.setScore(0);
             
             ClickHandler.reset();
 
@@ -82,7 +78,7 @@ class GameState {
             // Updating the board
             BoardState.performMove(...res.performed_move);
             // Updating the scoreboard
-            this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
+            ScoreboardState.setScore(this.calcScore());
             
             // Testing if the game is over
             this.checkGameOver(res);
@@ -114,7 +110,7 @@ class GameState {
             // Updating the board
             BoardState.performMove(...res.performed_move);
             // Updating the scoreboard
-            this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
+            ScoreboardState.setScore(this.calcScore());
 
             // Testing if the game is over
             this.checkGameOver(res);
@@ -198,10 +194,14 @@ class GameState {
         this.curr_game_state = this.previous_states[this.previous_states.length - 1 - this.current_undo_index];
 
         // Update the scoreboard
-        this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
+        ScoreboardState.setScore(this.calcScore());
 
         // Do animation by passing information to board
         BoardState.undoMove(...old_state.performed_move, this.wasPieceTaken(old_state.nWhite, this.curr_game_state.nWhite, old_state.nBlack, this.curr_game_state.nBlack));
+    }
+
+    static calcScore() {
+        return this.getNrWhite() - this.getNrBlack();
     }
 
     static redoMove() {
@@ -225,7 +225,7 @@ class GameState {
         this.curr_game_state = this.previous_states[this.previous_states.length - 1 - this.current_undo_index];
 
         // Update the scoreboard
-        this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
+        ScoreboardState.setScore(this.calcScore());
  
         // Do animation by passing information to board
         BoardState.performMove(...this.curr_game_state.performed_move);
@@ -276,7 +276,7 @@ class GameState {
         // Perform the move of the current state
         BoardState.performMove(...this.curr_game_state.performed_move);
         // Update the scoreboard score as well
-        this.scene.scoreBoard.setScore(this.getNrWhite() - this.getNrBlack());
+        ScoreboardState.setScore(this.calcScore());
 
         // Check for game finish
         if (this.replaying_turn < this.previous_states.length - 1) {

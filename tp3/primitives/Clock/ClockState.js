@@ -6,8 +6,8 @@ const CLOCK_STATE = Object.freeze({
 
 const CLOCK_COLOR = Object.freeze({
     "red": 1,
-    "yellow": 3,
-    "green": 5,
+    "yellow": 2,
+    "green": 3,
 });
 
 class ClockState {

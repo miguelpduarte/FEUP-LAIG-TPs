@@ -21,12 +21,7 @@ class ScoreBoard extends PrimitiveObject {
         this.createMaterials();
         this.createBody();
         this.createScoreDisplay();
-        this.init();
     };
-    
-    init() {
-        this.setScore(0);
-    }
 
 	display() {
         // Score Board body
@@ -37,27 +32,17 @@ class ScoreBoard extends PrimitiveObject {
             this.body.display();
         this.scene.popMatrix();
 
-        // Score Board display
+        // Score Board background display
         this.scene.pushMatrix();
             this.scene.translate(0, this.height/2, this.breadth/2 + 0.001);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
             this.scene.scale(this.display_width, 1, this.display_height);
-
-            if (GameState.isFinished()) {
-                if (GameState.getWinner() === 1) {
-                    this.player1wins_display_material.apply();
-                } else if (GameState.getWinner() === 2) {
-                    this.player2wins_display_material.apply();
-                }
-            } else {
-                this.empty_display_material.apply();
-            }
-
+            this.display_background_material.apply();
             this.display_part.display();
         this.scene.popMatrix();
 
 
-        if (!GameState.isFinished()) {
+        if (ScoreboardState.getState() === SCOREBOARD_STATE.playing) {
             // Score Board sign
             this.scene.pushMatrix();
                 this.scene.translate(-this.display_digit_width - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
@@ -87,7 +72,7 @@ class ScoreBoard extends PrimitiveObject {
         }
     }
 
-    setScore(score) {
+    setScoreTexture(score) {
         if (score >= 0) {
             this.number_sign_material.setTexture(this.plus_texture);
         } else {
@@ -101,6 +86,37 @@ class ScoreBoard extends PrimitiveObject {
 
         this.number_left_material.setTexture(this.number_texture[parseInt(scoreStr[0])]);
         this.number_right_material.setTexture(this.number_texture[parseInt(scoreStr[1])]);
+
+        // Removing background from previous player wins
+        this.display_background_material = this.empty_display_material;
+    }
+
+    setWinnerTexture() {
+        const winner = GameState.getWinner();
+        switch (winner) {
+            case 1:
+                this.display_background_material = this.player1wins_display_material;
+                break;
+            case 2:
+                this.display_background_material = this.player2wins_display_material;
+                break;
+            default:
+                this.display_background_material = this.empty_display_material;
+                break;
+        }
+    }
+
+    updateTextures() {
+        const curr_scoreboard_state = ScoreboardState.getState();
+        
+        switch (curr_scoreboard_state) {
+            case SCOREBOARD_STATE.playing:
+                this.setScoreTexture(ScoreboardState.getScore());
+                break;
+            case SCOREBOARD_STATE.finished:
+                this.setWinnerTexture();
+                break;
+        }
     }
 
     createMaterials() {

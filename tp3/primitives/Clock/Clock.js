@@ -209,6 +209,7 @@ class Clock extends PrimitiveObject {
 
     setWinnerTexture() {
         const winner = GameState.getWinner();
+
         switch (winner) {
             case 1:
                 this.display_background_material = this.player1wins_display_material;
@@ -237,6 +238,5 @@ class Clock extends PrimitiveObject {
                 this.setWinnerTexture();
                 break;
         }
-
     }
 };

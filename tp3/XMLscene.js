@@ -46,7 +46,6 @@ class XMLscene extends CGFscene {
         this.primitive_factory = new PrimitiveFactory(this);
 
         // Static objects scene setting
-        GameState.setScene(this);
         ClickHandler.setScene(this);
         CameraHandler.setScene(this);
         MenuHandler.init(this);
@@ -73,6 +72,7 @@ class XMLscene extends CGFscene {
             ClockState.updateCountdown(delta_time);
 
             this.clock && this.clock.updateTextures();
+            this.scoreBoard && this.scoreBoard.updateTextures();
         }
     }
     
