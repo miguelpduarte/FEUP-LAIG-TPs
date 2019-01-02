@@ -142,7 +142,7 @@ class PrimitiveFactory {
                 () => (GameState.redoMove()),
                 () => (GameState.continuePlaying()),
                 () => (GameState.replayGame()),
-                () => (MenuHandler.init(this.scene), this.scene.clock.resetCountdown())
+                () => (MenuHandler.init(this.scene), ClockState.resetCountdown())
             ],
             "menus/resources/gamecontrolsmenu.png"
         );

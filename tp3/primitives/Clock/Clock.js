@@ -43,7 +43,7 @@ class Clock extends PrimitiveObject {
             this.display_part.display();
         this.scene.popMatrix();
 
-        if (ClockState.getState() === CLOCK_STATE.playing) {
+        if (ClockState.getState() !== CLOCK_STATE.finished) {
             // Clock display left digit
             this.scene.pushMatrix();
                 this.scene.translate(-this.display_digit_width/2 - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);

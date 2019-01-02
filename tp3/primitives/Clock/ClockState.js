@@ -82,6 +82,7 @@ class ClockState {
 
     static disable() {
         this.state = CLOCK_STATE.disabled;
+        //this.counting_down = false;
     }
 
     static getState() {

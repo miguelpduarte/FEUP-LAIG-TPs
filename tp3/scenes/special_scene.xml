@@ -14,7 +14,7 @@
             <to x="0" y="4.8" z="0" />
         </perspective>
         <perspective id="spectator" near="0.1" far="90" angle="60">
-            <from x="-6.3" y="10" z="0" />
+            <from x="-5" y="11" z="-4.5" />
             <to x="0" y="4.8" z="0" />
         </perspective>
     </views>
@@ -781,7 +781,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" />
+            <texture id="tex_piece_black" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="donut_plate" />
             </children>
@@ -789,14 +789,16 @@
 
         <component id="simpson_donut">
             <transformation>
-                <transformationref id="trf_donut_to_plate" />
+                <translate x="0" y="0" z="0.075" />
+                <rotate axis="x" angle="90" />
+                <scale x="0.25" y="0.25" z="0.25" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="tex_donut" length_s="1" length_t="1" />
+            <texture id="tex_piece_white" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="simpson_donut" />
+                <primitiveref id="bishop" />
             </children>
         </component>
 
