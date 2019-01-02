@@ -124,7 +124,7 @@ class MyInterface extends CGFinterface {
         const sceneDropdownModel = [
             "room_scene.xml", 
             "boat_scene.xml", 
-            "scene3.xml"
+            "special_scene.xml"
         ];
 
         this.model.sceneIndex = this.scene.graph.filename;

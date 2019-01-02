@@ -6,9 +6,13 @@ class CameraHandler {
     static update(delta_time) {
         if (this.rotationAmount > 0) {
             let amount = Math.min(this.speed * this.speed_multiplier * delta_time, this.rotationAmount);
-            this.scene.camera.orbit(CGFcameraAxis.y, amount);
+            this.rotate(amount);
             this.rotationAmount -= amount;
         }
+    }
+
+    static rotate(angle) {
+        this.scene.camera.orbit(CGFcameraAxis.y, angle);
     }
 
     static swapPlayer(player_type) {
@@ -33,6 +37,10 @@ class CameraHandler {
 
     static isMoving() {
         return this.rotationAmount > 0;
+    }
+
+    static moveToPlayerPosition() {
+        this.rotate((this.curr_player - 1) * Math.PI);
     }
 }
 
