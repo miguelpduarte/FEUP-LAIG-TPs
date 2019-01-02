@@ -22,48 +22,8 @@ class Clock extends PrimitiveObject {
         this.createBody();
         this.createButton();
         this.createTimeDisplay();
-        this.setTime(0);
+        this.setTimeTexture(0);
     };
-    
-    countdown(countdown_time_s, callback) {
-        this.curr_countdown_time_ms = countdown_time_s * 1000;
-        this.curr_countdown_callback = callback;
-        // To prevent repeated countdown triggering
-        this.counting_down = true;
-        this.paused = false;
-
-        this.setTime(Math.floor(this.curr_countdown_time_ms/1000));
-    }
-
-    resetCountdown() {
-        this.curr_countdown_callback = null;
-        this.curr_countdown_time_ms = null;
-        this.counting_down = false;
-        this.paused = false;
-    }
-
-    pauseCountdown() {
-        this.paused = true;
-    }
-
-    resumeCountdown() {
-        this.paused = false;
-    }
-
-    updateCountdown(deltaTime) {
-        if (this.counting_down && !this.paused) {
-            this.curr_countdown_time_ms -= deltaTime;
-
-            this.setTime(Math.ceil(this.curr_countdown_time_ms/1000));
-
-            if (this.curr_countdown_time_ms <= 0) {
-                // Countdown over, trigger callback and then reset
-                this.curr_countdown_callback();
-                this.resetCountdown();
-                this.setTime(0);
-            }
-        }
-    }
 
 	display() {
         // Clock body
@@ -74,26 +34,16 @@ class Clock extends PrimitiveObject {
             this.body.display();
         this.scene.popMatrix();
 
-        // Clock display
+        // Clock display background
         this.scene.pushMatrix();
             this.scene.translate(0, this.height/2, this.breadth/2 + 0.001);
             this.scene.rotate(Math.PI/2, 1, 0, 0);
             this.scene.scale(this.display_width, 1, this.display_height);
-
-            if (GameState.isFinished()) {
-                if (GameState.getWinner() === 1) {
-                    this.player1wins_display_material.apply();
-                } else if (GameState.getWinner() === 2) {
-                    this.player2wins_display_material.apply();
-                }
-            } else {
-                this.empty_display_material.apply();
-            }
-
+            this.display_background_material.apply();
             this.display_part.display();
         this.scene.popMatrix();
 
-        if (!GameState.isFinished()) {
+        if (ClockState.getState() === CLOCK_STATE.playing) {
             // Clock display left digit
             this.scene.pushMatrix();
                 this.scene.translate(-this.display_digit_width/2 - this.display_digit_spacing/2, this.height/2, this.breadth/2 + 0.002);
@@ -122,17 +72,23 @@ class Clock extends PrimitiveObject {
         this.scene.popMatrix();
     }
 
-    setTime(time) {
+    setTimeTexture(time) {
         let timeStr = "00" + time;
         timeStr = timeStr.substr(timeStr.length-2);
 
         this.number_left_material.setTexture(this.number_texture[parseInt(timeStr[0])]);
         this.number_right_material.setTexture(this.number_texture[parseInt(timeStr[1])]);
+
+        // Removing background from previous player wins
+        this.display_background_material = this.empty_display_material;
     }
 
-    setDisabled() {
+    setDisabledTextures() {
         this.number_left_material.setTexture(this.minus_texture);
         this.number_right_material.setTexture(this.minus_texture);
+
+        // Removing background from previous player wins
+        this.display_background_material = this.empty_display_material;
     }
 
     createBody() {
@@ -231,22 +187,56 @@ class Clock extends PrimitiveObject {
         this.metal_material.setTexture(metal_texture);
     }
 
-    setColor(color) {
+    setColorTexture(color) {
         let texture;
-        if (color === "red") {
-            texture = this.red_plastic_texture;
-        } else if (color === "green") {
-            texture = this.green_plastic_texture;
-        } else {
-            return;
+
+        switch (color) {
+            case CLOCK_COLOR.red:
+                texture = this.red_plastic_texture;
+                break;
+            case CLOCK_COLOR.green:
+                texture = this.green_plastic_texture;
+                break;
+            case CLOCK_COLOR.yellow:
+                texture = this.yellow_plastic_texture;
+                break;
+            default:
+                return;
+        }
+        
+        this.plastic_material.setTexture(texture);
+    }
+
+    setWinnerTexture() {
+        const winner = GameState.getWinner();
+        switch (winner) {
+            case 1:
+                this.display_background_material = this.player1wins_display_material;
+                break;
+            case 2:
+                this.display_background_material = this.player2wins_display_material;
+                break;
+            default:
+                this.display_background_material = this.empty_display_material;
+                break;
+        }
+    }
+
+    updateTextures() {
+        this.setColorTexture(ClockState.getColor());
+
+        const curr_clock_state = ClockState.getState();
+        switch (curr_clock_state) {
+            case CLOCK_STATE.playing:
+                this.setTimeTexture(ClockState.getTime());
+                break;
+            case CLOCK_STATE.disabled:
+                this.setDisabledTextures();
+                break;
+            case CLOCK_STATE.finished:
+                this.setWinnerTexture();
+                break;
         }
 
-        clearTimeout(this.timeout_id);
-
-        this.plastic_material.setTexture(texture);
-        
-        this.timeout_id = setTimeout(() => {
-            this.plastic_material.setTexture(this.yellow_plastic_texture);
-        }, 2000);
     }
 };

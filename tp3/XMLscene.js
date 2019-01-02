@@ -70,8 +70,9 @@ class XMLscene extends CGFscene {
             Flag.updateTimeFactor(currTime);
             CameraHandler.update(delta_time);
             BoardState.updatePieceAnimations(delta_time);
+            ClockState.updateCountdown(delta_time);
 
-            this.clock && this.clock.updateCountdown(delta_time);
+            this.clock && this.clock.updateTextures();
         }
     }
     

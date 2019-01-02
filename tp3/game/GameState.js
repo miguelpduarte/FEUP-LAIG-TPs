@@ -54,6 +54,7 @@ class GameState {
             console.log("Game is over! Player ", res.winner, " is the winner!");
             this.state = STATE_ENUM.finished;
             this.winner = res.winner;
+            this.triggerGameFinishedActions();
         }
     }
 
@@ -71,10 +72,10 @@ class GameState {
             this.curr_game_state = res;
             this.previous_states.push(this.curr_game_state);
             // Resetting countdown to prevent player loss
-            this.scene.clock.resetCountdown();
+            ClockState.resetCountdown();
 
             // Signaling that the move was valid
-            this.scene.clock.setColor("green");
+            ClockState.setColor(CLOCK_COLOR.green);
 
             // console.log("Performed move!", res.performed_move);
 
@@ -88,7 +89,7 @@ class GameState {
         } catch(err) {
             // console.error("Move piece unsuccessful:", err);
             // Signaling that the move was invalid
-            this.scene.clock.setColor("red");
+            ClockState.setColor(CLOCK_COLOR.red);
         }
     }
 
@@ -99,7 +100,7 @@ class GameState {
             return;
         }
 
-        this.scene.clock.setDisabled();
+        ClockState.disable();
 
         // If it is not, then request the AI move from the API and do the same as above
         try {
@@ -127,7 +128,7 @@ class GameState {
         // If the current player is human and we are in the playing state (not undoing or replaying), then start the clock and change the camera
         if (this.isCurrentPlayerHuman() && this.isPlaying()) {
             CameraHandler.swapPlayer(this.getCurrentPlayerColor());
-            this.scene.clock.countdown(DIFFICULTY_TIME_ENUM[this.countdown_speed], () => {this.playerTimedOut()});
+            ClockState.countdown(DIFFICULTY_TIME_ENUM[this.countdown_speed], () => {this.playerTimedOut()});
         }
     }
 
@@ -135,6 +136,15 @@ class GameState {
         console.log("Time's up! Player ", this.getCurrentPlayerColor(), " lost and Player ", this.getOtherPlayerColor(), " won!");
         this.state = STATE_ENUM.finished;
         this.winner = this.getOtherPlayerColor();
+
+        this.triggerGameFinishedActions();
+    }
+
+    /**
+     * Central function that is always called when the game finishes
+     */
+    static triggerGameFinishedActions() {
+        ClockState.gameFinished();
     }
 
     static isAnimationRunning() {
@@ -179,7 +189,7 @@ class GameState {
             return;
         }
 
-        this.scene.clock.pauseCountdown();
+        ClockState.pauseCountdown();
         this.state = STATE_ENUM.undoing;
 
         // Changing game state due to undo
@@ -235,7 +245,7 @@ class GameState {
         // Continue playing with current undo level state
         this.previous_states = this.previous_states.slice(0, this.current_undo_index + 1);
         this.current_undo_index = 0;
-        this.scene.clock.resumeCountdown();
+        ClockState.resumeCountdown();
         this.state = STATE_ENUM.playing;
         // Rotate camera just in case the current player changed
         CameraHandler.swapPlayer(this.getCurrentPlayerColor());
@@ -247,7 +257,7 @@ class GameState {
             return;
         }
 
-        this.scene.clock.setDisabled();
+        ClockState.disable();
         this.state = STATE_ENUM.replaying;
         Piece.setPace(2.5);
         // Set initial board pieces positions
