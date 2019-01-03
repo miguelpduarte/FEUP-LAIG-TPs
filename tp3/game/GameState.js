@@ -160,10 +160,10 @@ class GameState {
     }
 
     static undoMove() {
-        // if (!this.isCurrentPlayerHuman()) {
-        //     console.warn("Cannot undo a move when a non human player is playing");
-        //     return;
-        // }
+        if (!this.isPlayerHuman(this.curr_game_state.currp) && !this.isPlayerHuman(this.curr_game_state.nextp)) {
+            console.warn("Cannot undo moves when both player are not human");
+            return;
+        }
 
         if (this.state !== STATE_ENUM.undoing && this.state !== STATE_ENUM.playing) {
             console.warn("Cannot undo if we are not undoing or playing");
@@ -243,7 +243,8 @@ class GameState {
         }
 
         // Continue playing with current undo level state
-        this.previous_states = this.previous_states.slice(0, this.current_undo_index + 1);
+        let num_states = this.previous_states.length;
+        this.previous_states = this.previous_states.slice(0, num_states - this.current_undo_index);
         this.current_undo_index = 0;
         this.state = STATE_ENUM.playing;
         // Rotate camera just in case the current player changed (only if the player is human!!) and resume clock countdown
@@ -305,6 +306,10 @@ class GameState {
 
     static isCurrentPlayerHuman() {
         return this.curr_game_state && this.curr_game_state.currp[1] === 1;
+    }
+
+    static isPlayerHuman(player) {
+        return player && player[1] === 1;
     }
 
     static isPlaying() {
