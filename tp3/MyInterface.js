@@ -33,10 +33,10 @@ class MyInterface extends CGFinterface {
         this.createLightsCheckboxes();
         this.createAxisCheckbox();
         this.createToggleLightsCheckbox();
-        this.createCamerasDropdown();
-        //this.createChangeSceneMenu();
-        //this.createGameControls();
+        // this.createCamerasDropdown();
         this.createScenesDropdown();
+        this.createCameraZoomSlider();
+        // this.createGameControls();
         this.initKeys();
     }
 
@@ -104,22 +104,6 @@ class MyInterface extends CGFinterface {
             .onChange(val => this.scene.setCurrentCamera(val));
     }
 
-    createChangeSceneMenu() {
-        const group = this.gui.addFolder("Change Scene");
-
-        this.model.filename = this.scene.graph.filename;
-
-        group.add(this.model, "filename")
-           .name("File Name");
-        
-        this.model.load_file = () => {
-            this.scene.graph.loadXML(this.model.filename);
-        };
-
-        group.add(this.model, "load_file")
-           .name("Load XML scene");
-    }
-
     createScenesDropdown() {
         const sceneDropdownModel = [
             "room_scene.xml", 
@@ -132,6 +116,23 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.model, "sceneIndex", sceneDropdownModel)
             .name("Current Scene")
             .onChange(filename => this.scene.graph.loadXML(filename));
+    }
+
+    createCameraZoomSlider() {
+        const MIN_ZOOM = -5;
+        const MAX_ZOOM = 5;
+
+        // Listening directly on CameraHandler's property to prevent state discrepancies
+        this.gui.add(CameraHandler, "zoom_amount", MIN_ZOOM, MAX_ZOOM)
+            .name("Camera Zoom").listen()
+            .onChange(new_zoom => CameraHandler.zoomTo(new_zoom));
+        
+        this.model.reset_zoom = () => {
+            CameraHandler.zoomTo(0);
+        }
+
+        this.gui.add(this.model, "reset_zoom")
+           .name("Reset Zoom");
     }
 
     createGameControls() {

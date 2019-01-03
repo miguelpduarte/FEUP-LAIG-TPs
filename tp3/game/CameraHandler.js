@@ -42,9 +42,20 @@ class CameraHandler {
     static moveToPlayerPosition() {
         this.rotate((this.curr_player - 1) * Math.PI);
     }
+
+    static get zoom_amount() {
+        return this.last_zoom;
+    }
+
+    static zoomTo(amount) {
+        this.scene.camera.zoom(-this.last_zoom);
+        this.scene.camera.zoom(amount);
+        this.last_zoom = amount;
+    }
 }
 
 CameraHandler.rotationAmount = 0;
 CameraHandler.speed = Math.PI/2e3;
 // The camera starts in the white player
 CameraHandler.curr_player = 1;
+CameraHandler.last_zoom = 0;
