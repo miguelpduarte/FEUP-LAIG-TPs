@@ -92,7 +92,7 @@ class GameState {
     // For AI moves
     static async aiMovePiece() {
         // Check if current player type is non human (1 means human)
-        if (this.curr_game_state.currp[1] === 1 || this.state !== STATE_ENUM.playing) {
+        if (this.isCurrentPlayerHuman() || this.state !== STATE_ENUM.playing) {
             return;
         }
 
@@ -160,10 +160,10 @@ class GameState {
     }
 
     static undoMove() {
-        if (!this.isCurrentPlayerHuman()) {
-            console.warn("Cannot undo a move when a non human player is playing");
-            return;
-        }
+        // if (!this.isCurrentPlayerHuman()) {
+        //     console.warn("Cannot undo a move when a non human player is playing");
+        //     return;
+        // }
 
         if (this.state !== STATE_ENUM.undoing && this.state !== STATE_ENUM.playing) {
             console.warn("Cannot undo if we are not undoing or playing");
@@ -245,10 +245,15 @@ class GameState {
         // Continue playing with current undo level state
         this.previous_states = this.previous_states.slice(0, this.current_undo_index + 1);
         this.current_undo_index = 0;
-        ClockState.resumeCountdown();
         this.state = STATE_ENUM.playing;
-        // Rotate camera just in case the current player changed
-        CameraHandler.swapPlayer(this.getCurrentPlayerColor());
+        // Rotate camera just in case the current player changed (only if the player is human!!) and resume clock countdown
+        if (this.isCurrentPlayerHuman()) {
+            CameraHandler.swapPlayer(this.getCurrentPlayerColor());
+            ClockState.resumeCountdown();
+        } else {
+            // If the player we ended up at is not human then trigger an ai move
+            this.aiMovePiece();
+        }
     }
 
     static replayGame() {
