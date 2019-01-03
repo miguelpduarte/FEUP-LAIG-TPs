@@ -141,6 +141,7 @@ class GameState {
      */
     static triggerGameFinishedActions() {
         ClockState.gameFinished();
+        ScoreboardState.gameFinished();
     }
 
     static isAnimationRunning() {
