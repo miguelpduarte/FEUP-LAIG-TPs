@@ -292,7 +292,7 @@ class XMLscene extends CGFscene {
         this.createCustomPieces();
 
         this.interface.createInterface();
-        CameraHandler.moveToPlayerPosition();
+        CameraHandler.moveToCurrentPosition();
 
         // Start or "resume" scene displaying
         this.sceneInited = true;

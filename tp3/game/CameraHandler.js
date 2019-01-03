@@ -39,8 +39,18 @@ class CameraHandler {
         return this.rotationAmount > 0;
     }
 
-    static moveToPlayerPosition() {
-        this.rotate((this.curr_player - 1) * Math.PI);
+    static moveToCurrentPosition() {
+        let rotation_amount;
+
+        if (this.isMoving()) {
+            let curr_animation_position = Math.PI - this.rotationAmount;
+            let player_rotation_amount = (this.curr_player === 1) ? Math.PI : 0;
+            rotation_amount = curr_animation_position + player_rotation_amount;
+        } else {
+            rotation_amount = (this.curr_player - 1) * Math.PI;
+        }
+
+        this.rotate(rotation_amount);
     }
 
     static get zoom_amount() {
