@@ -142,6 +142,7 @@ class XMLscene extends CGFscene {
     }
 
     initGame() {
+        CameraHandler.resetZoom();
         this.camera = this.game_camera;
         this.menuMode = false;
     }
