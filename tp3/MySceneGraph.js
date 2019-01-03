@@ -175,6 +175,14 @@ class MySceneGraph {
         if (!this.cameras.has(this.defaultViewId)) {
             throw "specified default view id does not exist";
         }
+
+        if (!this.cameras.has("player_camera")) {
+            throw "view with id 'player_camera' must be specified";
+        }
+
+        if (!this.cameras.has("spectator_camera")) {
+            throw "view with id 'spectator_camera' must be specified";
+        }
     }
 
     createPerspectiveCamera(viewNode) {

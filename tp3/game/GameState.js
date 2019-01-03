@@ -27,6 +27,9 @@ class GameState {
             this.num_pieces_moving = 0;
             this.current_undo_index = 0;
 
+            // Set the camera to playing mode
+            CameraHandler.setPlayerCamera();
+
             // Initializing board state pieces
             BoardState.initPieces(res.board);
 
@@ -264,6 +267,9 @@ class GameState {
             return;
         }
 
+        // Set spectator camera to watch the replay
+        CameraHandler.setSpectatorCamera();
+
         ClockState.disable();
         this.state = STATE_ENUM.replaying;
         Piece.setPace(2.5);
@@ -275,6 +281,12 @@ class GameState {
 
     static replayMove() {
         if (this.state !== STATE_ENUM.replaying) {
+            return;
+        }
+
+        if (!this.curr_game_state.performed_move) {
+            this.state = STATE_ENUM.finished;
+            Piece.setPace(1);
             return;
         }
 

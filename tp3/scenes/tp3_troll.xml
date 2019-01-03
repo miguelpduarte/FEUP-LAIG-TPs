@@ -1,11 +1,11 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
-    <views default="player-camera" >
+    <views default="player_camera" >
         <perspective id="room-overview" near="0.1" far="90" angle="60">
             <from x="10" y="12" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="player-camera" near="0.1" far="90" angle="60">
+        <perspective id="player_camera" near="0.1" far="90" angle="60">
             <from x="0" y="8" z="2.5" />
             <to x="0" y="4.8" z="0" />
         </perspective>

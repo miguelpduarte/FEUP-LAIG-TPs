@@ -1,20 +1,12 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
-    <views default="player-camera" >
-        <perspective id="room-overview-1" near="0.1" far="90" angle="60">
-            <from x="10" y="8" z="10" />
-            <to x="0" y="3" z="0" />
-        </perspective>
-        <perspective id="room-overview-2" near="0.1" far="90" angle="60">
-            <from x="-10" y="10" z="-6" />
-            <to x="0" y="4" z="0" />
-        </perspective>
-        <perspective id="player-camera" near="0.1" far="90" angle="60">
+    <views default="player_camera" >
+        <perspective id="player_camera" near="0.1" far="90" angle="60">
             <from x="0" y="9.5" z="3.5" />
             <to x="0" y="4.8" z="0" />
         </perspective>
-        <perspective id="spectator" near="0.1" far="90" angle="60">
-            <from x="-5" y="11" z="-4.5" />
+        <perspective id="spectator_camera" near="0.1" far="90" angle="60">
+            <from x="4" y="9" z="0" />
             <to x="0" y="4.8" z="0" />
         </perspective>
     </views>

@@ -40,6 +40,10 @@ class CameraHandler {
     }
 
     static moveToCurrentPosition() {
+        if (this.current_camera === "spectator_camera") {
+            return;
+        }
+
         let rotation_amount;
 
         if (this.isMoving()) {
@@ -66,8 +70,23 @@ class CameraHandler {
     static resetZoom() {
         this.zoomTo(0);
     }
+
+    static swapToCurrentCamera() {
+        this.scene.camera = this.scene.cameras.get(this.current_camera);
+    }
+
+    static setPlayerCamera() {
+        this.current_camera = "player_camera";
+        this.swapToCurrentCamera();
+    }
+
+    static setSpectatorCamera() {
+        this.current_camera = "spectator_camera";
+        this.swapToCurrentCamera();
+    }
 }
 
+CameraHandler.current_camera = "spectator_camera";
 CameraHandler.rotationAmount = 0;
 CameraHandler.speed = Math.PI/2e3;
 // The camera starts in the white player

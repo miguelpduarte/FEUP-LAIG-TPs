@@ -1,21 +1,13 @@
 <yas>
     <scene root="root_comp" axis_length="8" />
-    <views default="player-camera" >
-        <perspective id="scene-overview" near="0.1" far="150" angle="60">
-            <from x="-31" y="43" z="21" />
-            <to x="-5" y="10" z="0" />
-        </perspective>
-        <perspective id="boat-overview" near="0.1" far="90" angle="60">
-            <from x="25" y="10" z="3" />
-            <to x="0" y="5" z="0" />
-        </perspective>
-        <perspective id="player-camera" near="0.1" far="90" angle="60">
-            <from x="-2" y="8.5" z="2" />
+    <views default="player_camera" >
+        <perspective id="player_camera" near="0.1" far="90" angle="60">
+            <from x="-2.45" y="9.25" z="2.45" />
             <to x="0" y="4.8" z="0" />
         </perspective>
-        <perspective id="spectator" near="0.1" far="90" angle="60">
-            <from x="-6.3" y="10" z="0" />
-            <to x="0" y="4.8" z="0" />
+        <perspective id="spectator_camera" near="0.1" far="90" angle="60">
+            <from x="4" y="10" z="0.4" />
+            <to x="0" y="5.3" z="0" />
         </perspective>
     </views>
     <ambient>
@@ -91,7 +83,7 @@
         <material id="mat_grey" shininess="10">
             <emission r="0" g="0" b="0" a="1" />
             <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.42" g="0.42" b="0.42" a="1" />
             <specular r="0" g="0" b="0" a="1" />
         </material>
         <material id="mat_blue" shininess="30">
@@ -433,7 +425,7 @@
 
         <component id="clock_comp">
             <transformation>
-                <translate x="3" y="5.5" z="0" />
+                <translate x="3" y="4.8" z="0" />
                 <rotate axis="y" angle="-90" />
             </transformation>
             <animations></animations>
@@ -448,8 +440,8 @@
 
         <component id="scoreboard_comp">
             <transformation>
-                <translate x="3" y="4.8" z="0" />
-                <rotate axis="y" angle="-90" />
+                <translate x="-3" y="4.8" z="0" />
+                <rotate axis="y" angle="90" />
             </transformation>
             <animations></animations>
             <materials>
@@ -463,7 +455,7 @@
 
         <component id="gamecontrols_comp">
             <transformation>
-                <translate x="-3" y="5.9" z="0" />
+                <translate x="-2.87" y="6.6" z="0" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <animations></animations>

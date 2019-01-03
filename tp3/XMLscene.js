@@ -92,7 +92,7 @@ class XMLscene extends CGFscene {
     }
 
     initMenuCamera() {
-        this.menu_camera = new CGFcamera(1, 0.1, 5, vec3.fromValues(0, 0, 2.5), vec3.fromValues(0, 0, 0));
+        this.menu_camera = new CGFcamera(1, 0.1, 20, vec3.fromValues(0, 0, 2.5), vec3.fromValues(0, 0, 0));
         this.camera = this.menu_camera;
     }
     
@@ -292,7 +292,11 @@ class XMLscene extends CGFscene {
         this.createCustomPieces();
 
         this.interface.createInterface();
-        CameraHandler.moveToCurrentPosition();
+
+        if (!this.menuMode) {
+            CameraHandler.swapToCurrentCamera();
+            CameraHandler.moveToCurrentPosition();
+        }
 
         // Start or "resume" scene displaying
         this.sceneInited = true;
