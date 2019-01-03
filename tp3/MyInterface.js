@@ -128,7 +128,7 @@ class MyInterface extends CGFinterface {
             .onChange(new_zoom => CameraHandler.zoomTo(new_zoom));
         
         this.model.reset_zoom = () => {
-            CameraHandler.zoomTo(0);
+            CameraHandler.resetZoom();
         }
 
         this.gui.add(this.model, "reset_zoom")

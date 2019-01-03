@@ -52,6 +52,10 @@ class CameraHandler {
         this.scene.camera.zoom(amount);
         this.last_zoom = amount;
     }
+
+    static resetZoom() {
+        this.zoomTo(0);
+    }
 }
 
 CameraHandler.rotationAmount = 0;
