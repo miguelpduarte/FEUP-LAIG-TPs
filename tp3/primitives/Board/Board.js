@@ -3,7 +3,7 @@
  * @constructor
  */
 class Board extends PrimitiveObject {
-	constructor(scene, createNurbsObject) {
+	constructor(scene, tex, createNurbsObject) {
         super(scene);
 
         this.createNurbsObject = createNurbsObject;
@@ -18,7 +18,7 @@ class Board extends PrimitiveObject {
         this.createTouchSquare();
         this.createBoard();
         this.createFallbackPiece();
-        this.initMaterials();
+        this.initMaterials(tex);
     };
     
     display() {
@@ -116,8 +116,9 @@ class Board extends PrimitiveObject {
         this.fallback_piece = new Bishop(this.scene, this.createNurbsObject);
     } 
 
-    initMaterials() {
-        this.board_cover_texture = new CGFtexture(this.scene, "primitives/resources/board.jpg");
+    initMaterials(board_tex) {
+        this.board_cover_texture = board_tex ? this.scene.textures.get(board_tex) : new CGFtexture(this.scene, ("primitives/resources/board.jpg"));
+        
         this.board_edge_texture = new CGFtexture(this.scene, "primitives/resources/board_edge.jpg");
         this.board_bottom_texture = new CGFtexture(this.scene, "primitives/resources/board_bottom.jpg");
         this.black_piece_texture = new CGFtexture(this.scene, "primitives/resources/black_piece.jpg");

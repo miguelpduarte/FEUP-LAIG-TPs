@@ -54,6 +54,7 @@
         <texture id="tex_piece_black" file="primitives/resources/black_piece_plastic.jpg" />
         <texture id="tex_water" file="shaders/water_pretty.jpg" />
         <texture id="tex_waterwavemap" file="shaders/water-displacement-texture.jpg" />
+        <texture id="tex_board_plastic" file="primitives/resources/board_plastic.jpg" />
     </textures>
     <materials>
         <material id="mat_metal" shininess="80" >
@@ -153,7 +154,7 @@
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
         <primitive id="board">
-            <board />
+            <board tex="tex_board_plastic" />
         </primitive>
         <primitive id="clock">
             <clock />

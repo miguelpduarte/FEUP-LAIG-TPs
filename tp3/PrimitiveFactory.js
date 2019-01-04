@@ -46,8 +46,8 @@ class PrimitiveFactory {
         return new Pawn(this.scene, this.createNurbsObject);
     }
 
-    createBoard() {
-        return new Board(this.scene, this.createNurbsObject);
+    createBoard(primitive_model) {
+        return new Board(this.scene, primitive_model.tex, this.createNurbsObject);
     }
 
     createClock() {

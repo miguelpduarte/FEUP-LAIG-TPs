@@ -773,7 +773,7 @@ class MySceneGraph {
                 primitive = this.createWater(primitiveChild, id);
                 break;
             case "board":
-                primitive = this.createBoard();
+                primitive = this.createBoard(primitiveChild);
                 break;
             case "clock":
                 primitive = this.createClock();
@@ -1026,9 +1026,16 @@ class MySceneGraph {
         }
     }
 
-    createBoard() {
+    createBoard(primitiveNode) {
+        let tex = null;
+
+        if (this.reader.hasAttribute(primitiveNode, "tex")) {
+            tex = this.parseStringAttr(primitiveNode, "tex");
+        }
+        
         return {
-            type: "board"
+            type: "board",
+            tex
         };
     }
 

@@ -56,6 +56,7 @@
         <texture id="tex_donut" file="scenes/images/donut.png" />
         <texture id="tex_piece_white" file="primitives/resources/white_piece.jpg" />
         <texture id="tex_piece_black" file="primitives/resources/black_piece.jpg" />
+        <texture id="tex_board_simpsons" file="primitives/resources/board_simpsons.jpg" />
         <texture id="tex_world" file="scenes/images/world.jpg" />
     </textures>
     <materials>
@@ -173,7 +174,7 @@
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
         <primitive id="board">
-            <board />
+            <board tex="tex_board_simpsons" />
         </primitive>
         <primitive id="clock">
             <clock />
