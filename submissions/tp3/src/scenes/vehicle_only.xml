@@ -1,0 +1,282 @@
+<yas>
+    <scene root="root_comp" axis_length="8" />
+    <views default="test" >
+        <perspective id="test" near="0.1" far="90" angle="60">
+            <from x="10" y="5" z="12" />
+            <to x="0" y="1" z="0" />
+        </perspective>
+    </views>
+    <ambient>
+        <ambient r="0.6" g="0.6" b="0.6" a="1" />
+        <background r="0.05" g="0.05" b="0.05" a="1" />
+    </ambient>
+    <lights>
+        <omni id="room_top1" enabled="t" >
+            <location x="4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top2" enabled="t" >
+            <location x="4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top3" enabled="t" >
+            <location x="-4" y="3.5" z="4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top4" enabled="t" >
+            <location x="-4" y="3.5" z="-4" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom1" enabled="t" >
+            <location x="7" y="0.5" z="7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom2" enabled="t" >
+            <location x="7" y="0.5" z="-7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom3" enabled="t" >
+            <location x="-7" y="0.5" z="7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_bottom4" enabled="t" >
+            <location x="-7" y="0.5" z="-7" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+    </lights>
+    <textures>
+        <texture id="tex_rough" file="scenes/images/rough.jpg" />
+        <texture id="tex_world" file="scenes/images/world.jpg" />
+        <texture id="tex_window" file="scenes/images/window.jpg" />
+        <texture id="tex_frame" file="scenes/images/frame.jpg" />
+        <texture id="tex_frame2" file="scenes/images/frame2.jpg" />
+        <texture id="tex_wood" file="scenes/images/wood.png" />
+        <texture id="tex_donut" file="scenes/images/donut.png" />
+        <texture id="tex_floor" file="scenes/images/floor.png" />
+        <texture id="tex_homer" file="scenes/images/homer.png" />
+        <texture id="tex_terrain_heightmap" file="shaders/snow_heightmap.png" />
+        <texture id="tex_terrain" file="shaders/snow.jpg" />
+        <texture id="tex_water" file="shaders/water_pretty.jpg" />
+        <texture id="tex_waterwavemap" file="shaders/water-displacement-texture.jpg" />
+    </textures>
+    <materials>
+        <material id="mat_metal" shininess="80" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.15" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.5" a="1" />
+            <specular r="0.4" g="0.4" b="0.5" a="1" />
+        </material>
+        <material id="mat_regular" shininess="40" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </material>
+        <material id="mat_wood" shininess="20" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.0545" g="0.0271" b="0.0075" a="1" />
+            <diffuse r="0.300" g="0.15" b="0.045" a="1" />
+            <specular r="0.1" g="0.042" b="0.015" a="1" />
+        </material>
+        <material id="mat_lighter_wood" shininess="30" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.43" g="0.2" b="0.17" a="1" />
+            <diffuse r="0.53" g="0.2" b="0.16" a="1" />
+            <specular r="0.34" g="0.12" b="0.15" a="1" />
+        </material>
+        <material id="mat_grey" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+            <specular r="0.4" g="0.4" b="0.4" a="1" />
+        </material>
+        <material id="mat_blue" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0.1" a="1" />
+            <diffuse r="0.2" g="0.2" b="0.3" a="1" />
+            <specular r="0.2" g="0.2" b="0.3" a="1" />
+        </material>
+        <material id="mat_orange" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0" b="0" a="1" />
+            <diffuse r="0.4" g="0.3" b="0.2" a="1" />
+            <specular r="0.4" g="0.3" b="0.2" a="1" />
+        </material>
+        <material id="mat_turquoise" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.13" g="0.28" b="0.25" a="1" />
+            <specular r="0.13" g="0.28" b="0.25" a="1" />
+        </material>
+        <material id="mat_red" shininess="30">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.2" g="0.05" b="0.05" a="1" />
+            <specular r="0.2" g="0.05" b="0.05" a="1" />
+        </material>
+        <material id="mat_glass" shininess="90">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+            <specular r="0.9" g="0.9" b="0.9" a="1" />
+        </material>
+        <material id="mat_dark" shininess="10">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1" />
+            <diffuse r="0.27" g="0.27" b="0.27" a="1" />
+            <specular r="0.1" g="0.1" b="0.1" a="1" />
+        </material>
+    </materials>
+    <transformations>
+        <transformation id="trf_standup_y">
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_lift_y">
+            <translate x="0" y="1.2" z="0" />
+        </transformation>
+        <transformation id="trf_shift_to_room_middle">
+            <translate x="3.5" y="0" z="3.5" />
+        </transformation>
+        <transformation id="trf_donut_plate_to_table">
+            <translate x="2.1" y="2.4" z="4.1" />
+            <scale x="1.5" y="1.5" z="1.5" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_donut_to_plate">
+            <translate x="0" y="0" z="0.075" />
+        </transformation>
+    </transformations>
+    <animations>
+        <circular id="circ_anim1" span="4" center="2.5 0 3" radius="2.5" startang="180" rotang="360" />
+        <circular id="circ_anim2" span="1" center="0 0 6" radius="0" startang="0" rotang="-180" />
+        <circular id="circ_anim3" span="1" center="0 0 0" radius="0" startang="180" rotang="-180" />
+        <linear id="lin_anim1" span="5">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="2" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="2" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="2" yy="0" zz="2" />
+            <controlpoint xx="-5" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="-4" />
+            <controlpoint xx="0" yy="0" zz="0" />
+        </linear>
+        <linear id="lin_anim2" span="1">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="3" />
+        </linear>
+        <linear id="lin_anim3" span="0.8">
+            <controlpoint xx="0" yy="0" zz="3" />
+            <controlpoint xx="0" yy="0" zz="6" />
+        </linear>
+        <linear id="lin_anim4" span="1.4">
+            <controlpoint xx="0" yy="0" zz="6" />
+            <controlpoint xx="0" yy="0" zz="0" />
+        </linear>
+
+    </animations>
+    <primitives>
+        <primitive id="my_terrain">
+            <terrain idtexture="tex_terrain" idheightmap="tex_terrain_heightmap" parts="50" heightscale="0.3" />
+        </primitive>
+        <primitive id="my_vehicle">
+            <vehicle />
+        </primitive>
+        <primitive id="my_water">
+            <water idtexture="tex_water" idwavemap="tex_waterwavemap" parts="100" heightscale="0.01" texscale="4" />
+        </primitive>
+    </primitives>
+    <components>
+        <component id="root_comp">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <!-- <componentref id="my_terrain" /> -->
+                <componentref id="my_vehicle" />
+                <!-- <componentref id="my_water" /> -->
+            </children>
+        </component>
+        <component id="my_terrain">
+            <transformation>
+                <translate x="0" y="-0.2" z="0" />
+                <scale x="6" y="6" z="6" />
+            </transformation>
+            <animations>
+            </animations>
+            <materials>
+                <material id="mat_orange" />
+            </materials>
+            <texture id="tex_wood" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="my_terrain" />
+            </children>
+        </component>
+        <component id="my_vehicle">
+            <transformation>
+            </transformation>
+            <animations>
+                <!-- <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" />
+                <animationref id="circ_anim3" />
+                <animationref id="lin_anim2" />
+                <animationref id="circ_anim1" />
+                <animationref id="lin_anim3" />
+                <animationref id="circ_anim2" />
+                <animationref id="lin_anim4" /> -->
+            </animations>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="my_vehicle" />
+            </children>
+        </component>
+        <component id="my_water">
+            <transformation>
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="my_water" />
+            </children>
+        </component>
+    </components>
+</yas>

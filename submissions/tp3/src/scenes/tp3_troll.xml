@@ -1,0 +1,404 @@
+<yas>
+    <scene root="root_comp" axis_length="8" />
+    <views default="player_camera" >
+        <perspective id="room-overview" near="0.1" far="90" angle="60">
+            <from x="10" y="12" z="10" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <perspective id="player_camera" near="0.1" far="90" angle="60">
+            <from x="0" y="8" z="2.5" />
+            <to x="0" y="4.8" z="0" />
+        </perspective>
+        <perspective id="spectator" near="0.1" far="90" angle="60">
+            <from x="-3.5" y="8" z="0" />
+            <to x="0" y="4.8" z="0" />
+        </perspective>
+    </views>
+    <ambient>
+        <ambient r="0.6" g="0.6" b="0.6" a="1" />
+        <background r="0.05" g="0.05" b="0.05" a="1" />
+    </ambient>
+    <lights>
+        <omni id="room_top1" enabled="t" >
+            <location x="-4" y="6.5" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top2" enabled="t" >
+            <location x="4" y="6.5" z="-3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top3" enabled="t" >
+            <location x="-4" y="6.5" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top4" enabled="t" >
+            <location x="4" y="6.5" z="3" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+        <omni id="room_top5" enabled="f" >
+            <location x="0" y="7" z="0" w="1" />
+            <ambient r="0" g="0" b="0" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="1" g="1" b="1" a="1" />
+        </omni>
+    </lights>
+    <textures>
+        <texture id="tex_stark" file="scenes/images/stark.jpg" />
+        <texture id="tex_wood" file="scenes/images/wood.png" />
+        <texture id="tex_piece_white" file="primitives/resources/white_piece.jpg" />
+        <texture id="tex_piece_black" file="primitives/resources/black_piece.jpg" />
+    </textures>
+    <materials>
+        <material id="mat_regular" shininess="40" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.5" g="0.5" b="0.5" a="1" />
+        </material>
+        <material id="mat_wood" shininess="30" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.4" g="0.34" b="0.31" a="1" />
+            <diffuse r="0.4" g="0.34" b="0.31" a="1" />
+            <specular r="0.3" g="0.17" b="0.3" a="1" />
+        </material>
+        <material id="mat_piece_regular" shininess="25" >
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+        </material>
+        <material id="mat_piece_neon" shininess="25" >
+            <emission r="1" g="1" b="1" a="1" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.3" g="0.3" b="0.3" a="1" />
+        </material>
+    </materials>
+    <transformations>
+        <transformation id="trf_standup_y">
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_lift_y">
+            <translate x="0" y="1.2" z="0" />
+        </transformation>
+        <transformation id="trf_shift_to_room_middle">
+            <translate x="3.5" y="0" z="3.5" />
+        </transformation>
+        <transformation id="trf_donut_plate_to_table">
+            <translate x="2.1" y="2.4" z="4.1" />
+            <scale x="1.5" y="1.5" z="1.5" />
+            <rotate axis="x" angle="-90" />
+        </transformation>
+        <transformation id="trf_donut_to_plate">
+            <translate x="0" y="0" z="0.075" />
+        </transformation>
+    </transformations>
+    <animations>
+    </animations>
+    <primitives>
+        <primitive id="board">
+            <board />
+        </primitive>
+        <primitive id="clock">
+            <clock />
+        </primitive>
+        <primitive id="scoreboard">
+            <scoreboard />
+        </primitive>
+        <primitive id="table_leg">
+            <cylinder base="0.1" top="0.1" height="2.2" slices="10" stacks="3" />
+        </primitive>
+        <primitive id="table_top_part">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+        <primitive id="test_square">
+            <rectangle x1="0" y1="0" x2="2" y2="2" />
+        </primitive>
+        <primitive id="test_cone">
+            <cylinder base="0.35" top="0" height="0.24" slices="10" stacks="6" />
+        </primitive>
+        <primitive id="king">
+            <king />
+        </primitive>
+        <primitive id="pawn">
+            <pawn />
+        </primitive>
+    </primitives>
+    <components>
+        <component id="root_comp">
+            <transformation>
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="board_comp" />
+                <componentref id="table" />
+                <componentref id="clock_comp" />
+                <componentref id="scoreboard_comp" />
+            </children>
+        </component>
+
+        <component id="table">
+            <transformation>
+                <scale x="2.2" y="2" z="2.5" />
+            </transformation>
+            <materials>
+                <material id="mat_wood" />
+            </materials>
+            <texture id="tex_wood" length_s="1" length_t="1" />
+            <children>
+                <componentref id="table_leg1" />
+                <componentref id="table_leg2" />
+                <componentref id="table_leg3" />
+                <componentref id="table_leg4" />
+                <componentref id="table_top" />
+            </children>
+        </component>
+
+        <component id="table_leg1">
+            <transformation>
+                <translate x="-1.9" y="0" z="-1.1" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_leg" />
+            </children>
+        </component>
+
+        <component id="table_leg2">
+            <transformation>
+                <translate x="1.9" y="0" z="-1.1" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_leg" />
+            </children>
+        </component>
+
+        <component id="table_leg3">
+            <transformation>
+                <translate x="-1.9" y="0" z="1.1" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_leg" />
+            </children>
+        </component>
+
+        <component id="table_leg4">
+            <transformation>
+                <translate x="1.9" y="0" z="1.1" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_leg" />
+            </children>
+        </component>
+
+        <component id="table_top">
+            <transformation>
+                <translate x="0" y="2.3" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="table_top_top" />
+                <componentref id="table_top_bottom" />
+                <componentref id="table_top_left" /> 
+                <componentref id="table_top_right" />
+                <componentref id="table_top_back" />
+                <componentref id="table_top_front" />
+            </children>
+        </component>
+
+        <component id="table_top_front">
+            <transformation>
+                <translate x="0" y="0" z="1.2" />
+                <scale x="4" y="0.2" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="table_top_back">
+            <transformation>
+                <translate x="0" y="0" z="-1.2" />
+                <rotate axis="y" angle="180" />
+                <scale x="4" y="0.2" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="table_top_right">
+            <transformation>
+                <translate x="2" y="0" z="0" />
+                <rotate axis="y" angle="90" />
+                <scale x="2.4" y="0.2" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="table_top_left">
+            <transformation>
+                <translate x="-2" y="0" z="0" />
+                <rotate axis="y" angle="-90" />
+                <scale x="2.4" y="0.2" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="table_top_top">
+            <transformation>
+                <translate x="0" y="0.1" z="0" />
+                <rotate axis="x" angle="-90" />
+                <scale x="4" y="2.4" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="table_top_bottom">
+            <transformation>
+                <translate x="0" y="-0.1" z="0" />
+                <rotate axis="x" angle="90" />
+                <scale x="4" y="2.4" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="table_top_part" />
+            </children>
+        </component>
+
+        <component id="board_comp">
+            <transformation>
+                <translate x="-2" y="4.8" z="-2" />
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="board" />
+            </children>
+        </component>
+
+        <component id="clock_comp">
+            <transformation>
+                <translate x="3" y="4.8" z="-0.8" />
+                <rotate axis="y" angle="-70" />
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="clock" />
+            </children>
+        </component>
+
+        <component id="scoreboard_comp">
+            <transformation>
+                <translate x="3" y="4.8" z="0.8" />
+                <rotate axis="y" angle="-110" />
+            </transformation>
+            <animations></animations>
+            <materials>
+                <material id="mat_regular" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="scoreboard" />
+            </children>
+        </component>
+    </components>
+
+    <pieces>
+        <piece_white>
+            <transformation>
+                <translate x="0" y="1.3" z="0" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="mat_piece_neon" />
+            </materials>
+            <texture id="tex_piece_white" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="king" />
+            </children>
+        </piece_white>
+        <piece_black>
+            <transformation>
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="mat_piece_regular" />
+            </materials>
+            <texture id="tex_piece_black" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="pawn" />
+            </children>
+        </piece_black>
+    </pieces>
+</yas>
