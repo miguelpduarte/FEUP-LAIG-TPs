@@ -27,7 +27,7 @@ class CameraHandler {
         if (!this.rotationAmount > 0) {
             this.curr_player = player_type;
             this.rotationAmount = Math.PI;
-        }    
+        }
     }
 
     static menuRotation() {
@@ -72,6 +72,8 @@ class CameraHandler {
     }
 
     static swapToCurrentCamera() {
+        // Resetting camera zoom to prevent erroneous camera states
+        this.resetZoom();
         this.scene.camera = this.scene.cameras.get(this.current_camera);
     }
 
