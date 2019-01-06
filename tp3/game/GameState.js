@@ -165,7 +165,7 @@ class GameState {
 
     static undoMove() {
         if (!this.isPlayerHuman(this.curr_game_state.currp) && !this.isPlayerHuman(this.curr_game_state.nextp)) {
-            console.warn("Cannot undo moves when both player are not human");
+            console.warn("Cannot undo moves when both players are AI controlled");
             return;
         }
 
